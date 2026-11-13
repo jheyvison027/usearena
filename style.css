@@ -225,23 +225,6 @@ footer .cp{border-top:1px solid var(--chumbo);margin-top:32px;padding-top:18px;f
 .mh small{color:var(--chumbo);font-size:.78rem}
 .mb{overflow:auto;padding:20px}
 .mb h3{font-family:var(--serif);font-size:1.1rem;margin:24px 0 10px}
-.mb .btn{margin-top:18px}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.kpis div{background:var(--carvao);color:var(--off);border-radius:var(--r);padding:14px}
-.kpis small{color:var(--prata);display:block;font-size:.74rem}
-.kpis b{font-family:var(--serif);font-size:1.1rem}
-.stk,.ord{list-style:none}
-.stk li{display:grid;grid-template-columns:1fr 90px 32px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--linha);font-size:.86rem}
-.bar2{height:6px;background:var(--linha);border-radius:3px;overflow:hidden}
-.bar2 i{display:block;height:100%;background:var(--carvao);transition:width .5s var(--ease)}
-.bar2 i.low{background:var(--erro)}
-.stk b{text-align:right}
-.stk b.low{color:var(--erro)}
-.ord li{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linha);font-size:.86rem}
-.ord small{display:block;color:var(--chumbo)}
-.st{font-size:.72rem;font-weight:600;padding:3px 8px;border-radius:3px;white-space:nowrap}
-.st.aprovado{background:var(--lima);color:var(--carvao)}
-.st.aguardando{background:var(--linha);color:var(--chumbo)}
 
 .cupom{display:flex;gap:8px;margin-bottom:6px}
 .cupom input{flex:1;min-width:0;height:44px;padding:0 12px;border:1.5px solid var(--linha);border-radius:var(--r);background:var(--off);text-transform:uppercase}
@@ -269,5 +252,62 @@ footer .cp{border-top:1px solid var(--chumbo);margin-top:32px;padding-top:18px;f
 @media(max-width:600px){
   .proof{left:12px;right:12px;bottom:72px;max-width:none}
   .panelbtn{right:12px;bottom:14px}
-  .kpis{grid-template-columns:1fr}
 }
+
+/* =========================================================
+   PAINEL DO LOJISTA: gestao de produtos
+   ========================================================= */
+.mbox{width:min(980px,100%)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.phead small{color:var(--chumbo);font-size:.8rem;display:block;margin-top:2px}
+.cnt{font-family:var(--sans);font-size:.75rem;background:var(--carvao);color:var(--lima);padding:2px 8px;border-radius:3px;vertical-align:middle;margin-left:6px}
+.prow{display:grid;grid-template-columns:56px 1.4fr 150px 100px 64px auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linha);font-size:.86rem}
+.prow.ph2{font-size:.7rem;color:var(--chumbo);text-transform:uppercase;letter-spacing:.05em;padding:6px 0}
+.pth{width:56px;height:70px;object-fit:cover;border-radius:var(--r);background:#e4e4e0}
+.pinfo small{display:block;color:var(--chumbo)}
+.money{display:flex;align-items:center;border:1.5px solid var(--linha);border-radius:var(--r);background:var(--branco);padding:0 8px}
+.money:focus-within{border-color:var(--carvao)}
+.money i{font-style:normal;color:var(--chumbo);font-size:.8rem;margin-right:4px}
+.money input{border:0;outline:0;width:100%;min-width:0;height:38px;background:transparent}
+.ppromo{display:flex;gap:6px;align-items:center;cursor:pointer}
+.ppromo input,.chk input{accent-color:var(--carvao);width:16px;height:16px}
+.pstk small{display:none}
+.pstk b.low{color:var(--erro)}
+.pact{display:flex;gap:6px}
+.btn.sm{padding:8px 12px;font-size:.8rem}
+.btn.danger{color:var(--erro);border-color:#e6c3c0}
+.btn.danger:hover{background:var(--erro);border-color:var(--erro);color:#fff}
+
+.linkback{display:inline-flex;align-items:center;gap:4px;color:var(--chumbo);font-size:.86rem;text-decoration:underline}
+.pf{display:grid;gap:24px;grid-template-columns:1fr}
+.pfc{display:grid;gap:14px;align-content:start}
+.pfc .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label.fl textarea{display:block;width:100%;margin-top:5px;padding:10px 12px;border:1.5px solid var(--linha);border-radius:var(--r);background:var(--branco);resize:vertical;font:inherit}
+label.fl textarea:focus{outline:0;border-color:var(--carvao)}
+.chk{display:flex;gap:10px;align-items:center;font-size:.9rem;font-weight:500;cursor:pointer;padding:12px;border:1.5px solid var(--linha);border-radius:var(--r);background:var(--branco)}
+.chk:has(input:checked){border-color:var(--carvao)}
+.hint{font-size:.78rem;color:var(--chumbo)}
+.fotobox{aspect-ratio:4/3;background:#e4e4e0;border-radius:var(--r);overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--chumbo);font-size:.85rem}
+.fotobox img{width:100%;height:100%;object-fit:cover}
+.upl{cursor:pointer;text-align:center}
+.pick{padding:8px 14px;border:1.5px solid var(--linha);border-radius:var(--r);background:var(--branco);font-size:.88rem;font-weight:500;transition:all .2s}
+.pick:hover{border-color:var(--carvao)}
+.pick.on{background:var(--carvao);border-color:var(--carvao);color:var(--off)}
+.catlbl{font-size:.85rem;color:var(--chumbo);margin-top:8px}
+.catpick{border:1px solid var(--linha);border-radius:var(--r);background:var(--branco);padding:2px 14px 14px;margin-top:8px}
+.catpick[hidden]{display:none}
+.pf-act{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+@media(min-width:760px){.pf{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){
+  .prow{grid-template-columns:56px 1fr;grid-template-areas:'th in' 'pr pr' 'pm st' 'ac ac'}
+  .prow .pth{grid-area:th}.prow .pinfo{grid-area:in}.prow .pprice{grid-area:pr}.prow .ppromo{grid-area:pm}.prow .pstk{grid-area:st;text-align:right}.prow .pact{grid-area:ac}
+  .prow.ph2{display:none}
+  .pstk small{display:inline}
+}
+
+/* Selo de promocao na vitrine */
+.tag{position:absolute;top:10px;left:10px;z-index:1;background:var(--lima);color:var(--carvao);font-size:.74rem;font-weight:700;padding:4px 8px;border-radius:3px;letter-spacing:.02em}
+.tag.inl{position:static;display:inline-block;vertical-align:middle;margin-left:8px}
+.old{color:var(--chumbo);font-weight:400;font-size:.85em}
+.meta b{font-weight:600;color:var(--carvao)}

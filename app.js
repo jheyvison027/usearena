@@ -1,6 +1,6 @@
 /* ---------- DADOS ---------- */
 const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=80`;
-const PRODUTOS = [
+const PADRAO = [
  {id:'camisa-performance-pro-dry',nome:'Camisa Performance Pro Dry',preco:129.90,categorias:['Camisas','Masculino'],
   descricao:'Camiseta Dry-Fit em poliéster reciclado de 140 g/m² com acabamento que afasta o suor da pele e seca rápido. Costuras planas contra atrito, painéis de ventilação nas costas e proteção UV50+.',
   tamanhos:['P','M','G','GG'],cores:[{n:'Preto carvão',h:'#1e1e1e'},{n:'Cinza chumbo',h:'#4a4d50'},{n:'Cinza claro',h:'#c4c6c7'}],
@@ -40,11 +40,39 @@ const PRODUTOS = [
  {id:'regata-cavada-power-dry',nome:'Regata Cavada Power Dry',preco:99.90,categorias:['Regatas','Masculino'],
   descricao:'Regata cavada em poliéster Dry-Fit de 130 g/m² com malha respirável, acabamento sem etiqueta e recorte nas costas. Leve, seca rápido e acompanha todo o movimento nos treinos de peito e ombros.',
   tamanhos:['P','M','G','GG'],cores:[{n:'Cinza chumbo',h:'#4a4d50'},{n:'Preto',h:'#1e1e1e'}],
-  imagens:[U('photo-1530822847156-5df684ec5ee1'),U('photo-1534438327276-14e5300c3a48')]}
+  imagens:[U('photo-1530822847156-5df684ec5ee1'),U('photo-1534438327276-14e5300c3a48')]},
+ {id:'tenis-run-velocity',nome:'Tênis Run Velocity',preco:349.90,sexo:'Masculina',categoria:'Calçados',
+  descricao:'Tênis de corrida com cabedal em malha respirável, entressola de espuma leve com bom retorno de energia e solado de borracha com tração em piso molhado. Amortecimento para treinos de média e longa distância.',
+  tamanhos:['37','38','39','40','41','42','43','44'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza claro',h:'#c4c6c7'}],
+  imagens:[U('photo-1542291026-7eec264c27ff'),U('photo-1460353581641-37baddab0fa2')]}
 ];
-const FILTROS=['Todos','Camisas','Shorts','Leggings','Regatas'];
+const FILTROS=['Todos','Masculina','Feminina','Camisa','Calça','Short','Calçados','Leggins'];
+const CATEGORIAS=['Camisa','Calça','Short','Calçados','Leggins'];
+const SEXOS=['Masculina','Feminina'];
+const NUM=['36','38','40','42','44','46'];
+const GRADES={'Camisa':['P','M','G','GG','XG'],'Calça':[...NUM,'48'],'Short':NUM,'Leggins':NUM,'Calçados':['37','38','39','40','41','42','43','44']};
+const GRADE_NOTA={'Camisa':'Parte de cima: P ao XG','Calça':'Parte de baixo: numeração 36 ao 48','Short':'Parte de baixo: numeração 36 ao 46','Leggins':'Parte de baixo: numeração 36 ao 46','Calçados':'Calçados: numeração 37 ao 44'};
+const MAPA_NUM={P:'38',M:'40',G:'42',GG:'44',XG:'46'};
+Object.assign(PADRAO.find(p=>p.id==='shorts-treino-flex'),{precoRegular:149.90,promo:true});
+function migrar(p){
+  const c=p.categorias||[];
+  if(!p.categoria)p.categoria=c.includes('Leggings')?'Leggins':c.includes('Shorts')?'Short':'Camisa';
+  if(!p.sexo)p.sexo=c.includes('Feminino')?'Feminina':'Masculina';
+  delete p.categorias;
+  if(p.categoria!=='Camisa'&&p.categoria!=='Calçados')p.tamanhos=p.tamanhos.map(t=>MAPA_NUM[t]||t);
+  p.tamanhos=p.tamanhos.filter(t=>GRADES[p.categoria].includes(t));
+  if(!p.precoRegular)p.precoRegular=p.preco;
+  p.promo=!!p.promo;
+  return p;
+}
+function carregarCatalogo(){
+  try{const c=JSON.parse(localStorage.getItem('arena_catalogo'));if(Array.isArray(c))return c.map(migrar)}catch(e){}
+  return PADRAO.map(p=>migrar(JSON.parse(JSON.stringify(p))));
+}
+let PRODUTOS=carregarCatalogo();
+const salvarCatalogo=()=>{try{localStorage.setItem('arena_catalogo',JSON.stringify(PRODUTOS));return true}catch(e){toast('Armazenamento cheio: use uma imagem menor');return false}};
 const FRETE_GRATIS=399, FRETE=24.9;
-const FB="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Crect width='4' height='5' fill='%23d9d9d5'/%3E%3C/svg%3E";
+const FB="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 4 5%27%3E%3Crect width=%274%27 height=%275%27 fill=%27%23d9d9d5%27/%3E%3C/svg%3E";
 
 /* ---------- UTIL ---------- */
 const $=(s,r=document)=>r.querySelector(s);
@@ -61,6 +89,9 @@ const ic={
 };
 const img=(src,cls='',alt='')=>`<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='${FB}'">`;
 const find=id=>PRODUTOS.find(p=>p.id===id);
+const pctOff=p=>p.precoRegular>p.preco?Math.round((1-p.preco/p.precoRegular)*100):0;
+const tagPromo=(p,inl)=>p.promo?`<span class="tag${inl?' inl':''}">${pctOff(p)?'-'+pctOff(p)+'%':'Oferta'}</span>`:'';
+const precoHTML=p=>p.promo&&p.precoRegular>p.preco?`<b>${brl(p.preco)}</b> <s class="old">${brl(p.precoRegular)}</s>`:brl(p.preco);
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
 
 /* ---------- ESTADO ---------- */
@@ -84,15 +115,15 @@ const observe=()=>$$('.reveal:not(.in)').forEach(el=>io.observe(el));
 /* ---------- VITRINE ---------- */
 function filtrar(){
   const q=view.q.trim().toLowerCase();
-  return PRODUTOS.filter(p=>(view.cat==='Todos'||p.categorias.includes(view.cat))&&(!q||(p.nome+' '+p.descricao+' '+p.categorias.join(' ')).toLowerCase().includes(q)));
+  return PRODUTOS.filter(p=>(view.cat==='Todos'||p.sexo===view.cat||p.categoria===view.cat)&&(!q||(p.nome+' '+p.descricao+' '+p.categoria+' '+p.sexo).toLowerCase().includes(q))).sort((a,b)=>b.promo-a.promo);
 }
 function gridHTML(){
   const l=filtrar();
   if(!l.length)return `<div class="empty"><p>Nenhuma peça encontrada para esta busca.</p><button class="btn ghost" data-reset>Limpar filtros</button></div>`;
   return l.map((p,i)=>`<a class="card reveal" style="transition-delay:${(i%4)*50}ms" href="#produto/${p.id}">
-    <div class="ph">${img(p.imagens[0],'a',p.nome)}${img(p.imagens[1]||p.imagens[0],'b','')}<span class="quick">Ver detalhes</span></div>
+    <div class="ph">${img(p.imagens[0],'a',p.nome)}${img(p.imagens[1]||p.imagens[0],'b','')}${tagPromo(p)}<span class="quick">Ver detalhes</span></div>
     <h3>${p.nome}</h3>
-    <div class="meta"><span>${brl(p.preco)}</span><span class="dots">${p.cores.map(c=>`<i class="dot" title="${c.n}" style="background:${c.h}"></i>`).join('')}</span></div></a>`).join('');
+    <div class="meta"><span>${precoHTML(p)}</span><span class="dots">${p.cores.map(c=>`<i class="dot" title="${c.n}" style="background:${c.h}"></i>`).join('')}</span></div></a>`).join('');
 }
 function renderHome(){
   $('#app').innerHTML=`
@@ -135,7 +166,7 @@ function renderProduct(id){
       <div class="thumbs">${p.imagens.map((s,i)=>`<button class="${i?'':'on'}" data-t="${i}" aria-label="Foto ${i+1}">${img(s,'','')}</button>`).join('')}</div></div>
     <div class="info">
       <h1>${p.nome}</h1>
-      <div class="price">${brl(p.preco)}</div>
+      <div class="price">${precoHTML(p)}${tagPromo(p,true)}</div>
       <div class="parc">ou 3x de ${brl(p.preco/3)} sem juros</div>
       <div class="parc">${demo.stock[p.id]>0?(demo.stock[p.id]<=5?'Restam '+demo.stock[p.id]+' unidades':'Em estoque'):'Esgotado'}</div>
       <p class="desc">${p.descricao}</p>
@@ -380,20 +411,180 @@ function renderPix(p){
   };
 }
 
-/* ---------- PAINEL DO LOJISTA ---------- */
-const PG={pix:'Pix',cartao:'Cartão',boleto:'Boleto'};
-const ST={aprovado:'Aprovado',aguardando:'Aguardando pagamento'};
-function renderPanel(){
-  const ap=demo.orders.filter(o=>o.status==='aprovado'),fat=faturamento(),tk=ap.length?fat/ap.length:0;
-  $('#panelBody').innerHTML=`
-   <div class="kpis"><div><small>Faturamento do dia</small><b>${brl(fat)}</b></div><div><small>Pedidos aprovados</small><b>${ap.length}</b></div><div><small>Ticket médio</small><b>${brl(tk)}</b></div></div>
-   <h3>Estoque em tempo real</h3>
-   <ul class="stk">${PRODUTOS.map(p=>{const n=demo.stock[p.id]||0,m=STOCK0[p.id]||1,low=n<=5?'low':'';return `<li><span>${p.nome}</span><div class="bar2"><i class="${low}" style="width:${Math.min(100,n/m*100)}%"></i></div><b class="${low}">${n}</b></li>`}).join('')}</ul>
-   <h3>Pedidos recentes</h3>
-   <ul class="ord">${demo.orders.map(o=>`<li><div><b>${o.num}</b><small>${o.hora} / ${PG[o.pg]}</small></div><span class="st ${o.status}">${ST[o.status]}</span><b>${brl(o.valor)}</b></li>`).join('')}</ul>
-   <p class="note">Dados de demonstração salvos neste navegador. Finalize um pedido de teste para ver faturamento e estoque mudarem.</p>
-   <button class="btn ghost" data-reset-demo>Zerar demonstração</button>`;
+/* ---------- PAINEL DO LOJISTA: GESTAO DE PRODUTOS ---------- */
+let ed=null;
+const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n};
+const limpar=s=>String(s||'').replace(/[<>"]/g,'').trim();
+const slug=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const fotoValida=u=>/^https?:\/\/[^\s"'<>]+$/i.test(u)||/^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(u);
+function garantirEstoque(){PRODUTOS.forEach(p=>{if(demo.stock[p.id]===undefined)demo.stock[p.id]=STOCK0[p.id]||10});salvarDemo()}
+
+/* Reflete as alteracoes na vitrine, no produto aberto e no carrinho */
+function refrescarLoja(){
+  const [r,p]=(location.hash.slice(1)||'vitrine').split('/');
+  if(r==='produto'){if(find(p))renderProduct(p);else location.hash='#vitrine'}
+  else if($('#grid'))refreshGrid();
+  updateCart();
 }
+
+function rowHTML(p){
+  const n=demo.stock[p.id]||0;
+  return `<div class="prow">
+    ${img(p.imagens[0],'pth',p.nome)}
+    <div class="pinfo"><b>${p.nome}</b><small>${p.sexo} / ${p.categoria}</small></div>
+    <label class="pprice"><span class="sr">Preço de venda</span><div class="money"><i>R$</i><input type="number" step="0.01" min="0.01" inputmode="decimal" value="${p.preco.toFixed(2)}" data-price="${p.id}" aria-label="Preço de venda de ${p.nome}"></div></label>
+    <label class="ppromo"><input type="checkbox" data-promo="${p.id}" ${p.promo?'checked':''}><span>Promoção</span></label>
+    <div class="pstk"><small>Estoque</small> <b class="${n<=5?'low':''}">${n}</b></div>
+    <div class="pact"><button class="btn ghost sm" data-edit="${p.id}">Editar</button><button class="btn ghost sm danger" data-del="${p.id}">Remover</button></div>
+  </div>`;
+}
+function renderPanel(){
+  ed=null;
+  $('#panelBody').innerHTML=`
+   <div class="phead"><div><h3 style="margin:0">Produtos <span class="cnt">${PRODUTOS.length}</span></h3><small>Preço e promoção atualizam a vitrine na hora. Use Editar para foto, categoria e tamanhos.</small></div>
+     <button class="btn lime" data-novo>Novo Produto</button></div>
+   <div class="plist">
+    <div class="prow ph2" aria-hidden="true"><span></span><span>Produto</span><span>Preço de venda</span><span>Promoção</span><span>Estoque</span><span></span></div>
+    ${PRODUTOS.map(rowHTML).join('')||'<p class="note" style="padding:24px 0">Nenhum produto cadastrado. Use Novo Produto para começar.</p>'}
+   </div>
+   <button class="btn ghost sm" data-reset-catalog style="margin-top:18px">Restaurar catálogo padrão</button>`;
+}
+
+/* ---- Formulario de produto ---- */
+function novoEd(p){
+  return p?{id:p.id,foto:p.imagens[0]===FB?'':(p.imagens[0]||''),sexo:p.sexo,categoria:p.categoria,tamanhos:[...p.tamanhos]}
+          :{id:null,foto:'',sexo:'',categoria:'',tamanhos:[]};
+}
+function renderForm(p){
+  ed=novoEd(p);
+  $('#panelBody').innerHTML=`
+   <button class="linkback" data-lista><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"/></svg>Voltar aos produtos</button>
+   <h3 style="margin-top:6px">${p?'Editar produto':'Novo produto'}</h3>
+   <div class="pf">
+    <div class="pfc">
+      <label class="fl">Nome do produto<input id="f-nome" maxlength="80"></label>
+      <div class="two">
+        <label class="fl">Preço de venda (R$)<input id="f-preco" type="number" step="0.01" min="0.01" inputmode="decimal"></label>
+        <label class="fl">Preço regular (R$)<input id="f-reg" type="number" step="0.01" min="0.01" inputmode="decimal"></label>
+      </div>
+      <label class="chk"><input type="checkbox" id="f-promo">Priorizar como promoção</label>
+      <p class="hint">Produtos em promoção ganham selo de oferta, mostram o preço regular riscado e aparecem primeiro na vitrine.</p>
+      <label class="fl">Estoque (unidades)<input id="f-est" type="number" min="0" step="1"></label>
+      <label class="fl">Descrição<textarea id="f-desc" rows="4" maxlength="400"></textarea></label>
+    </div>
+    <div class="pfc">
+      <div><div class="lbl" style="margin-top:0">Foto principal</div><div class="fotobox" id="fotobox"></div></div>
+      <label class="fl">URL da imagem<input id="f-foto" type="url" placeholder="https://"></label>
+      <label class="btn ghost sm upl">Enviar arquivo do computador<input type="file" accept="image/*" id="f-file" hidden></label>
+      <div>
+        <div class="lbl" style="margin-top:6px">Categoria</div>
+        <button type="button" class="btn ghost full" data-catpick>Selecionar Categoria</button>
+        <div class="catlbl" id="catlbl"></div>
+        <div class="catpick" id="catpick" hidden></div>
+      </div>
+      <div><div class="lbl" style="margin-top:6px">Tamanhos <span id="sznote"></span></div><div class="opts" id="szgrid"></div></div>
+    </div>
+   </div>
+   <div class="err" id="ferr" role="alert"></div>
+   <div class="pf-act"><button class="btn lime" data-save>Salvar produto</button><button class="btn ghost" data-lista>Cancelar</button></div>`;
+  const v=(id,x)=>{$(id).value=x};
+  v('#f-nome',p?p.nome:'');v('#f-preco',p?p.preco:'');v('#f-reg',p?p.precoRegular:'');
+  v('#f-est',p?(demo.stock[p.id]||0):10);v('#f-desc',p?p.descricao:'');
+  $('#f-promo').checked=!!(p&&p.promo);
+  if(ed.foto&&!ed.foto.startsWith('data:'))v('#f-foto',ed.foto);
+  renderFoto();renderCat();renderSizes();
+  if(!p)$('#f-nome').focus();
+}
+function renderFoto(){$('#fotobox').innerHTML=ed.foto?img(ed.foto,'','Pré-visualização'):'Sem foto'}
+function renderCat(){
+  $('#catlbl').textContent=ed.sexo&&ed.categoria?ed.sexo+' / '+ed.categoria:(ed.sexo||ed.categoria||'Nenhuma categoria selecionada');
+  $('#catpick').innerHTML=`<div class="lbl">Sexo</div><div class="opts">${SEXOS.map(s=>`<button type="button" class="pick${ed.sexo===s?' on':''}" data-csexo="${s}">${s}</button>`).join('')}</div>
+   <div class="lbl">Categorias principais</div><div class="opts">${CATEGORIAS.map(c=>`<button type="button" class="pick${ed.categoria===c?' on':''}" data-ccat="${c}">${c}</button>`).join('')}</div>`;
+}
+function renderSizes(){
+  const g=GRADES[ed.categoria];
+  $('#sznote').textContent=g?GRADE_NOTA[ed.categoria]:'';
+  $('#szgrid').innerHTML=g?g.map(t=>`<button type="button" class="size${ed.tamanhos.includes(t)?' on':''}" data-sz="${t}">${t}</button>`).join('')+'<button type="button" class="btn ghost sm" data-szall style="margin-left:6px">Todos</button>':'<span class="hint">Selecione a categoria para ver a grade de tamanhos.</span>';
+}
+function lerArquivo(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const fr=new FileReader();
+  fr.onload=()=>{const im=new Image();im.onload=()=>{
+    const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');
+    c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    ed.foto=c.toDataURL('image/jpeg',.82);$('#f-foto').value='';renderFoto();
+  };im.src=fr.result};
+  fr.readAsDataURL(file);
+}
+function salvarProduto(){
+  const erro=m=>{$('#ferr').textContent=m};
+  const nome=limpar($('#f-nome').value),preco=num($('#f-preco').value);
+  let reg=num($('#f-reg').value);
+  if(!nome)return erro('Informe o nome do produto.');
+  if(preco<=0)return erro('Informe um preço de venda válido.');
+  if(!ed.sexo||!ed.categoria)return erro('Use Selecionar Categoria para escolher o sexo e a categoria.');
+  if(!ed.tamanhos.length)return erro('Selecione ao menos um tamanho.');
+  if(ed.foto&&!fotoValida(ed.foto))return erro('URL de imagem inválida. Use um link http(s) ou envie um arquivo.');
+  if(reg<preco)reg=preco;
+  const novo=!ed.id;
+  const dados={nome,preco,precoRegular:reg,promo:$('#f-promo').checked,sexo:ed.sexo,categoria:ed.categoria,
+    tamanhos:GRADES[ed.categoria].filter(t=>ed.tamanhos.includes(t)),descricao:limpar($('#f-desc').value)||'Peça esportiva Arena.'};
+  let p;
+  if(novo){
+    let id=slug(nome)||'produto';const b=id;let n=2;while(find(id))id=b+'-'+n++;
+    p={id,...dados,cores:[{n:'Preto',h:'#1e1e1e'}],imagens:[ed.foto||FB]};PRODUTOS.unshift(p);
+  }else{p=find(ed.id);Object.assign(p,dados);if(ed.foto)p.imagens[0]=ed.foto}
+  demo.stock[p.id]=Math.max(0,Math.floor(num($('#f-est').value)));
+  if(!salvarCatalogo())return;
+  salvarDemo();refrescarLoja();renderPanel();
+  toast(novo?'Produto adicionado à vitrine':'Produto atualizado na vitrine');
+}
+function removerProduto(id){
+  const p=find(id);
+  if(!p||!confirm('Remover "'+p.nome+'" da loja?'))return;
+  PRODUTOS=PRODUTOS.filter(x=>x.id!==id);delete demo.stock[id];
+  cart=cart.filter(i=>i.id!==id);save();
+  salvarCatalogo();salvarDemo();refrescarLoja();renderPanel();toast('Produto removido da vitrine');
+}
+function restaurarCatalogo(){
+  if(!confirm('Restaurar o catálogo e o estoque padrão? As alterações feitas serão perdidas.'))return;
+  PRODUTOS=PADRAO.map(p=>migrar(JSON.parse(JSON.stringify(p))));
+  demo=novoDemo();garantirEstoque();
+  cart=cart.filter(i=>find(i.id));save();salvarCatalogo();
+  refrescarLoja();renderPanel();toast('Catálogo padrão restaurado');
+}
+
+const pb=$('#panelBody');
+pb.addEventListener('click',e=>{
+  const g=a=>e.target.closest('['+a+']');let el;
+  if(g('data-novo'))renderForm();
+  else if((el=g('data-edit')))renderForm(find(el.dataset.edit));
+  else if((el=g('data-del')))removerProduto(el.dataset.del);
+  else if(g('data-lista'))renderPanel();
+  else if(g('data-catpick')){const c=$('#catpick');c.hidden=!c.hidden}
+  else if((el=g('data-csexo'))){ed.sexo=el.dataset.csexo;renderCat()}
+  else if((el=g('data-ccat'))){ed.categoria=el.dataset.ccat;ed.tamanhos=ed.tamanhos.filter(t=>GRADES[ed.categoria].includes(t));renderCat();renderSizes()}
+  else if((el=g('data-sz'))){const i=ed.tamanhos.indexOf(el.dataset.sz);if(i<0)ed.tamanhos.push(el.dataset.sz);else ed.tamanhos.splice(i,1);renderSizes()}
+  else if(g('data-szall')){ed.tamanhos=[...GRADES[ed.categoria]];renderSizes()}
+  else if(g('data-save'))salvarProduto();
+  else if(g('data-reset-catalog'))restaurarCatalogo();
+});
+/* Preço em tempo real: atualiza a vitrine a cada digitação */
+pb.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset&&el.dataset.price){
+    const p=find(el.dataset.price),v=num(el.value);
+    if(p&&v>0){p.preco=v;if(v>p.precoRegular)p.precoRegular=v;salvarCatalogo();refrescarLoja()}
+  }
+});
+pb.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset&&el.dataset.promo){const p=find(el.dataset.promo);if(p){p.promo=el.checked;salvarCatalogo();refrescarLoja();toast(p.promo?'Produto em promoção na vitrine':'Promoção removida')}}
+  else if(el.id==='f-file')lerArquivo(el.files[0]);
+  else if(el.id==='f-foto'){ed.foto=el.value.trim();renderFoto()}
+});
+garantirEstoque();
 function abrirPainel(){renderPanel();const m=$('#modal');m.classList.add('on');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>$('[data-panel-close]').focus(),50)}
 function fecharPainel(){const m=$('#modal');m.classList.remove('on');m.setAttribute('aria-hidden','true');document.body.style.overflow=''}
 
@@ -401,7 +592,7 @@ function fecharPainel(){const m=$('#modal');m.classList.remove('on');m.setAttrib
 const COMPRADORES=[['Lucas M.','Fortaleza/CE'],['Camila R.','Recife/PE'],['Rafael S.','São Paulo/SP'],['Beatriz A.','Belo Horizonte/MG'],['Thiago L.','Salvador/BA'],['Marina F.','Curitiba/PR'],['Gabriel P.','Brasília/DF'],['Juliana C.','Natal/RN']];
 function mostrarProva(){
   const [n,c]=COMPRADORES[Math.floor(Math.random()*COMPRADORES.length)];
-  const p=PRODUTOS[Math.floor(Math.random()*PRODUTOS.length)];
+  const p=PRODUTOS[Math.floor(Math.random()*PRODUTOS.length)];if(!p)return;
   const el=$('#proof');
   el.innerHTML=`<span class="pi">${ic.bolt}</span><div><b>${n} (${c})</b> comprou ${p.nome} via PIX<small>Aprovado agora<i>Simulação</i></small></div>`;
   el.classList.add('on');
@@ -415,7 +606,6 @@ document.addEventListener('click',e=>{
   else if(t.closest('[data-cupom-rm]'))removerCupom();
   else if(t.closest('[data-copy]')){const i=$('#pixcode');i.select();try{navigator.clipboard.writeText(i.value)}catch(x){}toast('Código Pix copiado')}
   else if(t.closest('[data-pix-back]'))renderCheckout();
-  else if(t.closest('[data-reset-demo]')){demo=novoDemo();salvarDemo();renderPanel();updateCart();toast('Demonstração reiniciada')}
   else if(t.closest('#panelBtn'))abrirPainel();
   else if(t.closest('[data-panel-close]')||t===$('#modal'))fecharPainel();
 });
