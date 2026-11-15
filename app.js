@@ -1,619 +1,1442 @@
-/* ---------- DADOS ---------- */
-const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=80`;
-const PADRAO = [
- {id:'camisa-performance-pro-dry',nome:'Camisa Performance Pro Dry',preco:129.90,categorias:['Camisas','Masculino'],
-  descricao:'Camiseta Dry-Fit em poliéster reciclado de 140 g/m² com acabamento que afasta o suor da pele e seca rápido. Costuras planas contra atrito, painéis de ventilação nas costas e proteção UV50+.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Preto carvão',h:'#1e1e1e'},{n:'Cinza chumbo',h:'#4a4d50'},{n:'Cinza claro',h:'#c4c6c7'}],
-  imagens:[U('photo-1571019613454-1cb2f99b2d8b'),U('photo-1541534741688-6078c6bfb5c5')]},
- {id:'camisa-compressao-manga-longa',nome:'Camisa de Compressão Manga Longa',preco:159.90,categorias:['Camisas','Masculino'],
-  descricao:'Camisa de compressão graduada em poliamida com elastano, 4 vias de elasticidade e zonas de ventilação sob as axilas. Mantém a musculatura estabilizada em treinos intensos e em dias frios de corrida.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza grafite',h:'#3a3d3f'}],
-  imagens:[U('photo-1576678927484-cc907957088c'),U('photo-1534438327276-14e5300c3a48')]},
- {id:'camisa-dry-fit-ultra-leve',nome:'Camisa Dry-Fit Ultra Leve',preco:119.90,categorias:['Camisas','Feminino'],
-  descricao:'Camiseta feminina em malha microfuro de 120 g/m², caimento levemente solto, gola reforçada e etiqueta termocolada sem coceira. Ideal para corrida de rua, funcional e pilates.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Off-white',h:'#ecebe6'},{n:'Cinza prata',h:'#b9bcbe'},{n:'Preto',h:'#1e1e1e'}],
-  imagens:[U('photo-1594381898411-846e7d193883'),U('photo-1518611012118-696072aa579a')]},
- {id:'shorts-running-tech',nome:'Shorts Running Tech',preco:139.90,categorias:['Shorts','Masculino'],
-  descricao:'Shorts de corrida em tactel leve com cós elástico e cordão interno, bolso embutido com zíper para chave e cartão, detalhes refletivos e entrepernas de 7 cm para total liberdade de passada.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza chumbo',h:'#4a4d50'}],
-  imagens:[U('photo-1552674605-db6ffd4facb5'),U('photo-1483721310020-03333e577078')]},
- {id:'shorts-treino-flex',nome:'Shorts Treino Flex',preco:119.90,categorias:['Shorts','Masculino'],
-  descricao:'Shorts de treino em malha elástica com secagem rápida, cós largo anatômico e bolsos laterais profundos. Corte até acima do joelho, indicado para musculação, funcional e treinos cruzados.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Cinza concreto',h:'#8a8d8f'},{n:'Preto',h:'#1e1e1e'}],
-  imagens:[U('photo-1599058945522-28d584b6f0ff'),U('photo-1581009146145-b5ef050c2e1e')]},
- {id:'shorts-legging-2-em-1-flex',nome:'Shorts Legging 2 em 1 Flex',preco:149.90,categorias:['Shorts','Feminino'],
-  descricao:'Shorts com legging interna de compressão leve que evita assadura e desliza. Camada externa em tecido fluido, cós alto com bolso interno e secagem rápida. Dois itens em uma única peça.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza chumbo',h:'#4a4d50'}],
-  imagens:[U('photo-1434596922112-19c563067271'),U('photo-1517836357463-d25dfeac3438')]},
- {id:'legging-sculpt-high-waist',nome:'Legging Sculpt High-Waist',preco:199.90,categorias:['Leggings','Feminino'],
-  descricao:'Legging de alta sustentação em poliamida de 280 g/m² opaca, cintura alta com dupla camada, costura plana e compressão firme sem transparência no agachamento. Bolso lateral para celular.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza grafite',h:'#3a3d3f'}],
-  imagens:[U('photo-1548690312-e3b507d8c110'),U('photo-1575052814086-f385e2e2ad1b')]},
- {id:'legging-seamless-power',nome:'Legging Seamless Power',preco:189.90,categorias:['Leggings','Feminino'],
-  descricao:'Legging sem costura tecida em tecnologia seamless, com zonas de compressão nas coxas e abdômen, cós largo e elasticidade multidirecional. Excelente para treinos de força e aulas de alta intensidade.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Cinza prata',h:'#9ea1a3'},{n:'Preto',h:'#1e1e1e'}],
-  imagens:[U('photo-1571731956672-f2b94d7dd0cb'),U('photo-1530822847156-5df684ec5ee1')]},
- {id:'regata-oversized-training',nome:'Regata Oversized Training',preco:109.90,categorias:['Regatas','Masculino'],
-  descricao:'Regata cavada de modelagem oversized em algodão com poliéster de 180 g/m², cava profunda que libera o ombro e a lateral, costas levemente alongadas e gola reforçada. Pensada para musculação.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Off-white',h:'#ecebe6'},{n:'Preto',h:'#1e1e1e'},{n:'Cinza mescla',h:'#a5a7a8'}],
-  imagens:[U('photo-1538805060514-97d9cc17730c'),U('photo-1593079831268-3381b0db4a77')]},
- {id:'regata-cavada-power-dry',nome:'Regata Cavada Power Dry',preco:99.90,categorias:['Regatas','Masculino'],
-  descricao:'Regata cavada em poliéster Dry-Fit de 130 g/m² com malha respirável, acabamento sem etiqueta e recorte nas costas. Leve, seca rápido e acompanha todo o movimento nos treinos de peito e ombros.',
-  tamanhos:['P','M','G','GG'],cores:[{n:'Cinza chumbo',h:'#4a4d50'},{n:'Preto',h:'#1e1e1e'}],
-  imagens:[U('photo-1530822847156-5df684ec5ee1'),U('photo-1534438327276-14e5300c3a48')]},
- {id:'tenis-run-velocity',nome:'Tênis Run Velocity',preco:349.90,sexo:'Masculina',categoria:'Calçados',
-  descricao:'Tênis de corrida com cabedal em malha respirável, entressola de espuma leve com bom retorno de energia e solado de borracha com tração em piso molhado. Amortecimento para treinos de média e longa distância.',
-  tamanhos:['37','38','39','40','41','42','43','44'],cores:[{n:'Preto',h:'#1e1e1e'},{n:'Cinza claro',h:'#c4c6c7'}],
-  imagens:[U('photo-1542291026-7eec264c27ff'),U('photo-1460353581641-37baddab0fa2')]}
-];
-const FILTROS=['Todos','Masculina','Feminina','Camisa','Calça','Short','Calçados','Leggins'];
-const CATEGORIAS=['Camisa','Calça','Short','Calçados','Leggins'];
-const SEXOS=['Masculina','Feminina'];
-const NUM=['36','38','40','42','44','46'];
-const GRADES={'Camisa':['P','M','G','GG','XG'],'Calça':[...NUM,'48'],'Short':NUM,'Leggins':NUM,'Calçados':['37','38','39','40','41','42','43','44']};
-const GRADE_NOTA={'Camisa':'Parte de cima: P ao XG','Calça':'Parte de baixo: numeração 36 ao 48','Short':'Parte de baixo: numeração 36 ao 46','Leggins':'Parte de baixo: numeração 36 ao 46','Calçados':'Calçados: numeração 37 ao 44'};
-const MAPA_NUM={P:'38',M:'40',G:'42',GG:'44',XG:'46'};
-Object.assign(PADRAO.find(p=>p.id==='shorts-treino-flex'),{precoRegular:149.90,promo:true});
-function migrar(p){
-  const c=p.categorias||[];
-  if(!p.categoria)p.categoria=c.includes('Leggings')?'Leggins':c.includes('Shorts')?'Short':'Camisa';
-  if(!p.sexo)p.sexo=c.includes('Feminino')?'Feminina':'Masculina';
-  delete p.categorias;
-  if(p.categoria!=='Camisa'&&p.categoria!=='Calçados')p.tamanhos=p.tamanhos.map(t=>MAPA_NUM[t]||t);
-  p.tamanhos=p.tamanhos.filter(t=>GRADES[p.categoria].includes(t));
-  if(!p.precoRegular)p.precoRegular=p.preco;
-  p.promo=!!p.promo;
-  return p;
-}
-function carregarCatalogo(){
-  try{const c=JSON.parse(localStorage.getItem('arena_catalogo'));if(Array.isArray(c))return c.map(migrar)}catch(e){}
-  return PADRAO.map(p=>migrar(JSON.parse(JSON.stringify(p))));
-}
-let PRODUTOS=carregarCatalogo();
-const salvarCatalogo=()=>{try{localStorage.setItem('arena_catalogo',JSON.stringify(PRODUTOS));return true}catch(e){toast('Armazenamento cheio: use uma imagem menor');return false}};
-const FRETE_GRATIS=399, FRETE=24.9;
-const FB="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 4 5%27%3E%3Crect width=%274%27 height=%275%27 fill=%27%23d9d9d5%27/%3E%3C/svg%3E";
+/* ARENA | Loja virtual (SPA, Vanilla JS + Firebase compat 10.12.2) */
+(function () {
+  'use strict';
 
-/* ---------- UTIL ---------- */
-const $=(s,r=document)=>r.querySelector(s);
-const $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const ic={
- search:'<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
- plus:'<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>',
- minus:'<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M5 12h14"/></svg>',
- truck:'<svg class="i" viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
- swap:'<svg class="i" viewBox="0 0 24 24"><path d="m17 1 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
- lock:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
- check:'<svg class="i" viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M20 6 9 17l-5-5"/></svg>'
-};
-const img=(src,cls='',alt='')=>`<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='${FB}'">`;
-const find=id=>PRODUTOS.find(p=>p.id===id);
-const pctOff=p=>p.precoRegular>p.preco?Math.round((1-p.preco/p.precoRegular)*100):0;
-const tagPromo=(p,inl)=>p.promo?`<span class="tag${inl?' inl':''}">${pctOff(p)?'-'+pctOff(p)+'%':'Oferta'}</span>`:'';
-const precoHTML=p=>p.promo&&p.precoRegular>p.preco?`<b>${brl(p.preco)}</b> <s class="old">${brl(p.precoRegular)}</s>`:brl(p.preco);
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
-
-/* ---------- ESTADO ---------- */
-let cart=[];
-try{cart=JSON.parse(localStorage.getItem('arena_cart')||'[]').filter(i=>find(i.id))}catch(e){cart=[]}
-const view={cat:'Todos',q:''};
-const CUPONS={ARENA10:{pct:.10}};
-let coupon=null,cupomMsg='';
-try{const c=localStorage.getItem('arena_coupon');if(c&&CUPONS[c])coupon={code:c,pct:CUPONS[c].pct}}catch(e){}
-function save(){try{localStorage.setItem('arena_cart',JSON.stringify(cart))}catch(e){}}
-const count=()=>cart.reduce((a,i)=>a+i.qty,0);
-const subtotal=()=>cart.reduce((a,i)=>a+find(i.id).preco*i.qty,0);
-const desconto=()=>coupon?+(subtotal()*coupon.pct).toFixed(2):0;
-const base=()=>subtotal()-desconto();
-const frete=()=>cart.length&&base()<FRETE_GRATIS?FRETE:0;
-
-/* ---------- REVEAL ---------- */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
-const observe=()=>$$('.reveal:not(.in)').forEach(el=>io.observe(el));
-
-/* ---------- VITRINE ---------- */
-function filtrar(){
-  const q=view.q.trim().toLowerCase();
-  return PRODUTOS.filter(p=>(view.cat==='Todos'||p.sexo===view.cat||p.categoria===view.cat)&&(!q||(p.nome+' '+p.descricao+' '+p.categoria+' '+p.sexo).toLowerCase().includes(q))).sort((a,b)=>b.promo-a.promo);
-}
-function gridHTML(){
-  const l=filtrar();
-  if(!l.length)return `<div class="empty"><p>Nenhuma peça encontrada para esta busca.</p><button class="btn ghost" data-reset>Limpar filtros</button></div>`;
-  return l.map((p,i)=>`<a class="card reveal" style="transition-delay:${(i%4)*50}ms" href="#produto/${p.id}">
-    <div class="ph">${img(p.imagens[0],'a',p.nome)}${img(p.imagens[1]||p.imagens[0],'b','')}${tagPromo(p)}<span class="quick">Ver detalhes</span></div>
-    <h3>${p.nome}</h3>
-    <div class="meta"><span>${precoHTML(p)}</span><span class="dots">${p.cores.map(c=>`<i class="dot" title="${c.n}" style="background:${c.h}"></i>`).join('')}</span></div></a>`).join('');
-}
-function renderHome(){
-  $('#app').innerHTML=`
-  <section class="hero"><div class="wrap">
-    <div><h1>Feita para o treino.</h1>
-    <p>Camisas Dry-Fit e de compressão, shorts de corrida, leggings de alta sustentação e regatas cavadas. Tecidos técnicos de secagem rápida, linhas masculina e feminina.</p>
-    <div class="acts"><a href="#colecao" class="btn lime" data-scroll>Ver coleção</a><a href="#termos" class="btn ghost">Trocas e entregas</a></div></div>
-    <div class="img">${img(U('photo-1571019613454-1cb2f99b2d8b'),'','Treino com roupas esportivas Arena')}</div>
-  </div></section>
-  <section class="perks"><div class="wrap">
-    <div class="perk">${ic.truck}<div><b>Frete grátis acima de R$ 399</b><small>Entrega para todo o Brasil</small></div></div>
-    <div class="perk">${ic.swap}<div><b>Troca em até 30 dias</b><small>Sem custo na primeira troca</small></div></div>
-    <div class="perk">${ic.lock}<div><b>Compra protegida</b><small>Pix, cartão ou boleto</small></div></div>
-  </div></section>
-  <section class="section" id="colecao"><div class="wrap">
-    <div class="head"><h2 class="t">Coleção</h2></div>
-    <div class="tools">
-      <div class="chips" role="group" aria-label="Filtros">${FILTROS.map(f=>`<button class="chip${f===view.cat?' on':''}" data-f="${f}">${f}</button>`).join('')}</div>
-      <label class="search">${ic.search}<input id="q" type="search" placeholder="Buscar peça" value="${view.q}" aria-label="Buscar peça"></label>
-    </div>
-    <div class="grid" id="grid">${gridHTML()}</div>
-  </div></section>`;
-  observe();
-}
-function refreshGrid(){
-  $('#grid').innerHTML=gridHTML();
-  $$('.chip').forEach(c=>c.classList.toggle('on',c.dataset.f===view.cat));
-  observe();
-}
-
-/* ---------- PRODUTO ---------- */
-function renderProduct(id){
-  const p=find(id);
-  if(!p){location.hash='#vitrine';return}
-  let tam=null,cor=0,foto=0;
-  $('#app').innerHTML=`<div class="wrap">
-  <div class="crumbs"><a href="#vitrine">Coleção</a> / ${p.nome}</div>
-  <div class="pdp">
-    <div class="gal"><div class="main" id="main">${img(p.imagens[0],'',p.nome)}</div>
-      <div class="thumbs">${p.imagens.map((s,i)=>`<button class="${i?'':'on'}" data-t="${i}" aria-label="Foto ${i+1}">${img(s,'','')}</button>`).join('')}</div></div>
-    <div class="info">
-      <h1>${p.nome}</h1>
-      <div class="price">${precoHTML(p)}${tagPromo(p,true)}</div>
-      <div class="parc">ou 3x de ${brl(p.preco/3)} sem juros</div>
-      <div class="parc">${demo.stock[p.id]>0?(demo.stock[p.id]<=5?'Restam '+demo.stock[p.id]+' unidades':'Em estoque'):'Esgotado'}</div>
-      <p class="desc">${p.descricao}</p>
-      <div class="lbl">Cor <span id="corn">${p.cores[0].n}</span></div>
-      <div class="opts">${p.cores.map((c,i)=>`<button class="sw${i?'':' on'}" data-c="${i}" style="background:${c.h}" aria-label="${c.n}"></button>`).join('')}</div>
-      <div class="lbl">Tamanho</div>
-      <div class="opts">${p.tamanhos.map(t=>`<button class="size" data-s="${t}">${t}</button>`).join('')}</div>
-      <div class="err" id="err" role="alert"></div>
-      <button class="btn full" id="add" style="margin-top:6px">Adicionar ao carrinho</button>
-      <div class="det"><div>${ic.truck}Frete grátis acima de R$ 399</div><div>${ic.swap}Troca em até 30 dias</div></div>
-    </div></div></div>`;
-  const root=$('#app');
-  root.onclick=e=>{
-    const t=e.target.closest('button');if(!t)return;
-    if(t.dataset.s){tam=t.dataset.s;$$('.size').forEach(b=>b.classList.toggle('on',b===t));$('#err').textContent=''}
-    if(t.dataset.c!==undefined){cor=+t.dataset.c;$$('.sw').forEach(b=>b.classList.toggle('on',b===t));$('#corn').textContent=p.cores[cor].n}
-    if(t.dataset.t!==undefined){foto=+t.dataset.t;$('#main').innerHTML=img(p.imagens[foto],'',p.nome);$$('.thumbs button').forEach(b=>b.classList.toggle('on',b===t))}
-    if(t.id==='add'){
-      if(!tam){$('#err').textContent='Selecione um tamanho para continuar.';return}
-      if(addItem(p.id,tam,p.cores[cor].n))openCart();
-    }
+  /* =====================================================================
+     1. CONFIGURAÇÃO
+     ===================================================================== */
+  const FIREBASE_CONFIG = {
+    apiKey: 'SUA_API_KEY',
+    authDomain: 'SEU_PROJETO.firebaseapp.com',
+    projectId: 'SEU_PROJETO',
+    storageBucket: 'SEU_PROJETO.appspot.com',
+    messagingSenderId: '000000000000',
+    appId: '1:000000000000:web:0000000000000000'
   };
-}
 
-/* ---------- CARRINHO ---------- */
-function addItem(id,size,color){
-  if(disponivel(id)<1){toast('Sem estoque suficiente para este produto');return false}
-  const it=cart.find(i=>i.id===id&&i.size===size&&i.color===color);
-  if(it)it.qty++;else cart.push({id,size,color,qty:1});
-  save();updateCart();return true;
-}
-function updateCart(){
-  const n=count(),b=$('#badge');b.textContent=n;b.classList.toggle('on',n>0);
-  const db=$('#db'),df=$('#df');
-  if(!cart.length){
-    db.innerHTML=`<div class="dempty"><p>Seu carrinho está vazio.</p><button class="btn" data-go>Ver coleção</button></div>`;df.innerHTML='';df.style.display='none';return;
+  const HERO_IMAGE = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1800&q=80';
+  const GENDERS = ['MASCULINO', 'FEMININO', 'UNISSEX'];
+  const STATUSES = ['Aguardando Pagamento / Confirmação', 'Pago / Em Separação', 'Enviado', 'Concluído'];
+  const TERMS_VERSION = '2026-11';
+  const LS_TERMS = 'arena_terms';
+  const LS_CART = 'arena_cart';
+
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const FV = firebase.firestore.FieldValue;
+
+  /* =====================================================================
+     2. UTILITÁRIOS
+     ===================================================================== */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const safeUrl = (u) => (/^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '');
+  const brl = (n) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(n) || 0);
+  const round2 = (n) => Math.round((Number(n) || 0) * 100) / 100;
+  const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const parseBRL = (v) => {
+    let s = String(v == null ? '' : v).trim();
+    if (!s) return 0;
+    s = s.indexOf(',') >= 0 ? s.replace(/\./g, '').replace(',', '.') : s;
+    const n = parseFloat(s);
+    return isFinite(n) ? n : 0;
+  };
+  const fmtInput = (n) => (n ? Number(n).toFixed(2).replace('.', ',') : '');
+
+  const ICONS = {
+    cart: '<path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L20 8H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    close: '<path d="M5 5l14 14M19 5 5 19"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    minus: '<path d="M5 12h14"/>',
+    trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+    back: '<path d="M15 5l-7 7 7 7"/>',
+    truck: '<path d="M2 6h11v10H2zM13 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>'
+  };
+  const icon = (n, s) => `<svg class="icon" width="${s || 20}" height="${s || 20}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">${ICONS[n]}</svg>`;
+
+  let toastTimer;
+  function toast(msg, type) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.className = 'toast show ' + (type || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.className = 'toast'; }, 3400);
   }
-  df.style.display='';
-  db.innerHTML=cart.map((i,k)=>{const p=find(i.id);return `<div class="line">${img(p.imagens[0],'',p.nome)}
-    <div><h4>${p.nome}</h4><small>${i.color} / ${i.size}</small>
-    <div class="lr"><div class="qty"><button data-q="${k}" data-d="-1" aria-label="Diminuir">${ic.minus}</button><span>${i.qty}</span><button data-q="${k}" data-d="1" aria-label="Aumentar">${ic.plus}</button></div><b>${brl(p.preco*i.qty)}</b></div>
-    <button class="rm" data-r="${k}">Remover</button></div></div>`}).join('');
-  const s=subtotal(),d=desconto(),f=frete(),bs=s-d,falta=Math.max(0,FRETE_GRATIS-bs);
-  df.innerHTML=`<div class="free">${falta>0?`Faltam ${brl(falta)} para frete grátis`:'Você ganhou frete grátis'}<div class="prog"><i style="width:${Math.min(100,bs/FRETE_GRATIS*100)}%"></i></div></div>
-    ${coupon?`<div class="cp-on"><span>Cupom <b>${coupon.code}</b> aplicado (${Math.round(coupon.pct*100)}%)</span><button data-cupom-rm>Remover</button></div>`:`<div class="cupom"><input id="cupom" placeholder="Cupom de desconto" autocomplete="off" aria-label="Cupom de desconto"><button class="btn ghost" data-cupom>Aplicar</button></div><div class="cp-msg" role="alert">${cupomMsg||'Teste o cupom ARENA10'}</div>`}
-    <div class="row"><span>Subtotal</span><span>${brl(s)}</span></div>
-    ${d?`<div class="row"><span>Desconto</span><span>-${brl(d)}</span></div>`:''}
-    <div class="row"><span>Frete</span><span>${f?brl(f):'Grátis'}</span></div>
-    <div class="row tot"><span>Total</span><span>${brl(bs+f)}</span></div>
-    <button class="btn full" data-checkout style="margin-top:14px">Finalizar compra</button>`;
-}
-let lastFocus=null;
-function openCart(){lastFocus=document.activeElement;updateCart();$('#drawer').classList.add('on');$('#ov').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>$('#closeCart').focus(),50)}
-function closeCart(){$('#drawer').classList.remove('on');$('#ov').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');document.body.style.overflow='';if(location.hash==='#carrinho')history.replaceState(null,'','#vitrine');if(lastFocus)lastFocus.focus()}
 
-/* ---------- CHECKOUT ---------- */
-function renderCheckout(){
-  if(!cart.length){location.hash='#vitrine';return}
-  const s=subtotal(),dc=desconto(),f=frete();
-  $('#app').innerHTML=`<div class="wrap"><div class="crumbs"><a href="#vitrine">Coleção</a> / Finalizar compra</div>
-  <div class="co">
-   <form id="form" novalidate>
-    <fieldset><legend>Contato</legend><div class="f">
-      <label class="fl w">Nome completo<input name="nome" required autocomplete="name" placeholder=" "></label>
-      <label class="fl">E-mail<input name="email" type="email" required autocomplete="email" placeholder=" "></label>
-      <label class="fl">Telefone<input name="tel" type="tel" required minlength="10" autocomplete="tel" placeholder=" "></label></div></fieldset>
-    <fieldset><legend>Entrega</legend><div class="f">
-      <label class="fl">CEP<input name="cep" required pattern="\\d{5}-?\\d{3}" inputmode="numeric" autocomplete="postal-code" placeholder=" "></label>
-      <label class="fl">Número<input name="num" required placeholder=" "></label>
-      <label class="fl w">Endereço<input name="end" required autocomplete="street-address" placeholder=" "></label>
-      <label class="fl">Cidade<input name="cid" required autocomplete="address-level2" placeholder=" "></label>
-      <label class="fl">Estado<input name="uf" required maxlength="2" autocomplete="address-level1" placeholder=" "></label></div></fieldset>
-    <fieldset><legend>Pagamento</legend><div class="pay">
-      <label><input type="radio" name="pg" value="pix" checked>Pix, 5% de desconto</label>
-      <label><input type="radio" name="pg" value="cartao">Cartão de crédito, até 3x sem juros</label>
-      <label><input type="radio" name="pg" value="boleto">Boleto bancário</label></div>
-      <div class="f" id="card" style="margin-top:14px;display:none">
-        <label class="fl w">Número do cartão<input name="cn" inputmode="numeric" placeholder=" "></label>
-        <label class="fl">Validade<input name="cv" placeholder="MM/AA"></label>
-        <label class="fl">CVV<input name="cc" inputmode="numeric" maxlength="4" placeholder=" "></label></div>
-      <p class="note">Ambiente de demonstração: nenhum pagamento é processado e nenhum dado é enviado.</p></fieldset>
-    <div class="err" id="err" role="alert"></div>
-    <button class="btn full" type="submit">Confirmar pedido</button>
-   </form>
-   <aside class="sum"><h3>Resumo do pedido</h3>
-    ${cart.map(i=>{const p=find(i.id);return `<div class="sl">${img(p.imagens[0],'',p.nome)}<div>${p.nome}<small>${i.color} / ${i.size} / ${i.qty}x</small></div><b>${brl(p.preco*i.qty)}</b></div>`}).join('')}
-    <div class="row" style="margin-top:10px"><span>Subtotal</span><span>${brl(s)}</span></div>
-    ${dc?`<div class="row"><span>Cupom ${coupon.code}</span><span>-${brl(dc)}</span></div>`:''}
-    <div class="row"><span>Frete</span><span>${f?brl(f):'Grátis'}</span></div>
-    <div class="row" id="desc" style="display:none"><span>Desconto Pix</span><span></span></div>
-    <div class="row tot"><span>Total</span><span id="tot">${brl(s-dc+f)}</span></div></aside>
-  </div></div>`;
-  const form=$('#form');
-  const calc=()=>{
-    const pg=form.pg.value,pix=pg==='pix'?(s-dc)*.05:0;
-    $('#card').style.display=pg==='cartao'?'':'none';
-    ['cn','cv','cc'].forEach(n=>form[n].required=pg==='cartao');
-    $('#desc').style.display=pix?'':'none';$('#desc span:last-child').textContent='-'+brl(pix);
-    $('#tot').textContent=brl(s-dc-pix+f);
+  function setMsg(sel, text, type) {
+    const el = $(sel);
+    if (el) { el.textContent = text || ''; el.className = 'msg ' + (type || ''); }
+  }
+
+  /* =====================================================================
+     3. ESTADO
+     ===================================================================== */
+  const state = {
+    products: [], categories: [], coupons: [], orders: [],
+    productsLoaded: false,
+    settings: { freeShippingThreshold: 0, shippingTiers: [], sizePresets: [] },
+    user: null, userDoc: null, isAdmin: false, authReady: false,
+    cart: loadCart(),
+    coupon: null, couponMsg: null, couponInput: '',
+    buyNow: null, pending: null,
+    filters: { q: '', cat: 'TODOS', gender: 'TODOS' },
+    authTab: 'login', authNote: '',
+    adminTab: 'produtos', pform: null
   };
-  form.addEventListener('change',calc);calc();
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    if(!form.checkValidity()){
-      const bad=form.querySelector(':invalid');$('#err').textContent='Preencha corretamente o campo: '+(bad.closest('label')?.firstChild.textContent||'obrigatório')+'.';bad.focus();return;
-    }
-    const nome=form.nome.value.trim().split(' ')[0],email=form.email.value.trim();
-    const pg=form.pg.value,pix=pg==='pix'?(s-dc)*.05:0;
-    const pedido={num:'AR-'+Date.now().toString().slice(-6),nome,email,pg,total:s-dc-pix+f,itens:cart.map(i=>({...i}))};
-    if(pg==='pix')renderPix(pedido);else concluirPedido(pedido);
+  const pdp = { pid: null, img: 0, color: null, size: null };
+  const view = () => $('#view');
+
+  function loadCart() {
+    try {
+      const c = JSON.parse(localStorage.getItem(LS_CART));
+      if (c && Array.isArray(c.items)) return { items: c.items.filter((i) => i && i.pid && i.qty > 0), shipIdx: Number.isInteger(c.shipIdx) ? c.shipIdx : -1 };
+    } catch (e) { /* storage indisponível */ }
+    return { items: [], shipIdx: -1 };
+  }
+  function saveCart() {
+    try { localStorage.setItem(LS_CART, JSON.stringify(state.cart)); } catch (e) { /* ignora */ }
+  }
+
+  /* ===== Regras de produto ===== */
+  const isPromo = (p) => Number(p.promoPrice) > 0 && Number(p.promoPrice) < Number(p.price);
+  const effPrice = (p) => (isPromo(p) ? Number(p.promoPrice) : Number(p.price));
+  const discountPct = (p) => Math.round((1 - Number(p.promoPrice) / Number(p.price)) * 100);
+  const skey = (c, s) => c + '|' + s;
+  const getStock = (p, c, s) => Number((p.stock || {})[skey(c, s)] || 0);
+  const totalStock = (p) => Object.values(p.stock || {}).reduce((a, b) => a + Number(b || 0), 0);
+  const colorsOf = (p) => (p.colors && p.colors.length ? p.colors : ['ÚNICA']);
+  const catName = (id) => { const c = state.categories.find((x) => x.id === id); return c ? c.name : ''; };
+  const imagesOf = (p) => (p.images || []).map(safeUrl).filter(Boolean);
+
+  function sortedProducts(list) {
+    return list.slice().sort((a, b) => {
+      const pa = isPromo(a) ? 1 : 0, pb = isPromo(b) ? 1 : 0;
+      if (pa !== pb) return pb - pa;
+      return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+  }
+
+  /* ===== Carrinho: linhas e totais ===== */
+  function normalizeCart() {
+    let changed = false;
+    state.cart.items = state.cart.items.filter((it) => {
+      const p = state.products.find((x) => x.id === it.pid);
+      if (!p) { changed = true; return false; }
+      const avail = getStock(p, it.color, it.size);
+      if (avail <= 0) { changed = true; return false; }
+      if (it.qty > avail) { it.qty = avail; changed = true; }
+      return true;
+    });
+    if (changed) saveCart();
+  }
+
+  function linesOf(items) {
+    return items.map((item) => {
+      const product = state.products.find((x) => x.id === item.pid);
+      return product ? { item, product, unit: effPrice(product), avail: getStock(product, item.color, item.size) } : null;
+    }).filter(Boolean);
+  }
+
+  function eligibleBase(lines, coupon) {
+    if (!coupon) return 0;
+    const list = coupon.scope === 'categoria' ? lines.filter((l) => l.product.categoryId === coupon.categoryId) : lines;
+    return list.reduce((a, l) => a + l.unit * l.item.qty, 0);
+  }
+
+  function computeTotals(lines, coupon, tier) {
+    const subtotal = round2(lines.reduce((a, l) => a + l.unit * l.item.qty, 0));
+    const discount = coupon ? round2(eligibleBase(lines, coupon) * Number(coupon.percent) / 100) : 0;
+    const threshold = Number(state.settings.freeShippingThreshold) || 0;
+    const base = subtotal - discount;
+    const free = threshold > 0 && base >= threshold;
+    const shipping = free || !tier ? 0 : Number(tier.price) || 0;
+    return { subtotal, discount, shipping, free, threshold, base, total: round2(subtotal - discount + shipping) };
+  }
+
+  const currentTier = () => state.settings.shippingTiers[state.cart.shipIdx] || null;
+
+  /* =====================================================================
+     4. MODAL, DRAWER E EVENTOS GLOBAIS
+     ===================================================================== */
+  const actions = {};
+  const forms = {};
+  const inputs = {};
+
+  function syncScrollLock() {
+    const open = !$('#modal-root').hidden || $('#cart').classList.contains('open');
+    document.body.classList.toggle('no-scroll', open);
+  }
+  function openModal(html, opts) {
+    opts = opts || {};
+    const root = $('#modal-root');
+    root.innerHTML = `<div class="backdrop" data-act="close-modal"></div><div class="modal ${opts.wide ? 'modal-wide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(opts.label || 'Janela')}"><button type="button" class="icon-btn modal-x" data-act="close-modal" aria-label="Fechar">${icon('close')}</button>${html}</div>`;
+    root.hidden = false;
+    syncScrollLock();
+    const f = $('input:not([type=hidden]), select, .btn', root.querySelector('.modal'));
+    if (f) f.focus();
+    return root.querySelector('.modal');
+  }
+  function closeModal() {
+    const root = $('#modal-root');
+    root.hidden = true;
+    root.innerHTML = '';
+    syncScrollLock();
+  }
+  actions['close-modal'] = closeModal;
+
+  function openCart() {
+    renderCart();
+    $('#cart').removeAttribute('inert');
+    $('#cart').classList.add('open');
+    $('#cart-backdrop').hidden = false;
+    syncScrollLock();
+  }
+  function closeCart() {
+    $('#cart').classList.remove('open');
+    $('#cart').setAttribute('inert', '');
+    $('#cart-backdrop').hidden = true;
+    syncScrollLock();
+  }
+  actions['open-cart'] = openCart;
+  actions['close-cart'] = closeCart;
+
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-act]');
+    if (!el) return;
+    const fn = actions[el.dataset.act];
+    if (fn) fn(el, e);
   });
-}
-function renderSuccess(){
-  let d=null;try{d=JSON.parse(sessionStorage.getItem('arena_ok'))}catch(e){}
-  if(!d){location.hash='#vitrine';return}
-  $('#app').innerHTML=`<div class="wrap"><div class="ok"><div class="mk">${ic.check}</div>
-   <h1 class="t" style="font-family:var(--serif);font-weight:800;font-size:2rem">Pedido ${d.num} recebido</h1>
-   <p>Obrigado, ${d.nome}. Enviaremos a confirmação e o código de rastreio para ${d.email}.</p>
-   <a href="#vitrine" class="btn">Voltar à coleção</a></div></div>`;
-}
+  document.addEventListener('submit', (e) => {
+    const f = e.target.closest('form[data-form]');
+    if (!f) return;
+    e.preventDefault();
+    const fn = forms[f.dataset.form];
+    if (fn) fn(f);
+  });
+  document.addEventListener('input', (e) => {
+    const el = e.target.closest('[data-in]');
+    if (!el) return;
+    const fn = inputs[el.dataset.in];
+    if (fn) fn(el, e);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!$('#gate').hidden) { e.preventDefault(); return; }
+    if (!$('#modal-root').hidden) closeModal();
+    else if ($('#cart').classList.contains('open')) closeCart();
+  });
 
-/* ---------- LEGAL ---------- */
-const LEGAL={
- privacidade:['Política de privacidade',[['Dados que coletamos','Coletamos apenas nome, e-mail, telefone e endereço informados no checkout para processar e entregar seu pedido.'],['Como usamos','Usamos os dados para confirmar o pedido, calcular frete, enviar atualizações de entrega e atender solicitações de troca.'],['Armazenamento','O carrinho fica salvo no seu navegador. Nesta versão de demonstração, nenhum dado é enviado a servidores.'],['Seus direitos','Conforme a LGPD, você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo canal de atendimento da loja.']]],
- termos:['Termos, trocas e entregas',[['Frete','Frete grátis em compras acima de R$ 399. Abaixo disso, o frete fixo é de R$ 24,90.'],['Trocas e devoluções','Você pode trocar ou devolver peças sem uso, com etiqueta, em até 30 dias após o recebimento. A primeira troca não tem custo.'],['Pagamento','Aceitamos Pix com 5% de desconto, cartão de crédito em até 3x sem juros e boleto bancário.'],['Loja de demonstração','Este site é uma simulação para apresentação. Produtos, preços e pedidos não são reais.']]]
-};
-function renderLegal(k){
-  const [t,s]=LEGAL[k];
-  $('#app').innerHTML=`<div class="wrap"><div class="legal"><h1>${t}</h1>${s.map(([h,p])=>`<h2>${h}</h2><p>${p}</p>`).join('')}</div></div>`;
-}
-
-/* ---------- ROTEADOR ---------- */
-function route(){
-  const [r,p]=(location.hash.slice(1)||'vitrine').split('/');
-  const app=$('#app');app.onclick=null;
-  if(r==='carrinho'){if(!app.innerHTML)renderHome();openCart();observe();return}
-  if(r==='colecao'){renderHome();setTimeout(()=>$('#colecao').scrollIntoView(),0);return}
-  if($('#drawer').classList.contains('on'))closeCart();
-  if(r==='produto')renderProduct(p);
-  else if(r==='checkout')renderCheckout();
-  else if(r==='sucesso')renderSuccess();
-  else if(LEGAL[r])renderLegal(r);
-  else renderHome();
-  if(r!=='colecao')window.scrollTo(0,0);
-  $$('[data-nav]').forEach(a=>a.classList.toggle('on',r==='vitrine'));
-}
-addEventListener('hashchange',route);
-
-/* ---------- EVENTOS GLOBAIS ---------- */
-document.addEventListener('click',e=>{
-  const t=e.target;
-  const chip=t.closest('.chip');if(chip){view.cat=chip.dataset.f;refreshGrid();return}
-  if(t.closest('[data-reset]')){view.cat='Todos';view.q='';const q=$('#q');if(q)q.value='';refreshGrid();return}
-  const nav=t.closest('[data-cat]');if(nav){view.cat=nav.dataset.cat;view.q='';if(location.hash==='#vitrine'||!location.hash){renderHome();$('#colecao').scrollIntoView()}else{location.hash='#vitrine';setTimeout(()=>$('#colecao')&&$('#colecao').scrollIntoView(),30)}e.preventDefault();return}
-  const sc=t.closest('[data-scroll]');if(sc){e.preventDefault();$('#colecao').scrollIntoView();return}
-  const qb=t.closest('[data-q]');if(qb){const i=cart[+qb.dataset.q];if(+qb.dataset.d>0&&disponivel(i.id)<1){toast('Estoque insuficiente');return}i.qty+=+qb.dataset.d;if(i.qty<1)cart.splice(+qb.dataset.q,1);save();updateCart();return}
-  const rm=t.closest('[data-r]');if(rm){cart.splice(+rm.dataset.r,1);save();updateCart();return}
-  if(t.closest('[data-go]')){closeCart();location.hash='#vitrine';return}
-  if(t.closest('[data-checkout]')){closeCart();location.hash='#checkout';return}
-});
-document.addEventListener('input',e=>{if(e.target.id==='q'){view.q=e.target.value;refreshGrid()}});
-$('#openCart').addEventListener('click',openCart);
-$('#closeCart').addEventListener('click',closeCart);
-$('#ov').addEventListener('click',closeCart);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('on'))closeCart()});
-
-/* ---------- MODO DEMONSTRACAO ---------- */
-/* Defina como false para desligar prova social simulada e painel do lojista. */
-const DEMO_MODE=true;
-ic.bolt='<svg class="i" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>';
-ic.chart='<svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15v-4M12 15V7M17 15v-6"/></svg>';
-
-const STOCK0={'camisa-performance-pro-dry':24,'camisa-compressao-manga-longa':12,'camisa-dry-fit-ultra-leve':18,'shorts-running-tech':20,'shorts-treino-flex':15,'shorts-legging-2-em-1-flex':16,'legging-sculpt-high-waist':14,'legging-seamless-power':10,'regata-oversized-training':22,'regata-cavada-power-dry':9};
-const SEED=[
- {num:'AR-104812',valor:259.8,pg:'pix',status:'aprovado',hora:'09:14'},
- {num:'AR-104813',valor:199.9,pg:'cartao',status:'aprovado',hora:'10:02'},
- {num:'AR-104814',valor:149.9,pg:'boleto',status:'aguardando',hora:'10:41'}
-];
-const novoDemo=()=>({stock:{...STOCK0},orders:SEED.map(o=>({...o}))});
-function carregarDemo(){
-  try{const d=JSON.parse(localStorage.getItem('arena_demo'));if(d&&d.stock&&d.orders)return d}catch(e){}
-  return novoDemo();
-}
-let demo=carregarDemo();
-const salvarDemo=()=>{try{localStorage.setItem('arena_demo',JSON.stringify(demo))}catch(e){}};
-const faturamento=()=>demo.orders.filter(o=>o.status==='aprovado').reduce((a,o)=>a+o.valor,0);
-const disponivel=id=>(demo.stock[id]||0)-cart.filter(i=>i.id===id).reduce((a,i)=>a+i.qty,0);
-
-/* ---------- CUPOM ---------- */
-function aplicarCupom(){
-  const v=(($('#cupom')||{}).value||'').trim().toUpperCase();
-  if(!v)cupomMsg='Digite um código de cupom.';
-  else if(CUPONS[v]){coupon={code:v,pct:CUPONS[v].pct};cupomMsg='';try{localStorage.setItem('arena_coupon',v)}catch(e){}toast('Cupom '+v+' aplicado')}
-  else cupomMsg='Cupom inválido ou expirado.';
-  updateCart();
-}
-function removerCupom(){coupon=null;cupomMsg='';try{localStorage.removeItem('arena_coupon')}catch(e){}updateCart()}
-
-/* ---------- PEDIDO E PIX ---------- */
-function concluirPedido(p){
-  const status=p.pg==='boleto'?'aguardando':'aprovado';
-  p.itens.forEach(i=>{demo.stock[i.id]=Math.max(0,(demo.stock[i.id]||0)-i.qty)});
-  demo.orders.unshift({num:p.num,valor:+p.total.toFixed(2),pg:p.pg,status,hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});
-  demo.orders=demo.orders.slice(0,12);
-  salvarDemo();
-  cart=[];coupon=null;cupomMsg='';
-  try{localStorage.removeItem('arena_coupon')}catch(e){}
-  save();updateCart();
-  try{sessionStorage.setItem('arena_ok',JSON.stringify({num:p.num,nome:p.nome,email:p.email}))}catch(e){}
-  if($('#modal').classList.contains('on'))renderPanel();
-  location.hash='#sucesso';
-}
-function qrSVG(seed){
-  const N=25;let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;
-  const rnd=()=>(h=(h*1664525+1013904223)>>>0)/4294967296;
-  const fin=(x,y)=>(x<8&&y<8)||(x>=N-8&&y<8)||(x<8&&y>=N-8);
-  let r='';
-  for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(!fin(x,y)&&rnd()>.52)r+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}
-  const f=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3"/>`;
-  return `<svg viewBox="-1 -1 ${N+2} ${N+2}" shape-rendering="crispEdges" role="img" aria-label="QR Code ilustrativo" fill="#1e1e1e"><rect x="-1" y="-1" width="${N+2}" height="${N+2}" fill="#fff"/>${r}${f(0,0)}${f(N-7,0)}${f(0,N-7)}</svg>`;
-}
-function renderPix(p){
-  window.scrollTo(0,0);
-  const code='ARENA-DEMO-PIX-'+p.num+'-'+Math.round(p.total*100);
-  $('#app').innerHTML=`<div class="wrap"><div class="pixv">
-    <p class="eyebrow">Pedido ${p.num}</p>
-    <h1>Pague com Pix</h1>
-    <p class="sub">Escaneie o QR Code no aplicativo do seu banco.</p>
-    <div class="qr">${qrSVG(p.num)}</div>
-    <div class="pixtot">${brl(p.total)}</div>
-    <div class="code"><input readonly id="pixcode" value="${code}" aria-label="Código Pix copia e cola"><button class="btn ghost" data-copy>Copiar</button></div>
-    <p class="note">QR Code ilustrativo de demonstração. Nenhuma cobrança real é gerada.</p>
-    <div class="hook" id="hook" role="status"></div>
-    <button class="btn lime full" id="simular" style="margin-top:14px">Simular Pagamento PIX Aprovado</button>
-    <button class="back" data-pix-back>Voltar ao checkout</button></div></div>`;
-  $('#simular').onclick=e=>{
-    e.currentTarget.disabled=true;
-    const h=$('#hook');
-    h.innerHTML=ic.check+'<span>Webhook Mercado Pago recebido: Pagamento Aprovado &amp; Estoque Atualizado!</span>';
-    h.classList.add('on');
-    setTimeout(()=>concluirPedido(p),1900);
-  };
-}
-
-/* ---------- PAINEL DO LOJISTA: GESTAO DE PRODUTOS ---------- */
-let ed=null;
-const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n};
-const limpar=s=>String(s||'').replace(/[<>"]/g,'').trim();
-const slug=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const fotoValida=u=>/^https?:\/\/[^\s"'<>]+$/i.test(u)||/^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(u);
-function garantirEstoque(){PRODUTOS.forEach(p=>{if(demo.stock[p.id]===undefined)demo.stock[p.id]=STOCK0[p.id]||10});salvarDemo()}
-
-/* Reflete as alteracoes na vitrine, no produto aberto e no carrinho */
-function refrescarLoja(){
-  const [r,p]=(location.hash.slice(1)||'vitrine').split('/');
-  if(r==='produto'){if(find(p))renderProduct(p);else location.hash='#vitrine'}
-  else if($('#grid'))refreshGrid();
-  updateCart();
-}
-
-function rowHTML(p){
-  const n=demo.stock[p.id]||0;
-  return `<div class="prow">
-    ${img(p.imagens[0],'pth',p.nome)}
-    <div class="pinfo"><b>${p.nome}</b><small>${p.sexo} / ${p.categoria}</small></div>
-    <label class="pprice"><span class="sr">Preço de venda</span><div class="money"><i>R$</i><input type="number" step="0.01" min="0.01" inputmode="decimal" value="${p.preco.toFixed(2)}" data-price="${p.id}" aria-label="Preço de venda de ${p.nome}"></div></label>
-    <label class="ppromo"><input type="checkbox" data-promo="${p.id}" ${p.promo?'checked':''}><span>Promoção</span></label>
-    <div class="pstk"><small>Estoque</small> <b class="${n<=5?'low':''}">${n}</b></div>
-    <div class="pact"><button class="btn ghost sm" data-edit="${p.id}">Editar</button><button class="btn ghost sm danger" data-del="${p.id}">Remover</button></div>
-  </div>`;
-}
-function renderPanel(){
-  ed=null;
-  $('#panelBody').innerHTML=`
-   <div class="phead"><div><h3 style="margin:0">Produtos <span class="cnt">${PRODUTOS.length}</span></h3><small>Preço e promoção atualizam a vitrine na hora. Use Editar para foto, categoria e tamanhos.</small></div>
-     <button class="btn lime" data-novo>Novo Produto</button></div>
-   <div class="plist">
-    <div class="prow ph2" aria-hidden="true"><span></span><span>Produto</span><span>Preço de venda</span><span>Promoção</span><span>Estoque</span><span></span></div>
-    ${PRODUTOS.map(rowHTML).join('')||'<p class="note" style="padding:24px 0">Nenhum produto cadastrado. Use Novo Produto para começar.</p>'}
-   </div>
-   <button class="btn ghost sm" data-reset-catalog style="margin-top:18px">Restaurar catálogo padrão</button>`;
-}
-
-/* ---- Formulario de produto ---- */
-function novoEd(p){
-  return p?{id:p.id,foto:p.imagens[0]===FB?'':(p.imagens[0]||''),sexo:p.sexo,categoria:p.categoria,tamanhos:[...p.tamanhos]}
-          :{id:null,foto:'',sexo:'',categoria:'',tamanhos:[]};
-}
-function renderForm(p){
-  ed=novoEd(p);
-  $('#panelBody').innerHTML=`
-   <button class="linkback" data-lista><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"/></svg>Voltar aos produtos</button>
-   <h3 style="margin-top:6px">${p?'Editar produto':'Novo produto'}</h3>
-   <div class="pf">
-    <div class="pfc">
-      <label class="fl">Nome do produto<input id="f-nome" maxlength="80"></label>
-      <div class="two">
-        <label class="fl">Preço de venda (R$)<input id="f-preco" type="number" step="0.01" min="0.01" inputmode="decimal"></label>
-        <label class="fl">Preço regular (R$)<input id="f-reg" type="number" step="0.01" min="0.01" inputmode="decimal"></label>
-      </div>
-      <label class="chk"><input type="checkbox" id="f-promo">Priorizar como promoção</label>
-      <p class="hint">Produtos em promoção ganham selo de oferta, mostram o preço regular riscado e aparecem primeiro na vitrine.</p>
-      <label class="fl">Estoque (unidades)<input id="f-est" type="number" min="0" step="1"></label>
-      <label class="fl">Descrição<textarea id="f-desc" rows="4" maxlength="400"></textarea></label>
-    </div>
-    <div class="pfc">
-      <div><div class="lbl" style="margin-top:0">Foto principal</div><div class="fotobox" id="fotobox"></div></div>
-      <label class="fl">URL da imagem<input id="f-foto" type="url" placeholder="https://"></label>
-      <label class="btn ghost sm upl">Enviar arquivo do computador<input type="file" accept="image/*" id="f-file" hidden></label>
-      <div>
-        <div class="lbl" style="margin-top:6px">Categoria</div>
-        <button type="button" class="btn ghost full" data-catpick>Selecionar Categoria</button>
-        <div class="catlbl" id="catlbl"></div>
-        <div class="catpick" id="catpick" hidden></div>
-      </div>
-      <div><div class="lbl" style="margin-top:6px">Tamanhos <span id="sznote"></span></div><div class="opts" id="szgrid"></div></div>
-    </div>
-   </div>
-   <div class="err" id="ferr" role="alert"></div>
-   <div class="pf-act"><button class="btn lime" data-save>Salvar produto</button><button class="btn ghost" data-lista>Cancelar</button></div>`;
-  const v=(id,x)=>{$(id).value=x};
-  v('#f-nome',p?p.nome:'');v('#f-preco',p?p.preco:'');v('#f-reg',p?p.precoRegular:'');
-  v('#f-est',p?(demo.stock[p.id]||0):10);v('#f-desc',p?p.descricao:'');
-  $('#f-promo').checked=!!(p&&p.promo);
-  if(ed.foto&&!ed.foto.startsWith('data:'))v('#f-foto',ed.foto);
-  renderFoto();renderCat();renderSizes();
-  if(!p)$('#f-nome').focus();
-}
-function renderFoto(){$('#fotobox').innerHTML=ed.foto?img(ed.foto,'','Pré-visualização'):'Sem foto'}
-function renderCat(){
-  $('#catlbl').textContent=ed.sexo&&ed.categoria?ed.sexo+' / '+ed.categoria:(ed.sexo||ed.categoria||'Nenhuma categoria selecionada');
-  $('#catpick').innerHTML=`<div class="lbl">Sexo</div><div class="opts">${SEXOS.map(s=>`<button type="button" class="pick${ed.sexo===s?' on':''}" data-csexo="${s}">${s}</button>`).join('')}</div>
-   <div class="lbl">Categorias principais</div><div class="opts">${CATEGORIAS.map(c=>`<button type="button" class="pick${ed.categoria===c?' on':''}" data-ccat="${c}">${c}</button>`).join('')}</div>`;
-}
-function renderSizes(){
-  const g=GRADES[ed.categoria];
-  $('#sznote').textContent=g?GRADE_NOTA[ed.categoria]:'';
-  $('#szgrid').innerHTML=g?g.map(t=>`<button type="button" class="size${ed.tamanhos.includes(t)?' on':''}" data-sz="${t}">${t}</button>`).join('')+'<button type="button" class="btn ghost sm" data-szall style="margin-left:6px">Todos</button>':'<span class="hint">Selecione a categoria para ver a grade de tamanhos.</span>';
-}
-function lerArquivo(file){
-  if(!file||!file.type.startsWith('image/'))return;
-  const fr=new FileReader();
-  fr.onload=()=>{const im=new Image();im.onload=()=>{
-    const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');
-    c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
-    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-    ed.foto=c.toDataURL('image/jpeg',.82);$('#f-foto').value='';renderFoto();
-  };im.src=fr.result};
-  fr.readAsDataURL(file);
-}
-function salvarProduto(){
-  const erro=m=>{$('#ferr').textContent=m};
-  const nome=limpar($('#f-nome').value),preco=num($('#f-preco').value);
-  let reg=num($('#f-reg').value);
-  if(!nome)return erro('Informe o nome do produto.');
-  if(preco<=0)return erro('Informe um preço de venda válido.');
-  if(!ed.sexo||!ed.categoria)return erro('Use Selecionar Categoria para escolher o sexo e a categoria.');
-  if(!ed.tamanhos.length)return erro('Selecione ao menos um tamanho.');
-  if(ed.foto&&!fotoValida(ed.foto))return erro('URL de imagem inválida. Use um link http(s) ou envie um arquivo.');
-  if(reg<preco)reg=preco;
-  const novo=!ed.id;
-  const dados={nome,preco,precoRegular:reg,promo:$('#f-promo').checked,sexo:ed.sexo,categoria:ed.categoria,
-    tamanhos:GRADES[ed.categoria].filter(t=>ed.tamanhos.includes(t)),descricao:limpar($('#f-desc').value)||'Peça esportiva Arena.'};
-  let p;
-  if(novo){
-    let id=slug(nome)||'produto';const b=id;let n=2;while(find(id))id=b+'-'+n++;
-    p={id,...dados,cores:[{n:'Preto',h:'#1e1e1e'}],imagens:[ed.foto||FB]};PRODUTOS.unshift(p);
-  }else{p=find(ed.id);Object.assign(p,dados);if(ed.foto)p.imagens[0]=ed.foto}
-  demo.stock[p.id]=Math.max(0,Math.floor(num($('#f-est').value)));
-  if(!salvarCatalogo())return;
-  salvarDemo();refrescarLoja();renderPanel();
-  toast(novo?'Produto adicionado à vitrine':'Produto atualizado na vitrine');
-}
-function removerProduto(id){
-  const p=find(id);
-  if(!p||!confirm('Remover "'+p.nome+'" da loja?'))return;
-  PRODUTOS=PRODUTOS.filter(x=>x.id!==id);delete demo.stock[id];
-  cart=cart.filter(i=>i.id!==id);save();
-  salvarCatalogo();salvarDemo();refrescarLoja();renderPanel();toast('Produto removido da vitrine');
-}
-function restaurarCatalogo(){
-  if(!confirm('Restaurar o catálogo e o estoque padrão? As alterações feitas serão perdidas.'))return;
-  PRODUTOS=PADRAO.map(p=>migrar(JSON.parse(JSON.stringify(p))));
-  demo=novoDemo();garantirEstoque();
-  cart=cart.filter(i=>find(i.id));save();salvarCatalogo();
-  refrescarLoja();renderPanel();toast('Catálogo padrão restaurado');
-}
-
-const pb=$('#panelBody');
-pb.addEventListener('click',e=>{
-  const g=a=>e.target.closest('['+a+']');let el;
-  if(g('data-novo'))renderForm();
-  else if((el=g('data-edit')))renderForm(find(el.dataset.edit));
-  else if((el=g('data-del')))removerProduto(el.dataset.del);
-  else if(g('data-lista'))renderPanel();
-  else if(g('data-catpick')){const c=$('#catpick');c.hidden=!c.hidden}
-  else if((el=g('data-csexo'))){ed.sexo=el.dataset.csexo;renderCat()}
-  else if((el=g('data-ccat'))){ed.categoria=el.dataset.ccat;ed.tamanhos=ed.tamanhos.filter(t=>GRADES[ed.categoria].includes(t));renderCat();renderSizes()}
-  else if((el=g('data-sz'))){const i=ed.tamanhos.indexOf(el.dataset.sz);if(i<0)ed.tamanhos.push(el.dataset.sz);else ed.tamanhos.splice(i,1);renderSizes()}
-  else if(g('data-szall')){ed.tamanhos=[...GRADES[ed.categoria]];renderSizes()}
-  else if(g('data-save'))salvarProduto();
-  else if(g('data-reset-catalog'))restaurarCatalogo();
-});
-/* Preço em tempo real: atualiza a vitrine a cada digitação */
-pb.addEventListener('input',e=>{
-  const el=e.target;
-  if(el.dataset&&el.dataset.price){
-    const p=find(el.dataset.price),v=num(el.value);
-    if(p&&v>0){p.preco=v;if(v>p.precoRegular)p.precoRegular=v;salvarCatalogo();refrescarLoja()}
+  /* =====================================================================
+     5. BLOQUEIO OBRIGATÓRIO (TERMOS E PRIVACIDADE)
+     ===================================================================== */
+  let memoryAcceptance = null;
+  function getAcceptance() {
+    try {
+      const v = JSON.parse(localStorage.getItem(LS_TERMS));
+      if (v && v.accepted) return v;
+    } catch (e) { /* ignora */ }
+    return memoryAcceptance;
   }
-});
-pb.addEventListener('change',e=>{
-  const el=e.target;
-  if(el.dataset&&el.dataset.promo){const p=find(el.dataset.promo);if(p){p.promo=el.checked;salvarCatalogo();refrescarLoja();toast(p.promo?'Produto em promoção na vitrine':'Promoção removida')}}
-  else if(el.id==='f-file')lerArquivo(el.files[0]);
-  else if(el.id==='f-foto'){ed.foto=el.value.trim();renderFoto()}
-});
-garantirEstoque();
-function abrirPainel(){renderPanel();const m=$('#modal');m.classList.add('on');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>$('[data-panel-close]').focus(),50)}
-function fecharPainel(){const m=$('#modal');m.classList.remove('on');m.setAttribute('aria-hidden','true');document.body.style.overflow=''}
 
-/* ---------- PROVA SOCIAL SIMULADA ---------- */
-const COMPRADORES=[['Lucas M.','Fortaleza/CE'],['Camila R.','Recife/PE'],['Rafael S.','São Paulo/SP'],['Beatriz A.','Belo Horizonte/MG'],['Thiago L.','Salvador/BA'],['Marina F.','Curitiba/PR'],['Gabriel P.','Brasília/DF'],['Juliana C.','Natal/RN']];
-function mostrarProva(){
-  const [n,c]=COMPRADORES[Math.floor(Math.random()*COMPRADORES.length)];
-  const p=PRODUTOS[Math.floor(Math.random()*PRODUTOS.length)];if(!p)return;
-  const el=$('#proof');
-  el.innerHTML=`<span class="pi">${ic.bolt}</span><div><b>${n} (${c})</b> comprou ${p.nome} via PIX<small>Aprovado agora<i>Simulação</i></small></div>`;
-  el.classList.add('on');
-  clearTimeout(mostrarProva.t);mostrarProva.t=setTimeout(()=>el.classList.remove('on'),5500);
-}
+  let appStarted = false;
+  function unlockApp() {
+    $('#app').removeAttribute('inert');
+    document.body.classList.remove('gated');
+    if (!appStarted) { appStarted = true; startApp(); }
+  }
 
-/* ---------- EVENTOS DA DEMONSTRACAO ---------- */
-document.addEventListener('click',e=>{
-  const t=e.target;
-  if(t.closest('[data-cupom]'))aplicarCupom();
-  else if(t.closest('[data-cupom-rm]'))removerCupom();
-  else if(t.closest('[data-copy]')){const i=$('#pixcode');i.select();try{navigator.clipboard.writeText(i.value)}catch(x){}toast('Código Pix copiado')}
-  else if(t.closest('[data-pix-back]'))renderCheckout();
-  else if(t.closest('#panelBtn'))abrirPainel();
-  else if(t.closest('[data-panel-close]')||t===$('#modal'))fecharPainel();
-});
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&e.target.id==='cupom'){e.preventDefault();aplicarCupom()}
-  if(e.key==='Escape'&&$('#modal').classList.contains('on'))fecharPainel();
-});
-$('#panelBtn').hidden=!DEMO_MODE;
-if(DEMO_MODE){setTimeout(mostrarProva,6000);setInterval(mostrarProva,12000)}
+  function initGate() {
+    if (getAcceptance()) { unlockApp(); return; }
+    const gate = $('#gate');
+    const box = $('#gate-legal');
+    const cb = $('#gate-check');
+    const btn = $('#gate-enter');
+    box.appendChild($('#tpl-legal').content.cloneNode(true));
+    gate.hidden = false;
 
-updateCart();route();
+    const checkEnd = () => {
+      if (box.scrollTop + box.clientHeight >= box.scrollHeight - 8 && cb.disabled) {
+        cb.disabled = false;
+        $('#gate-hint').textContent = 'Marque a caixa abaixo para confirmar o aceite.';
+      }
+    };
+    box.addEventListener('scroll', checkEnd);
+    checkEnd();
+    cb.addEventListener('change', () => { btn.disabled = !cb.checked; });
+    btn.addEventListener('click', () => {
+      if (!cb.checked) return;
+      const acc = { accepted: true, at: new Date().toISOString(), version: TERMS_VERSION };
+      memoryAcceptance = acc;
+      try { localStorage.setItem(LS_TERMS, JSON.stringify(acc)); } catch (e) { /* ignora */ }
+      gate.hidden = true;
+      unlockApp();
+      syncTermsToUser();
+    });
+    box.focus();
+  }
+
+  async function syncTermsToUser() {
+    const u = auth.currentUser;
+    const acc = getAcceptance();
+    if (!u || !acc) return;
+    try {
+      const ref = db.collection('users').doc(u.uid);
+      const snap = await ref.get();
+      if (!snap.exists || !snap.data().acceptedTermsAt) {
+        await ref.set({ name: u.displayName || '', email: u.email || '', acceptedTermsAt: acc.at, termsVersion: acc.version }, { merge: true });
+      }
+    } catch (e) { console.warn('Sincronização dos termos falhou', e); }
+  }
+
+  actions.legal = () => {
+    const modal = openModal('<div class="legal-box" id="legal-modal-box"></div>', { wide: true, label: 'Termos de Uso e Política de Privacidade' });
+    $('#legal-modal-box', modal).appendChild($('#tpl-legal').content.cloneNode(true));
+  };
+
+  /* =====================================================================
+     6. AUTENTICAÇÃO
+     ===================================================================== */
+  const AUTH_ERRORS = {
+    'auth/invalid-credential': 'E-mail ou senha incorretos.',
+    'auth/wrong-password': 'E-mail ou senha incorretos.',
+    'auth/user-not-found': 'E-mail ou senha incorretos.',
+    'auth/invalid-email': 'E-mail inválido.',
+    'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
+    'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
+    'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',
+    'auth/network-request-failed': 'Sem conexão. Verifique sua internet.'
+  };
+  const authError = (e) => AUTH_ERRORS[e && e.code] || 'Não foi possível concluir. Tente novamente.';
+
+  function openAuth(tab, note) {
+    state.authTab = tab || 'login';
+    if (note !== undefined) state.authNote = note;
+    const login = state.authTab === 'login';
+    openModal(`
+      <h2 class="modal-title">Minha conta</h2>
+      ${state.authNote ? `<p class="note">${esc(state.authNote)}</p>` : ''}
+      <div class="tabs">
+        <button type="button" class="tab ${login ? 'is-active' : ''}" data-act="auth-tab" data-tab="login">Entrar</button>
+        <button type="button" class="tab ${login ? '' : 'is-active'}" data-act="auth-tab" data-tab="cadastro">Cadastrar</button>
+      </div>
+      <div id="auth-msg" class="msg" role="alert"></div>
+      ${login ? `
+      <form data-form="login" novalidate>
+        <div class="field"><label for="a-email">E-mail</label><input id="a-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="a-pass">Senha</label><input id="a-pass" name="password" type="password" autocomplete="current-password" required></div>
+        <button class="btn btn-block" type="submit">Entrar</button>
+        <p class="small" style="margin-top:12px"><button type="button" class="link" data-act="reset-pass">Esqueci minha senha</button></p>
+      </form>` : `
+      <form data-form="register" novalidate>
+        <div class="field"><label for="r-name">Nome completo</label><input id="r-name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="r-email">E-mail</label><input id="r-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="r-pass">Senha (mínimo 6 caracteres)</label><input id="r-pass" name="password" type="password" autocomplete="new-password" minlength="6" required></div>
+        <label class="check"><input type="checkbox" name="terms"><span>Li e aceito os <button type="button" class="link" data-act="legal">Termos de Uso</button> e a <button type="button" class="link" data-act="legal">Política de Privacidade</button>.</span></label>
+        <button class="btn btn-block" type="submit">Criar conta</button>
+      </form>`}`, { label: 'Login e cadastro' });
+  }
+  actions['auth-tab'] = (el) => openAuth(el.dataset.tab);
+
+  forms.login = async (f) => {
+    const d = new FormData(f);
+    const email = String(d.get('email')).trim(), pass = String(d.get('password'));
+    if (!email || !pass) return setMsg('#auth-msg', 'Preencha e-mail e senha.', 'error');
+    try {
+      await auth.signInWithEmailAndPassword(email, pass);
+      closeModal();
+      toast('Login realizado.');
+      runPending();
+    } catch (e) { setMsg('#auth-msg', authError(e), 'error'); }
+  };
+
+  forms.register = async (f) => {
+    const d = new FormData(f);
+    const name = String(d.get('name')).trim(), email = String(d.get('email')).trim(), pass = String(d.get('password'));
+    if (name.length < 3) return setMsg('#auth-msg', 'Informe o nome completo.', 'error');
+    if (!email) return setMsg('#auth-msg', 'Informe o e-mail.', 'error');
+    if (pass.length < 6) return setMsg('#auth-msg', AUTH_ERRORS['auth/weak-password'], 'error');
+    if (!d.get('terms')) return setMsg('#auth-msg', 'É obrigatório aceitar os Termos de Uso e a Política de Privacidade.', 'error');
+    try {
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      await cred.user.updateProfile({ displayName: name });
+      await db.collection('users').doc(cred.user.uid).set({
+        name, email, acceptedTermsAt: new Date().toISOString(), termsVersion: TERMS_VERSION, createdAt: FV.serverTimestamp()
+      }, { merge: true });
+      closeModal();
+      updateHeader();
+      toast('Conta criada com sucesso.');
+      runPending();
+    } catch (e) { setMsg('#auth-msg', authError(e), 'error'); }
+  };
+
+  actions['reset-pass'] = async () => {
+    const email = String(($('#a-email') || {}).value || '').trim();
+    if (!email) return setMsg('#auth-msg', 'Digite seu e-mail e clique novamente.', 'error');
+    try {
+      await auth.sendPasswordResetEmail(email);
+      setMsg('#auth-msg', 'Enviamos um link de redefinição para o seu e-mail.', 'ok');
+    } catch (e) { setMsg('#auth-msg', authError(e), 'error'); }
+  };
+
+  actions.account = () => {
+    if (!state.user) return openAuth('login', '');
+    openModal(`
+      <h2 class="modal-title">Minha conta</h2>
+      <p><strong>${esc(state.user.displayName || 'Cliente')}</strong><br><span class="muted">${esc(state.user.email)}</span></p>
+      ${state.isAdmin ? '<a class="btn btn-ghost btn-block" href="#admin" data-act="close-modal" style="margin-bottom:8px">Abrir painel do lojista</a>' : ''}
+      <button type="button" class="btn btn-ghost btn-block" data-act="logout">Sair</button>`, { label: 'Minha conta' });
+  };
+  actions.logout = async () => { await auth.signOut(); closeModal(); toast('Você saiu da conta.'); };
+
+  let unsubUserDoc = null;
+  auth.onAuthStateChanged(async (u) => {
+    state.user = u;
+    state.authReady = true;
+    state.isAdmin = false;
+    state.userDoc = null;
+    if (unsubUserDoc) { unsubUserDoc(); unsubUserDoc = null; }
+    if (u) {
+      unsubUserDoc = db.collection('users').doc(u.uid).onSnapshot((s) => { state.userDoc = s.exists ? s.data() : null; }, () => {});
+      try { state.isAdmin = (await db.collection('admins').doc(u.uid).get()).exists; } catch (e) { state.isAdmin = false; }
+      syncTermsToUser();
+    }
+    if (state.isAdmin) startAdminListeners(); else stopAdminListeners();
+    updateHeader();
+    if (currentRoute() === 'admin') renderAdmin();
+    if ($('#cart').classList.contains('open')) renderCart();
+  });
+
+  function runPending() {
+    const p = state.pending;
+    state.pending = null;
+    if (p && state.user) openCheckout(p.source);
+  }
+
+  /* =====================================================================
+     7. FIRESTORE (TEMPO REAL)
+     ===================================================================== */
+  function listen() {
+    const fail = (e) => { console.error(e); toast('Não foi possível carregar os dados da loja.', 'error'); };
+    db.collection('products').onSnapshot((snap) => {
+      state.products = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      state.productsLoaded = true;
+      normalizeCart();
+      onDataChange('products');
+    }, fail);
+    db.collection('categories').onSnapshot((snap) => {
+      state.categories = snap.docs.map((d) => Object.assign({ id: d.id }, d.data())).sort((a, b) => (a.order || 0) - (b.order || 0));
+      if (state.filters.cat !== 'TODOS' && !state.categories.some((c) => c.id === state.filters.cat)) state.filters.cat = 'TODOS';
+      onDataChange('categories');
+    }, fail);
+    db.collection('settings').doc('store').onSnapshot((s) => {
+      const d = s.exists ? s.data() : {};
+      state.settings = {
+        freeShippingThreshold: Number(d.freeShippingThreshold) || 0,
+        shippingTiers: Array.isArray(d.shippingTiers) ? d.shippingTiers : [],
+        sizePresets: Array.isArray(d.sizePresets) ? d.sizePresets : []
+      };
+      if (state.cart.shipIdx >= state.settings.shippingTiers.length) state.cart.shipIdx = -1;
+      onDataChange('settings');
+    }, fail);
+  }
+
+  let adminUnsubs = [];
+  function startAdminListeners() {
+    if (adminUnsubs.length) return;
+    adminUnsubs.push(db.collection('coupons').onSnapshot((snap) => {
+      state.coupons = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      onDataChange('coupons');
+    }, console.error));
+    adminUnsubs.push(db.collection('orders').orderBy('createdAt', 'desc').limit(150).onSnapshot((snap) => {
+      state.orders = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      onDataChange('orders');
+    }, console.error));
+  }
+  function stopAdminListeners() {
+    adminUnsubs.forEach((u) => u());
+    adminUnsubs = [];
+  }
+
+  function onDataChange(kind) {
+    const r = currentRoute();
+    if (r === 'home') {
+      if (kind === 'products' || kind === 'categories' || kind === 'settings') renderCatalog();
+    } else if (r === 'pdp') {
+      if (kind === 'products' || kind === 'settings' || kind === 'categories') renderPDP(routeArg());
+    } else if (r === 'admin' && state.isAdmin) {
+      refreshAdmin(kind);
+    }
+    if ($('#cart').classList.contains('open')) renderCart();
+    updateHeader();
+  }
+
+  /* =====================================================================
+     8. ROTEAMENTO E CABEÇALHO
+     ===================================================================== */
+  function currentRoute() {
+    const h = location.hash.replace(/^#/, '');
+    if (h.startsWith('produto/')) return 'pdp';
+    if (h === 'admin') return 'admin';
+    return 'home';
+  }
+  const routeArg = () => decodeURIComponent(location.hash.replace(/^#produto\//, ''));
+
+  function route() {
+    window.scrollTo(0, 0);
+    const r = currentRoute();
+    if (r === 'pdp') renderPDP(routeArg());
+    else if (r === 'admin') renderAdmin();
+    else renderHome();
+  }
+  window.addEventListener('hashchange', () => { if (appStarted) route(); });
+
+  function updateHeader() {
+    const count = state.cart.items.reduce((a, i) => a + i.qty, 0);
+    const badge = $('#cart-badge');
+    badge.textContent = count;
+    badge.hidden = count === 0;
+    $('#account-label').textContent = state.user ? (state.user.displayName || 'Minha conta').split(' ')[0] : 'Entrar';
+    $('#admin-link').hidden = !state.isAdmin;
+  }
+
+  /* =====================================================================
+     9. VITRINE
+     ===================================================================== */
+  function cardHtml(p, quick) {
+    const img = imagesOf(p)[0];
+    const sold = totalStock(p) <= 0;
+    return `
+    <article class="card">
+      <a class="card-media" href="#produto/${esc(p.id)}" aria-label="${esc(p.name)}">
+        ${img ? `<img src="${esc(img)}" alt="${esc(p.name)}" loading="lazy">` : '<div class="img-empty"></div>'}
+        ${isPromo(p) ? `<span class="badge">-${discountPct(p)}%</span>` : ''}
+        ${sold ? '<span class="badge badge-muted">Esgotado</span>' : ''}
+      </a>
+      <div class="card-body">
+        <h3>${esc(p.name)}</h3>
+        <div class="price">${isPromo(p) ? `<strong>${brl(p.promoPrice)}</strong><s>${brl(p.price)}</s>` : `<strong>${brl(p.price)}</strong>`}</div>
+        ${quick
+          ? `<button type="button" class="btn btn-sm" data-act="quick" data-id="${esc(p.id)}" ${sold ? 'disabled' : ''}>Adicionar</button>`
+          : `<a class="btn btn-sm" href="#produto/${esc(p.id)}">Ver Detalhes</a>`}
+      </div>
+    </article>`;
+  }
+
+  function renderHome() {
+    view().innerHTML = `
+    <section class="hero">
+      <img class="hero-img" src="${esc(HERO_IMAGE)}" alt="" fetchpriority="high">
+      <div class="hero-inner">
+        <span class="eyebrow">ARENA MODA FITNESS</span>
+        <h1>Roupas e calçados de treino para quem leva o resultado a sério</h1>
+        <p>Camisas, shorts, calças, tênis e acessórios para treinar com conforto. Escolha o tamanho, monte o carrinho e feche o pedido.</p>
+        <p id="hero-ship" class="hero-ship" hidden></p>
+        <button type="button" class="btn" data-act="scroll-shop">Ver produtos</button>
+      </div>
+    </section>
+    <section id="shop" class="shop container">
+      <div class="search">${icon('search')}<input type="search" id="search" data-in="search" placeholder="Buscar por nome ou descrição" value="${esc(state.filters.q)}" aria-label="Buscar produtos" autocomplete="off"></div>
+      <div class="filter-title">Categorias</div>
+      <div class="tiles" id="cat-tiles"></div>
+      <div class="filter-title">Sexo</div>
+      <div class="tiles" id="gender-tiles"></div>
+      <div class="result-bar"><h2 style="margin:0">Produtos</h2><span id="result-count" class="muted small"></span></div>
+      <div class="grid" id="grid"></div>
+    </section>`;
+    renderCatalog();
+  }
+
+  actions['scroll-shop'] = () => { const s = $('#shop'); if (s) s.scrollIntoView(); };
+  inputs.search = (el) => { state.filters.q = el.value; renderGrid(); };
+  actions.cat = (el) => { state.filters.cat = el.dataset.id; renderCatalog(); };
+  actions.gender = (el) => { state.filters.gender = el.dataset.id; renderCatalog(); };
+  actions['clear-filters'] = () => { state.filters = { q: '', cat: 'TODOS', gender: 'TODOS' }; const s = $('#search'); if (s) s.value = ''; renderCatalog(); };
+
+  function renderCatalog() {
+    if (!$('#grid')) return;
+    const th = state.settings.freeShippingThreshold;
+    const hs = $('#hero-ship');
+    if (hs) { hs.hidden = !(th > 0); hs.textContent = th > 0 ? `Frete grátis em compras acima de ${brl(th)}` : ''; }
+    const tile = (id, label, on, act) => `<button type="button" class="tile ${on ? 'is-active' : ''}" data-act="${act}" data-id="${esc(id)}" aria-pressed="${on}">${esc(label)}</button>`;
+    $('#cat-tiles').innerHTML = tile('TODOS', 'TODOS', state.filters.cat === 'TODOS', 'cat') +
+      state.categories.map((c) => tile(c.id, c.name, state.filters.cat === c.id, 'cat')).join('');
+    $('#gender-tiles').innerHTML = ['TODOS'].concat(GENDERS).map((g) => tile(g, g, state.filters.gender === g, 'gender')).join('');
+    renderGrid();
+  }
+
+  function renderGrid() {
+    const grid = $('#grid');
+    if (!grid) return;
+    if (!state.productsLoaded) { grid.innerHTML = '<div class="state-box" style="grid-column:1/-1">Carregando produtos...</div>'; return; }
+    const q = norm(state.filters.q);
+    const list = sortedProducts(state.products.filter((p) => {
+      if (state.filters.cat !== 'TODOS' && p.categoryId !== state.filters.cat) return false;
+      if (state.filters.gender !== 'TODOS' && p.gender !== state.filters.gender) return false;
+      if (q && !(norm(p.name).includes(q) || norm(p.description).includes(q))) return false;
+      return true;
+    }));
+    $('#result-count').textContent = list.length + (list.length === 1 ? ' item' : ' itens');
+    if (!list.length) {
+      const filtered = state.filters.q || state.filters.cat !== 'TODOS' || state.filters.gender !== 'TODOS';
+      grid.innerHTML = `<div class="state-box" style="grid-column:1/-1">${filtered
+        ? '<p>Nenhum produto encontrado para os filtros selecionados.</p><button type="button" class="btn btn-ghost" data-act="clear-filters">Limpar filtros</button>'
+        : '<p>Nenhum produto disponível no momento.</p>'}</div>`;
+      return;
+    }
+    grid.innerHTML = list.map((p) => cardHtml(p, false)).join('');
+  }
+
+  /* =====================================================================
+     10. PÁGINA DE PRODUTO (PDP)
+     ===================================================================== */
+  function renderPDP(id) {
+    const v = view();
+    if (!state.productsLoaded) { v.innerHTML = '<div class="container state-box">Carregando produto...</div>'; return; }
+    const p = state.products.find((x) => x.id === id);
+    if (!p) { v.innerHTML = '<div class="container state-box"><h1>Produto não encontrado</h1><a class="btn" href="#">Voltar à vitrine</a></div>'; return; }
+
+    const colors = colorsOf(p), sizes = p.sizes || [], imgs = imagesOf(p);
+    if (pdp.pid !== id) {
+      const first = colors.find((c) => sizes.some((s) => getStock(p, c, s) > 0)) || colors[0];
+      Object.assign(pdp, { pid: id, img: 0, color: first, size: null });
+    }
+    if (!colors.includes(pdp.color)) pdp.color = colors[0];
+    if (pdp.size && getStock(p, pdp.color, pdp.size) <= 0) pdp.size = null;
+    if (pdp.img >= imgs.length) pdp.img = 0;
+
+    const related = sortedProducts(state.products.filter((x) => x.categoryId === p.categoryId && x.id !== p.id)).slice(0, 4);
+    v.innerHTML = `
+    <div class="container">
+      <a class="crumb" href="#">${icon('back', 16)} Voltar à vitrine</a>
+      <div class="pdp">
+        <div>
+          <div class="gallery-main">${imgs[pdp.img] ? `<img src="${esc(imgs[pdp.img])}" alt="${esc(p.name)}">` : '<div class="img-empty"></div>'}</div>
+          ${imgs.length > 1 ? `<div class="thumbs">${imgs.map((u, i) => `<button type="button" class="thumb ${i === pdp.img ? 'is-active' : ''}" data-act="pdp-img" data-i="${i}" aria-label="Foto ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}
+        </div>
+        <div>
+          <p class="muted small" style="margin:0">${esc(catName(p.categoryId))}${p.gender ? ' / ' + esc(p.gender) : ''}</p>
+          <h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">${esc(p.name)}</h1>
+          <div class="pdp-price">
+            ${isPromo(p)
+              ? `<span class="badge" style="position:static;display:inline-block;margin-bottom:6px">-${discountPct(p)}%</span><div class="old">De ${brl(p.price)} por apenas</div><div class="now">${brl(p.promoPrice)}</div>`
+              : `<div class="now" style="color:var(--text)">${brl(p.price)}</div>`}
+          </div>
+          <div class="opt-label">Cor: ${esc(pdp.color)}</div>
+          <div class="opts">${colors.map((c) => {
+            const out = !sizes.some((s) => getStock(p, c, s) > 0);
+            return `<button type="button" class="opt ${c === pdp.color ? 'is-active' : ''}" data-act="pdp-color" data-v="${esc(c)}" ${out ? 'disabled' : ''}>${esc(c)}</button>`;
+          }).join('')}</div>
+          <div class="opt-label">Tamanho</div>
+          <div class="opts">${sizes.map((s) => {
+            const out = getStock(p, pdp.color, s) <= 0;
+            return `<button type="button" class="opt ${s === pdp.size ? 'is-active' : ''}" data-act="pdp-size" data-v="${esc(s)}" ${out ? 'disabled' : ''}>${esc(s)}</button>`;
+          }).join('')}</div>
+          <div id="pdp-msg" class="msg" role="alert" style="margin-top:10px"></div>
+          <div class="pdp-actions">
+            <button type="button" class="btn btn-ghost" data-act="pdp-add" ${totalStock(p) <= 0 ? 'disabled' : ''}>Adicionar ao Carrinho</button>
+            <button type="button" class="btn" data-act="pdp-buy" ${totalStock(p) <= 0 ? 'disabled' : ''}>Comprar Agora</button>
+          </div>
+          ${totalStock(p) <= 0 ? '<p class="muted small" style="margin-top:10px">Produto esgotado.</p>' : ''}
+          <div class="spec"><h3>Descrição técnica</h3><p>${esc(p.description || 'Sem detalhes cadastrados.')}</p></div>
+        </div>
+      </div>
+    </div>
+    ${related.length ? `<section class="container related"><h2>Produtos relacionados</h2><div class="grid">${related.map((x) => cardHtml(x, true)).join('')}</div></section>` : ''}`;
+  }
+
+  actions['pdp-img'] = (el) => { pdp.img = Number(el.dataset.i); renderPDP(pdp.pid); };
+  actions['pdp-color'] = (el) => { pdp.color = el.dataset.v; renderPDP(pdp.pid); };
+  actions['pdp-size'] = (el) => { pdp.size = el.dataset.v; renderPDP(pdp.pid); };
+
+  function pdpSelection() {
+    const p = state.products.find((x) => x.id === pdp.pid);
+    if (!p) return null;
+    if (!pdp.size) { setMsg('#pdp-msg', 'Selecione um tamanho para continuar.', 'error'); return null; }
+    if (getStock(p, pdp.color, pdp.size) <= 0) { setMsg('#pdp-msg', 'Esta combinação está esgotada.', 'error'); return null; }
+    return { p, color: pdp.color, size: pdp.size };
+  }
+
+  function addToCart(pid, color, size, qty) {
+    const p = state.products.find((x) => x.id === pid);
+    if (!p) return false;
+    const avail = getStock(p, color, size);
+    const ex = state.cart.items.find((i) => i.pid === pid && i.color === color && i.size === size);
+    const next = (ex ? ex.qty : 0) + (qty || 1);
+    if (next > avail) { toast(`Estoque disponível: ${avail} unidade(s).`, 'error'); return false; }
+    if (ex) ex.qty = next; else state.cart.items.push({ pid, color, size, qty: qty || 1 });
+    saveCart();
+    updateHeader();
+    return true;
+  }
+
+  actions['pdp-add'] = () => {
+    const s = pdpSelection();
+    if (!s) return;
+    if (addToCart(s.p.id, s.color, s.size, 1)) { setMsg('#pdp-msg', ''); toast('Produto adicionado ao carrinho.'); openCart(); }
+  };
+  actions['pdp-buy'] = () => {
+    const s = pdpSelection();
+    if (!s) return;
+    state.buyNow = { pid: s.p.id, color: s.color, size: s.size, qty: 1 };
+    startCheckout('buynow');
+  };
+  actions.quick = (el) => {
+    const p = state.products.find((x) => x.id === el.dataset.id);
+    if (!p) return;
+    const variants = [];
+    colorsOf(p).forEach((c) => (p.sizes || []).forEach((s) => { if (getStock(p, c, s) > 0) variants.push([c, s]); }));
+    if (variants.length === 1) { if (addToCart(p.id, variants[0][0], variants[0][1], 1)) toast('Produto adicionado ao carrinho.'); }
+    else if (!variants.length) toast('Produto esgotado.', 'error');
+    else { location.hash = '#produto/' + p.id; toast('Escolha cor e tamanho para adicionar.'); }
+  };
+
+  /* =====================================================================
+     11. CARRINHO, FRETE E CUPONS
+     ===================================================================== */
+  function renderCart() {
+    const body = $('#cart-body'), foot = $('#cart-foot');
+    let lines = linesOf(state.cart.items);
+    if (state.coupon && state.coupon.scope === 'categoria' && eligibleBase(lines, state.coupon) === 0) {
+      state.coupon = null;
+      state.couponMsg = { text: 'Não há produtos no carrinho que se apliquem ao cupom', type: 'error' };
+    }
+    if (!lines.length) {
+      body.innerHTML = '<div class="state-box"><p>Seu carrinho está vazio.</p><button type="button" class="btn btn-ghost" data-act="close-cart">Continuar comprando</button></div>';
+      foot.innerHTML = '';
+      return;
+    }
+    body.innerHTML = lines.map((l, i) => {
+      const img = imagesOf(l.product)[0];
+      return `<div class="cart-item">
+        ${img ? `<img src="${esc(img)}" alt="${esc(l.product.name)}">` : '<div class="img-empty"></div>'}
+        <div>
+          <h4>${esc(l.product.name)}</h4>
+          <div class="cart-meta">COR: ${esc(l.item.color)} / TAM: ${esc(l.item.size)}</div>
+          <div class="cart-line">
+            <div class="qty">
+              <button type="button" data-act="cart-dec" data-i="${i}" aria-label="Diminuir quantidade">${icon('minus', 16)}</button>
+              <span>${l.item.qty}</span>
+              <button type="button" data-act="cart-inc" data-i="${i}" aria-label="Aumentar quantidade" ${l.item.qty >= l.avail ? 'disabled' : ''}>${icon('plus', 16)}</button>
+            </div>
+            <strong>${brl(l.unit * l.item.qty)}</strong>
+            <button type="button" class="rm" data-act="cart-rm" data-i="${i}" aria-label="Remover item">${icon('trash', 18)}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    const tiers = state.settings.shippingTiers;
+    const t = computeTotals(lines, state.coupon, currentTier());
+    const pct = t.threshold > 0 ? Math.min(100, Math.round((t.base / t.threshold) * 100)) : 0;
+    const msg = state.couponMsg;
+    foot.innerHTML = `
+      ${t.threshold > 0 ? `
+        <div class="small">${t.free ? 'Você ganhou frete grátis.' : `Faltam ${brl(t.threshold - t.base)} para o frete grátis.`}</div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>` : ''}
+      <div class="field" style="margin-bottom:8px">
+        <label for="cart-ship">Frete</label>
+        ${tiers.length ? `<select id="cart-ship" data-in="ship"><option value="-1">Selecione a região ou faixa de distância</option>${tiers.map((x, i) => `<option value="${i}" ${i === state.cart.shipIdx ? 'selected' : ''}>${esc(x.label)} (${brl(x.price)})</option>`).join('')}</select>` : '<span class="muted small">Frete a combinar com a loja.</span>'}
+      </div>
+      ${state.coupon
+        ? `<div class="coupon-tag"><span>Cupom <strong>${esc(state.coupon.code)}</strong> (-${esc(state.coupon.percent)}%)</span><button type="button" class="link" data-act="coupon-remove">Remover</button></div>`
+        : `<form class="coupon-row" data-form="coupon"><input class="inline-input upper" id="coupon-input" data-in="coupon" placeholder="Cupom de desconto" value="${esc(state.couponInput)}" aria-label="Cupom de desconto" autocomplete="off"><button type="submit" class="btn btn-ghost btn-sm">Aplicar</button></form>`}
+      <div class="msg ${msg ? msg.type : ''}" role="alert">${msg ? esc(msg.text) : ''}</div>
+      <div class="sum-row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>
+      ${t.discount > 0 ? `<div class="sum-row"><span>Desconto</span><span class="disc">-${brl(t.discount)}</span></div>` : ''}
+      <div class="sum-row"><span>Frete</span><span>${t.free ? 'Grátis' : (currentTier() ? brl(t.shipping) : (tiers.length ? 'A calcular' : 'A combinar'))}</span></div>
+      <div class="sum-row total"><span>Total</span><span>${brl(t.total)}</span></div>
+      <button type="button" class="btn btn-block" style="margin-top:12px" data-act="checkout-cart">Finalizar Compra</button>`;
+  }
+
+  inputs.ship = (el) => { state.cart.shipIdx = Number(el.value); saveCart(); renderCart(); };
+  inputs.coupon = (el) => { el.value = el.value.toUpperCase(); state.couponInput = el.value; };
+  actions['cart-inc'] = (el) => { const l = linesOf(state.cart.items)[Number(el.dataset.i)]; if (l && l.item.qty < l.avail) { l.item.qty++; saveCart(); updateHeader(); renderCart(); } };
+  actions['cart-dec'] = (el) => { const l = linesOf(state.cart.items)[Number(el.dataset.i)]; if (l) { l.item.qty--; if (l.item.qty <= 0) state.cart.items = state.cart.items.filter((x) => x !== l.item); saveCart(); updateHeader(); renderCart(); } };
+  actions['cart-rm'] = (el) => { const l = linesOf(state.cart.items)[Number(el.dataset.i)]; if (l) { state.cart.items = state.cart.items.filter((x) => x !== l.item); saveCart(); updateHeader(); renderCart(); } };
+  actions['coupon-remove'] = () => { state.coupon = null; state.couponMsg = null; state.couponInput = ''; renderCart(); if (!$('#modal-root').hidden && $('#co-summary')) renderCheckoutSummary(); };
+
+  async function applyCoupon(raw, lines) {
+    const code = String(raw || '').trim().toUpperCase();
+    if (!code) return { text: 'Informe o código do cupom.', type: 'error' };
+    if (!/^[A-Z0-9_-]{2,30}$/.test(code)) return { text: 'Cupom inválido ou inativo.', type: 'error' };
+    let snap;
+    try { snap = await db.collection('coupons').doc(code).get(); } catch (e) { return { text: 'Não foi possível validar o cupom agora.', type: 'error' }; }
+    if (!snap.exists || !snap.data().active) return { text: 'Cupom inválido ou inativo.', type: 'error' };
+    const c = Object.assign({ code }, snap.data());
+    const used = Number(((state.userDoc || {}).couponUses || {})[code] || 0);
+    if (state.user && c.maxUsesPerUser > 0 && used >= c.maxUsesPerUser) return { text: 'Você já atingiu o limite de usos deste cupom.', type: 'error' };
+    if (c.scope === 'categoria' && eligibleBase(lines, c) === 0) return { text: 'Não há produtos no carrinho que se apliquem ao cupom', type: 'error' };
+    state.coupon = c;
+    return { text: `Cupom ${code} aplicado.`, type: 'ok' };
+  }
+
+  forms.coupon = async (f) => {
+    state.couponMsg = await applyCoupon(new FormData(f).get('code') || $('#coupon-input').value, linesOf(state.cart.items));
+    if (state.couponMsg.type === 'ok') state.couponInput = '';
+    renderCart();
+  };
+
+  /* =====================================================================
+     12. CHECKOUT E REGISTRO DO PEDIDO
+     ===================================================================== */
+  const itemsFor = (source) => (source === 'buynow' ? (state.buyNow ? [state.buyNow] : []) : state.cart.items);
+
+  actions['checkout-cart'] = () => startCheckout('cart');
+
+  function startCheckout(source) {
+    if (!itemsFor(source).length) return toast('Seu carrinho está vazio.', 'error');
+    if (!state.user) {
+      state.pending = { source };
+      closeCart();
+      openAuth('login', 'Entre ou crie sua conta para finalizar a compra. Seus itens continuam salvos.');
+      return;
+    }
+    closeCart();
+    openCheckout(source);
+  }
+
+  let coSource = 'cart';
+  function openCheckout(source) {
+    coSource = source;
+    const lines = linesOf(itemsFor(source));
+    if (!lines.length) return toast('Itens indisponíveis.', 'error');
+    const tiers = state.settings.shippingTiers;
+    const u = state.user;
+    const modal = openModal(`
+      <h2 class="modal-title">Fechamento do pedido</h2>
+      <div class="co-grid">
+        <form data-form="order" id="order-form" novalidate>
+          <div class="field"><label for="o-name">Nome completo</label><input id="o-name" name="name" value="${esc(u.displayName || '')}" autocomplete="name" required></div>
+          <div class="field-row">
+            <div class="field"><label for="o-phone">Telefone (WhatsApp)</label><input id="o-phone" name="phone" inputmode="tel" autocomplete="tel" required></div>
+            <div class="field"><label for="o-cep">CEP</label><input id="o-cep" name="cep" inputmode="numeric" maxlength="9" autocomplete="postal-code" required></div>
+          </div>
+          <div class="field"><label for="o-street">Rua</label><input id="o-street" name="street" autocomplete="address-line1" required></div>
+          <div class="field-row">
+            <div class="field"><label for="o-number">Número</label><input id="o-number" name="number" required></div>
+            <div class="field"><label for="o-comp">Complemento</label><input id="o-comp" name="complement"></div>
+          </div>
+          <div class="field"><label for="o-district">Bairro</label><input id="o-district" name="district" required></div>
+          <div class="field-row">
+            <div class="field"><label for="o-city">Cidade</label><input id="o-city" name="city" autocomplete="address-level2" required></div>
+            <div class="field"><label for="o-uf">UF</label><input id="o-uf" name="uf" class="upper" maxlength="2" required></div>
+          </div>
+          <div class="field">
+            <label for="o-ship">Frete</label>
+            ${tiers.length ? `<select id="o-ship" name="ship" data-in="co-ship"><option value="-1">Selecione a região ou faixa de distância</option>${tiers.map((x, i) => `<option value="${i}" ${i === state.cart.shipIdx ? 'selected' : ''}>${esc(x.label)} (${brl(x.price)})</option>`).join('')}</select>` : '<span class="muted small">Frete a combinar com a loja.</span>'}
+          </div>
+          <div id="order-msg" class="msg" role="alert"></div>
+          <button type="submit" id="order-submit" class="btn btn-block">Confirmar Pedido</button>
+        </form>
+        <div class="co-box" id="co-summary"></div>
+      </div>`, { wide: true, label: 'Fechamento do pedido' });
+    renderCheckoutSummary(modal);
+  }
+
+  inputs['co-ship'] = (el) => { state.cart.shipIdx = Number(el.value); saveCart(); renderCheckoutSummary(); };
+  forms['co-coupon'] = async (f) => {
+    state.couponMsg = await applyCoupon($('#co-coupon-input', f).value, linesOf(itemsFor(coSource)));
+    if (state.couponMsg.type === 'ok') state.couponInput = '';
+    renderCheckoutSummary();
+  };
+
+  function renderCheckoutSummary() {
+    const box = $('#co-summary');
+    if (!box) return;
+    const lines = linesOf(itemsFor(coSource));
+    if (state.coupon && state.coupon.scope === 'categoria' && eligibleBase(lines, state.coupon) === 0) {
+      state.coupon = null;
+      state.couponMsg = { text: 'Não há produtos no carrinho que se apliquem ao cupom', type: 'error' };
+    }
+    const t = computeTotals(lines, state.coupon, currentTier());
+    const msg = state.couponMsg;
+    box.innerHTML = `
+      <h3>Resumo</h3>
+      ${lines.map((l) => `<div class="sum-row"><span>${l.item.qty}x ${esc(l.product.name)}<br><span class="muted small">${esc(l.item.color)} / ${esc(l.item.size)}</span></span><span>${brl(l.unit * l.item.qty)}</span></div>`).join('')}
+      ${state.coupon
+        ? `<div class="coupon-tag"><span>Cupom <strong>${esc(state.coupon.code)}</strong></span><button type="button" class="link" data-act="coupon-remove">Remover</button></div>`
+        : `<form class="coupon-row" data-form="co-coupon"><input class="inline-input upper" id="co-coupon-input" data-in="coupon" placeholder="Cupom de desconto" value="${esc(state.couponInput)}" aria-label="Cupom de desconto" autocomplete="off"><button type="submit" class="btn btn-ghost btn-sm">Aplicar</button></form>`}
+      <div class="msg ${msg ? msg.type : ''}" role="alert">${msg ? esc(msg.text) : ''}</div>
+      <div class="sum-row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>
+      ${t.discount > 0 ? `<div class="sum-row"><span>Desconto</span><span class="disc">-${brl(t.discount)}</span></div>` : ''}
+      <div class="sum-row"><span>Frete</span><span>${t.free ? 'Grátis' : (currentTier() ? brl(t.shipping) : (state.settings.shippingTiers.length ? 'Selecione' : 'A combinar'))}</span></div>
+      <div class="sum-row total"><span>Total</span><span>${brl(t.total)}</span></div>
+      <p class="muted small" style="margin:10px 0 0">O pagamento é combinado diretamente com a loja após o registro do pedido.</p>`;
+  }
+
+  forms.order = async (f) => {
+    const d = Object.fromEntries(new FormData(f).entries());
+    const required = ['name', 'phone', 'cep', 'street', 'number', 'district', 'city', 'uf'];
+    if (required.some((k) => !String(d[k] || '').trim())) return setMsg('#order-msg', 'Preencha todos os campos obrigatórios.', 'error');
+    const tiers = state.settings.shippingTiers;
+    if (tiers.length && !currentTier()) return setMsg('#order-msg', 'Selecione o frete.', 'error');
+    const btn = $('#order-submit');
+    btn.disabled = true;
+    setMsg('#order-msg', 'Registrando pedido...', '');
+    try {
+      const orderId = await placeOrder(coSource, d);
+      if (coSource === 'buynow') state.buyNow = null; else state.cart.items = [];
+      state.coupon = null; state.couponMsg = null; state.couponInput = '';
+      saveCart();
+      updateHeader();
+      openModal(`
+        <h2 class="modal-title">Pedido registrado</h2>
+        <p>Número do pedido: <strong>${esc(orderId.slice(0, 8).toUpperCase())}</strong></p>
+        <p>Status: Aguardando Pagamento / Confirmação. A loja entrará em contato pelo telefone informado para combinar o pagamento e o envio.</p>
+        <button type="button" class="btn btn-block" data-act="close-modal">Voltar à loja</button>`, { label: 'Pedido registrado' });
+    } catch (e) {
+      console.error(e);
+      btn.disabled = false;
+      setMsg('#order-msg', e.userMessage || 'Não foi possível registrar o pedido. Tente novamente.', 'error');
+    }
+  };
+
+  class UserError extends Error { constructor(m) { super(m); this.userMessage = m; } }
+
+  async function placeOrder(source, d) {
+    const uid = state.user.uid;
+    const items = itemsFor(source).map((i) => Object.assign({}, i));
+    const tier = currentTier();
+    const orderRef = db.collection('orders').doc();
+    const userRef = db.collection('users').doc(uid);
+    const couponRef = state.coupon ? db.collection('coupons').doc(state.coupon.code) : null;
+
+    await db.runTransaction(async (tx) => {
+      const pids = Array.from(new Set(items.map((i) => i.pid)));
+      const prodSnaps = await Promise.all(pids.map((id) => tx.get(db.collection('products').doc(id))));
+      const userSnap = await tx.get(userRef);
+      const couponSnap = couponRef ? await tx.get(couponRef) : null;
+
+      const prods = {};
+      prodSnaps.forEach((s) => { if (s.exists) prods[s.id] = s.data(); });
+
+      const stockMaps = {};
+      const lines = items.map((it) => {
+        const p = prods[it.pid];
+        if (!p) throw new UserError('Um dos produtos não está mais disponível.');
+        if (!stockMaps[it.pid]) stockMaps[it.pid] = Object.assign({}, p.stock || {});
+        const k = skey(it.color, it.size);
+        const avail = Number(stockMaps[it.pid][k] || 0);
+        if (avail < it.qty) throw new UserError(`Estoque insuficiente para ${p.name} (${it.color} / ${it.size}).`);
+        stockMaps[it.pid][k] = avail - it.qty;
+        return { item: it, product: Object.assign({ id: it.pid }, p), unit: effPrice(p) };
+      });
+
+      let coupon = null;
+      if (couponSnap) {
+        if (!couponSnap.exists || !couponSnap.data().active) throw new UserError('O cupom informado não está mais ativo.');
+        coupon = Object.assign({ code: couponSnap.id }, couponSnap.data());
+        const used = Number(((userSnap.exists ? userSnap.data() : {}).couponUses || {})[coupon.code] || 0);
+        if (coupon.maxUsesPerUser > 0 && used >= coupon.maxUsesPerUser) throw new UserError('Você já atingiu o limite de usos deste cupom.');
+        if (coupon.scope === 'categoria' && eligibleBase(lines, coupon) === 0) throw new UserError('Não há produtos no carrinho que se apliquem ao cupom');
+      }
+
+      const t = computeTotals(lines, coupon, tier);
+      Object.keys(stockMaps).forEach((pid) => tx.update(db.collection('products').doc(pid), { stock: stockMaps[pid] }));
+      tx.set(orderRef, {
+        uid,
+        customer: { name: d.name.trim(), email: state.user.email, phone: d.phone.trim() },
+        address: {
+          cep: d.cep.trim(), street: d.street.trim(), number: d.number.trim(), complement: (d.complement || '').trim(),
+          district: d.district.trim(), city: d.city.trim(), uf: d.uf.trim().toUpperCase()
+        },
+        items: lines.map((l) => ({ productId: l.item.pid, name: l.product.name, color: l.item.color, size: l.item.size, qty: l.item.qty, unitPrice: l.unit })),
+        subtotal: t.subtotal, discount: t.discount, shipping: t.shipping,
+        shippingLabel: t.free ? 'Frete grátis' : (tier ? tier.label : 'A combinar'),
+        total: t.total, coupon: coupon ? coupon.code : null,
+        status: STATUSES[0], createdAt: FV.serverTimestamp()
+      });
+      if (coupon) {
+        const used = Number(((userSnap.exists ? userSnap.data() : {}).couponUses || {})[coupon.code] || 0);
+        const patch = { couponUses: {} };
+        patch.couponUses[coupon.code] = used + 1;
+        tx.set(userRef, patch, { merge: true });
+      }
+    });
+    return orderRef.id;
+  }
+
+  /* =====================================================================
+     13. PAINEL DO LOJISTA (#admin)
+     ===================================================================== */
+  const ADMIN_TABS = [['produtos', 'Produtos'], ['categorias', 'Categorias'], ['cupons', 'Cupons'], ['pedidos', 'Pedidos'], ['frete', 'Frete']];
+
+  function renderAdmin() {
+    const v = view();
+    if (!state.authReady) { v.innerHTML = '<div class="container state-box">Verificando acesso...</div>'; return; }
+    if (!state.user) {
+      v.innerHTML = `<div class="container admin" style="max-width:440px">
+        <h1>Área do lojista</h1>
+        <div class="panel">
+          <div id="admin-msg" class="msg" role="alert"></div>
+          <form data-form="admin-login" novalidate>
+            <div class="field"><label for="ad-email">E-mail</label><input id="ad-email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="ad-pass">Senha</label><input id="ad-pass" name="password" type="password" autocomplete="current-password" required></div>
+            <button class="btn btn-block" type="submit">Entrar</button>
+          </form>
+        </div></div>`;
+      return;
+    }
+    if (!state.isAdmin) {
+      v.innerHTML = '<div class="container state-box"><h1>Acesso restrito</h1><p>Esta conta não tem permissão de lojista.</p><button type="button" class="btn btn-ghost" data-act="logout">Sair</button> <a class="btn" href="#">Voltar à loja</a></div>';
+      return;
+    }
+    v.innerHTML = `<div class="container admin">
+      <h1>Painel do lojista</h1>
+      <div class="admin-tabs" role="tablist">${ADMIN_TABS.map(([id, label]) => `<button type="button" role="tab" class="tab ${state.adminTab === id ? 'is-active' : ''}" data-act="admin-tab" data-id="${id}">${label}</button>`).join('')}</div>
+      <div id="admin-body"></div></div>`;
+    renderAdminTab();
+  }
+
+  forms['admin-login'] = async (f) => {
+    const d = new FormData(f);
+    try { await auth.signInWithEmailAndPassword(String(d.get('email')).trim(), String(d.get('password'))); }
+    catch (e) { setMsg('#admin-msg', authError(e), 'error'); }
+  };
+  actions['admin-tab'] = (el) => { state.adminTab = el.dataset.id; state.pform = null; renderAdmin(); };
+
+  function renderAdminTab() {
+    const body = $('#admin-body');
+    if (!body) return;
+    const t = state.adminTab;
+    if (t === 'produtos') return renderProductsTab(body);
+    if (t === 'categorias') return renderCategoriesTab(body);
+    if (t === 'cupons') return renderCouponsTab(body);
+    if (t === 'pedidos') return renderOrdersTab(body);
+    return renderShippingTab(body);
+  }
+
+  function refreshAdmin(kind) {
+    const t = state.adminTab;
+    if (kind === 'products' && t === 'produtos' && !state.pform) renderProductList();
+    else if (kind === 'categories' && t === 'categorias') renderCategoryList();
+    else if (kind === 'coupons' && t === 'cupons') renderCouponList();
+    else if (kind === 'orders' && t === 'pedidos') renderOrderList();
+    else if (kind === 'settings' && t === 'produtos' && state.pform) {
+      const sel = $('#preset-pick');
+      if (sel) sel.innerHTML = '<option value="">Selecione</option>' + state.settings.sizePresets.map((p, i) => `<option value="${i}">${esc(p.name)}: ${esc((p.sizes || []).join(' '))}</option>`).join('');
+    }
+  }
+
+  const adminErr = (e) => { console.error(e); toast('Operação não permitida ou falhou. Verifique as regras do Firestore.', 'error'); };
+
+  /* ----- Produtos ----- */
+  function blankProduct() {
+    return { id: null, name: '', description: '', categoryId: '', gender: 'UNISSEX', price: '', promoPrice: '', images: '', colors: [], sizes: [], stock: {} };
+  }
+
+  function renderProductsTab(body) {
+    if (state.pform) return renderProductForm(body);
+    body.innerHTML = `
+      <div class="panel">
+        <button type="button" class="btn btn-block" data-act="p-new">Novo produto</button>
+      </div>
+      <div class="panel"><h3>Catálogo</h3><div id="ap-list"></div></div>`;
+    renderProductList();
+  }
+
+  function renderProductList() {
+    const box = $('#ap-list');
+    if (!box) return;
+    const list = sortedProducts(state.products);
+    box.innerHTML = list.length ? list.map((p) => {
+      const img = imagesOf(p)[0];
+      return `<div class="row-item">
+        ${img ? `<img src="${esc(img)}" alt="">` : '<div class="img-empty"></div>'}
+        <div class="row-grow">
+          <strong>${esc(p.name)}</strong>
+          <span class="muted small">${esc(catName(p.categoryId) || 'Sem categoria')} / ${esc(p.gender || '')}</span><br>
+          <span class="small">${isPromo(p) ? `${brl(p.promoPrice)} <s class="muted">${brl(p.price)}</s> <span class="tag on">-${discountPct(p)}%</span>` : brl(p.price)}</span>
+          <span class="tag">Estoque: ${totalStock(p)}</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-act="p-edit" data-id="${esc(p.id)}">Editar</button>
+          <button type="button" class="btn btn-danger btn-sm" data-act="p-del" data-id="${esc(p.id)}">Excluir</button>
+        </div>
+      </div>`;
+    }).join('') : '<p class="muted">Nenhum produto cadastrado.</p>';
+  }
+
+  actions['p-new'] = () => { state.pform = blankProduct(); renderAdminTab(); };
+  actions['p-edit'] = (el) => {
+    const p = state.products.find((x) => x.id === el.dataset.id);
+    if (!p) return;
+    state.pform = {
+      id: p.id, name: p.name || '', description: p.description || '', categoryId: p.categoryId || '', gender: p.gender || 'UNISSEX',
+      price: fmtInput(p.price), promoPrice: isPromo(p) ? fmtInput(p.promoPrice) : '', images: (p.images || []).join('\n'),
+      colors: (p.colors || []).slice(), sizes: (p.sizes || []).slice(), stock: Object.assign({}, p.stock || {})
+    };
+    renderAdminTab();
+    window.scrollTo(0, 0);
+  };
+  actions['p-del'] = async (el) => {
+    const p = state.products.find((x) => x.id === el.dataset.id);
+    if (!p || !confirm(`Excluir o produto "${p.name}"? Esta ação não pode ser desfeita.`)) return;
+    try { await db.collection('products').doc(p.id).delete(); toast('Produto excluído.'); } catch (e) { adminErr(e); }
+  };
+  actions['p-cancel'] = () => { state.pform = null; renderAdminTab(); };
+
+  function renderProductForm(body) {
+    const f = state.pform;
+    const presets = state.settings.sizePresets;
+    body.innerHTML = `
+    <form data-form="product" class="panel" novalidate>
+      <h3>${f.id ? 'Editar produto' : 'Novo produto'}</h3>
+      <div class="field"><label for="pf-name">Nome</label><input id="pf-name" data-in="pf" data-k="name" value="${esc(f.name)}" required></div>
+      <div class="field"><label for="pf-desc">Descrição técnica (material, malha, especificações)</label><textarea id="pf-desc" data-in="pf" data-k="description">${esc(f.description)}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label for="pf-cat">Categoria</label>
+          <select id="pf-cat" data-in="pf" data-k="categoryId"><option value="">Selecione</option>${state.categories.map((c) => `<option value="${esc(c.id)}" ${c.id === f.categoryId ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div>
+        <div class="field"><label for="pf-gender">Sexo</label>
+          <select id="pf-gender" data-in="pf" data-k="gender">${GENDERS.map((g) => `<option ${g === f.gender ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="pf-price">Preço lançado (R$)</label><input id="pf-price" data-in="pf" data-k="price" inputmode="decimal" placeholder="199,00" value="${esc(f.price)}"></div>
+        <div class="field"><label for="pf-promo">Preço promocional (R$)</label><input id="pf-promo" data-in="pf" data-k="promoPrice" inputmode="decimal" placeholder="159,00" value="${esc(f.promoPrice)}"></div>
+      </div>
+      <div class="field"><label for="pf-images">URLs das fotos (uma por linha)</label><textarea id="pf-images" data-in="pf" data-k="images" placeholder="https://...">${esc(f.images)}</textarea></div>
+      <div class="field"><label for="pf-colors">Cores (separadas por vírgula)</label><input id="pf-colors" class="upper" data-in="pf-colors" placeholder="PRETO, BRANCO, VERDE" value="${esc(f.colors.join(', '))}"></div>
+
+      <div class="label">Tamanhos</div>
+      <div class="add-row">
+        <input class="inline-input upper" id="size-new" placeholder="P, M, G, GG ou 39, 40..." maxlength="8" data-in="size-new" aria-label="Novo tamanho">
+        <button type="button" class="btn btn-ghost" data-act="size-add">Adicionar</button>
+      </div>
+      <div class="chips" id="size-chips"></div>
+      <div class="field-row" style="align-items:end">
+        <div class="field" style="margin:0"><label for="preset-pick">Pré-configurações salvas</label>
+          <select id="preset-pick" data-in="preset-pick"><option value="">Selecione</option>${presets.map((p, i) => `<option value="${i}">${esc(p.name)}: ${esc((p.sizes || []).join(' '))}</option>`).join('')}</select></div>
+        <button type="button" class="btn btn-ghost btn-sm" data-act="preset-del">Excluir pré-config.</button>
+      </div>
+      <div class="add-row" style="margin:12px 0 16px">
+        <input class="inline-input" id="preset-name" placeholder="Nome da pré-configuração (ex: Roupas)" aria-label="Nome da pré-configuração">
+        <button type="button" class="btn btn-ghost" data-act="preset-save">Salvar tamanhos</button>
+      </div>
+
+      <div class="label">Estoque por cor e tamanho</div>
+      <div id="stock-matrix"></div>
+      <div id="pf-msg" class="msg" role="alert" style="margin-top:12px"></div>
+      <div class="stack">
+        <button type="submit" class="btn btn-block">Salvar produto</button>
+        <button type="button" class="btn btn-ghost btn-block" data-act="p-cancel">Cancelar</button>
+      </div>
+    </form>`;
+    renderSizeChips();
+    renderMatrix();
+  }
+
+  inputs.pf = (el) => { if (state.pform) state.pform[el.dataset.k] = el.value; };
+  inputs['pf-colors'] = (el) => {
+    el.value = el.value.toUpperCase();
+    state.pform.colors = Array.from(new Set(el.value.split(',').map((c) => c.trim()).filter(Boolean)));
+    renderMatrix();
+  };
+  inputs['size-new'] = (el) => { el.value = el.value.toUpperCase(); };
+  inputs['preset-pick'] = (el) => {
+    const p = state.settings.sizePresets[Number(el.value)];
+    if (!p) return;
+    state.pform.sizes = (p.sizes || []).slice();
+    renderSizeChips();
+    renderMatrix();
+  };
+  inputs.stock = (el) => { state.pform.stock[el.dataset.k] = Math.max(0, parseInt(el.value, 10) || 0); };
+
+  function renderSizeChips() {
+    const box = $('#size-chips');
+    if (!box) return;
+    box.innerHTML = state.pform.sizes.length
+      ? state.pform.sizes.map((s) => `<span class="chip">${esc(s)}<button type="button" data-act="size-rm" data-v="${esc(s)}" aria-label="Remover tamanho ${esc(s)}">${icon('close', 14)}</button></span>`).join('')
+      : '<span class="muted small">Nenhum tamanho adicionado.</span>';
+  }
+
+  function renderMatrix() {
+    const box = $('#stock-matrix');
+    if (!box) return;
+    const f = state.pform;
+    const colors = f.colors.length ? f.colors : ['ÚNICA'];
+    if (!f.sizes.length) { box.innerHTML = '<p class="muted small">Adicione tamanhos para informar o estoque.</p>'; return; }
+    box.innerHTML = `<div class="matrix-wrap"><table class="matrix"><thead><tr><th>Cor</th>${f.sizes.map((s) => `<th>${esc(s)}</th>`).join('')}</tr></thead><tbody>${colors.map((c) => `<tr><td>${esc(c)}</td>${f.sizes.map((s) => {
+      const k = skey(c, s);
+      return `<td><input type="number" min="0" step="1" inputmode="numeric" data-in="stock" data-k="${esc(k)}" value="${Number(f.stock[k] || 0)}" aria-label="Estoque ${esc(c)} ${esc(s)}"></td>`;
+    }).join('')}</tr>`).join('')}</tbody></table></div>`;
+  }
+
+  actions['size-add'] = () => {
+    const inp = $('#size-new');
+    const parts = inp.value.split(/[,\s]+/).map((s) => s.trim().toUpperCase()).filter(Boolean);
+    parts.forEach((s) => { if (!state.pform.sizes.includes(s)) state.pform.sizes.push(s); });
+    inp.value = '';
+    renderSizeChips();
+    renderMatrix();
+  };
+  actions['size-rm'] = (el) => { state.pform.sizes = state.pform.sizes.filter((s) => s !== el.dataset.v); renderSizeChips(); renderMatrix(); };
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target && e.target.id === 'size-new') { e.preventDefault(); actions['size-add'](); }
+  });
+
+  async function savePresets(list) {
+    await db.collection('settings').doc('store').set({ sizePresets: list }, { merge: true });
+  }
+  actions['preset-save'] = async () => {
+    const name = $('#preset-name').value.trim();
+    if (!name || !state.pform.sizes.length) return toast('Informe um nome e adicione tamanhos.', 'error');
+    const list = state.settings.sizePresets.filter((p) => p.name !== name).concat([{ name, sizes: state.pform.sizes.slice() }]);
+    try { await savePresets(list); $('#preset-name').value = ''; toast('Pré-configuração salva.'); } catch (e) { adminErr(e); }
+  };
+  actions['preset-del'] = async () => {
+    const idx = Number($('#preset-pick').value);
+    if (!state.settings.sizePresets[idx] || $('#preset-pick').value === '') return toast('Selecione uma pré-configuração.', 'error');
+    try { await savePresets(state.settings.sizePresets.filter((_, i) => i !== idx)); toast('Pré-configuração excluída.'); } catch (e) { adminErr(e); }
+  };
+
+  forms.product = async (form) => {
+    const f = state.pform;
+    const price = parseBRL(f.price), promo = parseBRL(f.promoPrice);
+    const images = f.images.split('\n').map((s) => s.trim()).filter(Boolean);
+    const err = (m) => setMsg('#pf-msg', m, 'error');
+    if (f.name.trim().length < 2) return err('Informe o nome do produto.');
+    if (!f.categoryId) return err('Selecione uma categoria. Crie uma na aba Categorias, se necessário.');
+    if (price <= 0) return err('Informe o preço lançado.');
+    if (promo && promo >= price) return err('O preço promocional deve ser menor que o preço lançado.');
+    if (!images.length || images.some((u) => !safeUrl(u))) return err('Informe ao menos uma URL de foto válida (começando com http ou https).');
+    if (!f.sizes.length) return err('Adicione ao menos um tamanho.');
+    const colors = f.colors.length ? f.colors : ['ÚNICA'];
+    const stock = {};
+    colors.forEach((c) => f.sizes.forEach((s) => { stock[skey(c, s)] = Number(f.stock[skey(c, s)] || 0); }));
+    const data = {
+      name: f.name.trim(), description: f.description.trim(), categoryId: f.categoryId, gender: f.gender,
+      images, colors, sizes: f.sizes.slice(), stock, price, promoPrice: promo || 0, updatedAt: Date.now()
+    };
+    try {
+      if (f.id) await db.collection('products').doc(f.id).update(data);
+      else await db.collection('products').add(Object.assign(data, { createdAt: Date.now() }));
+      state.pform = null;
+      toast('Produto salvo.');
+      renderAdminTab();
+    } catch (e) { adminErr(e); }
+  };
+
+  /* ----- Categorias ----- */
+  function renderCategoriesTab(body) {
+    body.innerHTML = `
+      <div class="panel"><h3>Nova categoria</h3>
+        <form data-form="cat-new" class="add-row"><input class="inline-input upper" name="name" placeholder="Ex: CAMISAS" maxlength="30" aria-label="Nome da categoria" required><button class="btn" type="submit">Criar</button></form>
+      </div>
+      <div class="panel"><h3>Categorias</h3><div id="ac-list"></div></div>`;
+    renderCategoryList();
+  }
+  function renderCategoryList() {
+    const box = $('#ac-list');
+    if (!box) return;
+    box.innerHTML = state.categories.length ? state.categories.map((c) => `
+      <div class="row-item">
+        <input class="inline-input upper row-grow" id="cat-${esc(c.id)}" value="${esc(c.name)}" aria-label="Nome da categoria" maxlength="30">
+        <div class="row-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-act="cat-save" data-id="${esc(c.id)}">Salvar</button>
+          <button type="button" class="btn btn-danger btn-sm" data-act="cat-del" data-id="${esc(c.id)}">Excluir</button>
+        </div>
+      </div>`).join('') : '<p class="muted">Nenhuma categoria criada.</p>';
+  }
+  forms['cat-new'] = async (f) => {
+    const name = String(new FormData(f).get('name')).trim().toUpperCase();
+    if (!name) return;
+    if (state.categories.some((c) => c.name === name)) return toast('Já existe uma categoria com este nome.', 'error');
+    try { await db.collection('categories').add({ name, order: Date.now() }); f.reset(); toast('Categoria criada.'); } catch (e) { adminErr(e); }
+  };
+  actions['cat-save'] = async (el) => {
+    const name = ($('#cat-' + el.dataset.id).value || '').trim().toUpperCase();
+    if (!name) return toast('Informe o nome.', 'error');
+    try { await db.collection('categories').doc(el.dataset.id).update({ name }); toast('Categoria atualizada.'); } catch (e) { adminErr(e); }
+  };
+  actions['cat-del'] = async (el) => {
+    const c = state.categories.find((x) => x.id === el.dataset.id);
+    if (!c) return;
+    const inUse = state.products.filter((p) => p.categoryId === c.id).length + state.coupons.filter((x) => x.categoryId === c.id).length;
+    if (inUse) return toast('Esta categoria está em uso por produtos ou cupons. Reatribua antes de excluir.', 'error');
+    if (!confirm(`Excluir a categoria "${c.name}"?`)) return;
+    try { await db.collection('categories').doc(c.id).delete(); toast('Categoria excluída.'); } catch (e) { adminErr(e); }
+  };
+
+  /* ----- Cupons ----- */
+  function renderCouponsTab(body) {
+    body.innerHTML = `
+      <div class="panel"><h3 id="cp-title">Novo cupom</h3>
+        <form data-form="coupon-save" id="cp-form" novalidate>
+          <div class="field-row">
+            <div class="field"><label for="cp-code">Código</label><input id="cp-code" name="code" class="upper" maxlength="30" placeholder="SITE10" required></div>
+            <div class="field"><label for="cp-pct">Desconto (%)</label><input id="cp-pct" name="percent" type="number" min="1" max="100" step="1" inputmode="numeric" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="cp-max">Limite de usos por conta (0 = sem limite)</label><input id="cp-max" name="max" type="number" min="0" step="1" inputmode="numeric" value="1"></div>
+            <div class="field"><label for="cp-scope">Escopo</label>
+              <select id="cp-scope" name="scope" data-in="cp-scope"><option value="carrinho">Desconto de Carrinho</option><option value="categoria">Categoria Específica</option></select></div>
+          </div>
+          <div class="field" id="cp-cat-wrap" hidden><label for="cp-cat">Categoria</label>
+            <select id="cp-cat" name="categoryId"><option value="">Selecione</option>${state.categories.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}</select></div>
+          <label class="check"><input type="checkbox" name="active" checked><span>Cupom ativo</span></label>
+          <div id="cp-msg" class="msg" role="alert"></div>
+          <div class="stack">
+            <button class="btn btn-block" type="submit">Salvar cupom</button>
+            <button class="btn btn-ghost btn-block" type="button" data-act="cp-reset" id="cp-reset" hidden>Cancelar edição</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel"><h3>Cupons</h3><div id="cp-list"></div></div>`;
+    renderCouponList();
+  }
+  inputs['cp-scope'] = (el) => { $('#cp-cat-wrap').hidden = el.value !== 'categoria'; };
+  function resetCouponForm() {
+    const f = $('#cp-form');
+    if (!f) return;
+    f.reset();
+    $('#cp-code').readOnly = false;
+    $('#cp-cat-wrap').hidden = true;
+    $('#cp-title').textContent = 'Novo cupom';
+    $('#cp-reset').hidden = true;
+    setMsg('#cp-msg', '');
+  }
+  actions['cp-reset'] = resetCouponForm;
+
+  function renderCouponList() {
+    const box = $('#cp-list');
+    if (!box) return;
+    box.innerHTML = state.coupons.length ? state.coupons.slice().sort((a, b) => a.code.localeCompare(b.code)).map((c) => `
+      <div class="row-item">
+        <div class="row-grow">
+          <strong>${esc(c.code)} <span class="tag ${c.active ? 'on' : ''}">${c.active ? 'Ativo' : 'Inativo'}</span></strong>
+          <span class="small muted">${esc(c.percent)}% / ${c.scope === 'categoria' ? 'Categoria: ' + esc(catName(c.categoryId) || 'removida') : 'Carrinho'} / ${c.maxUsesPerUser > 0 ? 'até ' + esc(c.maxUsesPerUser) + ' uso(s) por conta' : 'sem limite por conta'}</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-act="cp-toggle" data-id="${esc(c.id)}">${c.active ? 'Desativar' : 'Ativar'}</button>
+          <button type="button" class="btn btn-ghost btn-sm" data-act="cp-edit" data-id="${esc(c.id)}">Editar</button>
+          <button type="button" class="btn btn-danger btn-sm" data-act="cp-del" data-id="${esc(c.id)}">Excluir</button>
+        </div>
+      </div>`).join('') : '<p class="muted">Nenhum cupom criado.</p>';
+  }
+  actions['cp-edit'] = (el) => {
+    const c = state.coupons.find((x) => x.id === el.dataset.id);
+    const f = $('#cp-form');
+    if (!c || !f) return;
+    f.elements.code.value = c.code; f.elements.code.readOnly = true;
+    f.elements.percent.value = c.percent;
+    f.elements.max.value = c.maxUsesPerUser || 0;
+    f.elements.scope.value = c.scope;
+    $('#cp-cat-wrap').hidden = c.scope !== 'categoria';
+    f.elements.categoryId.value = c.categoryId || '';
+    f.elements.active.checked = !!c.active;
+    $('#cp-title').textContent = 'Editar cupom';
+    $('#cp-reset').hidden = false;
+    f.scrollIntoView();
+  };
+  actions['cp-toggle'] = async (el) => {
+    const c = state.coupons.find((x) => x.id === el.dataset.id);
+    if (!c) return;
+    try { await db.collection('coupons').doc(c.id).update({ active: !c.active }); } catch (e) { adminErr(e); }
+  };
+  actions['cp-del'] = async (el) => {
+    if (!confirm('Excluir este cupom?')) return;
+    try { await db.collection('coupons').doc(el.dataset.id).delete(); toast('Cupom excluído.'); } catch (e) { adminErr(e); }
+  };
+  forms['coupon-save'] = async (f) => {
+    const d = new FormData(f);
+    const code = String(d.get('code')).trim().toUpperCase();
+    const percent = parseInt(d.get('percent'), 10);
+    const max = Math.max(0, parseInt(d.get('max'), 10) || 0);
+    const scope = d.get('scope');
+    const categoryId = scope === 'categoria' ? String(d.get('categoryId') || '') : '';
+    const err = (m) => setMsg('#cp-msg', m, 'error');
+    if (!/^[A-Z0-9_-]{2,30}$/.test(code)) return err('O código deve ter de 2 a 30 caracteres, apenas letras, números, hífen ou sublinhado.');
+    if (!(percent >= 1 && percent <= 100)) return err('O percentual deve ficar entre 1% e 100%.');
+    if (scope === 'categoria' && !categoryId) return err('Selecione a categoria do cupom.');
+    try {
+      await db.collection('coupons').doc(code).set({ code, percent, maxUsesPerUser: max, scope, categoryId, active: !!d.get('active') });
+      resetCouponForm();
+      toast('Cupom salvo.');
+    } catch (e) { adminErr(e); }
+  };
+
+  /* ----- Pedidos ----- */
+  function renderOrdersTab(body) {
+    body.innerHTML = '<div class="panel"><h3>Pedidos recebidos</h3><div id="ao-list"></div></div>';
+    renderOrderList();
+  }
+  function renderOrderList() {
+    const box = $('#ao-list');
+    if (!box) return;
+    if (!state.orders.length) { box.innerHTML = '<p class="muted">Nenhum pedido recebido.</p>'; return; }
+    box.innerHTML = state.orders.map((o) => {
+      const dt = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleString('pt-BR') : 'Registrando...';
+      const a = o.address || {}, c = o.customer || {};
+      return `<div class="order">
+        <div class="order-head"><strong>Pedido ${esc(o.id.slice(0, 8).toUpperCase())}</strong><span class="muted small">${esc(dt)}</span></div>
+        <div class="small">${esc(c.name)} / ${esc(c.email)} / ${esc(c.phone)}</div>
+        <ul>${(o.items || []).map((i) => `<li>${esc(i.qty)}x ${esc(i.name)} (COR: ${esc(i.color)}, TAM: ${esc(i.size)}) ${brl(i.unitPrice * i.qty)}</li>`).join('')}</ul>
+        <div class="small">Entrega: ${esc(a.street)}, ${esc(a.number)}${a.complement ? ' ' + esc(a.complement) : ''}, ${esc(a.district)}, ${esc(a.city)}/${esc(a.uf)}, CEP ${esc(a.cep)}</div>
+        <div class="small">Frete: ${esc(o.shippingLabel)} (${brl(o.shipping)}) / Cupom: ${o.coupon ? esc(o.coupon) + ' (-' + brl(o.discount) + ')' : 'nenhum'}</div>
+        <div class="sum-row total"><span>Total</span><span>${brl(o.total)}</span></div>
+        <div class="field" style="margin:8px 0 0"><label for="st-${esc(o.id)}">Status</label>
+          <select id="st-${esc(o.id)}" data-in="order-status" data-id="${esc(o.id)}">${STATUSES.map((s) => `<option ${s === o.status ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select></div>
+      </div>`;
+    }).join('');
+  }
+  inputs['order-status'] = async (el) => {
+    try { await db.collection('orders').doc(el.dataset.id).update({ status: el.value }); toast('Status atualizado.'); } catch (e) { adminErr(e); }
+  };
+
+  /* ----- Frete e meta ----- */
+  let tiersDraft = [];
+  function renderShippingTab(body) {
+    tiersDraft = state.settings.shippingTiers.map((t) => ({ label: t.label, price: t.price }));
+    body.innerHTML = `
+      <form class="panel" data-form="shipping" novalidate>
+        <h3>Meta de frete grátis</h3>
+        <div class="field"><label for="sh-th">Valor mínimo do pedido, já com desconto (R$). Use 0 para desativar.</label><input id="sh-th" name="threshold" inputmode="decimal" value="${esc(fmtInput(state.settings.freeShippingThreshold))}" placeholder="299,00"></div>
+        <h3 style="margin-top:20px">Faixas de envio</h3>
+        <p class="muted small">Cada faixa pode representar uma distância em KM ou uma região atendida.</p>
+        <div id="tiers"></div>
+        <button type="button" class="btn btn-ghost btn-sm" data-act="tier-add">Adicionar faixa</button>
+        <div id="sh-msg" class="msg" role="alert" style="margin-top:12px"></div>
+        <button type="submit" class="btn btn-block">Salvar configurações</button>
+      </form>`;
+    renderTiers();
+  }
+  function renderTiers() {
+    const box = $('#tiers');
+    if (!box) return;
+    box.innerHTML = tiersDraft.length ? tiersDraft.map((t, i) => `
+      <div class="row-item">
+        <input class="inline-input row-grow" data-in="tier-label" data-i="${i}" value="${esc(t.label)}" placeholder="Ex: Até 5 km" aria-label="Descrição da faixa">
+        <input class="inline-input" style="width:110px" data-in="tier-price" data-i="${i}" inputmode="decimal" value="${esc(fmtInput(t.price))}" placeholder="10,00" aria-label="Valor do frete">
+        <button type="button" class="icon-btn" data-act="tier-rm" data-i="${i}" aria-label="Remover faixa">${icon('trash', 18)}</button>
+      </div>`).join('') : '<p class="muted small">Nenhuma faixa cadastrada.</p>';
+  }
+  inputs['tier-label'] = (el) => { tiersDraft[Number(el.dataset.i)].label = el.value; };
+  inputs['tier-price'] = (el) => { tiersDraft[Number(el.dataset.i)].price = parseBRL(el.value); };
+  actions['tier-add'] = () => { tiersDraft.push({ label: '', price: 0 }); renderTiers(); };
+  actions['tier-rm'] = (el) => { tiersDraft.splice(Number(el.dataset.i), 1); renderTiers(); };
+  forms.shipping = async (f) => {
+    const threshold = parseBRL(new FormData(f).get('threshold'));
+    const tiers = tiersDraft.map((t) => ({ label: String(t.label).trim(), price: round2(t.price) }));
+    if (tiers.some((t) => !t.label)) return setMsg('#sh-msg', 'Preencha a descrição de todas as faixas.', 'error');
+    try {
+      await db.collection('settings').doc('store').set({ freeShippingThreshold: threshold, shippingTiers: tiers }, { merge: true });
+      setMsg('#sh-msg', 'Configurações salvas.', 'ok');
+    } catch (e) { adminErr(e); }
+  };
+
+  /* =====================================================================
+     14. INICIALIZAÇÃO
+     ===================================================================== */
+  function startApp() {
+    $$('[data-bind]').forEach((el) => { el.innerHTML = icon(el.dataset.bind.replace('icon-', ''), 20); });
+    updateHeader();
+    listen();
+    route();
+  }
+
+  initGate();
+})();
