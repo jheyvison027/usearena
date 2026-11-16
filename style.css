@@ -293,3 +293,15 @@ p { margin: 0 0 1em; }
 .logo-link img { height: 46px; width: auto; margin-left: -4px; }
 .gate-logo { height: 56px; width: auto; margin: 0 0 14px -4px; }
 .footer-logo { height: 48px; width: auto; margin-left: -4px; }
+
+/* Barras de rolagem estilizadas */
+.legal-box, .drawer-body, #modal-root, .matrix-wrap, .admin-tabs { scrollbar-width: thin; scrollbar-color: var(--accent) #1a1a1a; }
+.legal-box::-webkit-scrollbar, .drawer-body::-webkit-scrollbar, #modal-root::-webkit-scrollbar { width: 8px; height: 8px; }
+.legal-box::-webkit-scrollbar-track, .drawer-body::-webkit-scrollbar-track, #modal-root::-webkit-scrollbar-track { background: #1a1a1a; }
+.legal-box::-webkit-scrollbar-thumb, .drawer-body::-webkit-scrollbar-thumb, #modal-root::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+/* Feedback imediato nos filtros */
+.tile:active { transform: translateY(1px); }
+.tile.is-active { box-shadow: 0 0 0 1px var(--accent); }
+.search input:focus { border-color: var(--accent); outline: none; }
+html { background: var(--bg); color-scheme: dark; }

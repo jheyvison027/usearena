@@ -21,6 +21,10 @@
   const LS_TERMS = 'arena_terms';
   const LS_CART = 'arena_cart';
 
+  if (typeof firebase === 'undefined') {
+    document.body.insertAdjacentHTML('afterbegin', '<div style="padding:24px;background:#1E1E1E;color:#fff;font-family:sans-serif;border-bottom:3px solid #B4FF39">Não foi possível carregar o Firebase. Verifique a conexão com a internet e recarregue a página.</div>');
+    return;
+  }
   firebase.initializeApp(FIREBASE_CONFIG);
   const auth = firebase.auth();
   const db = firebase.firestore();
