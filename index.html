@@ -1,40 +1,583 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="theme-color" content="#121212"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arena | Moda Fitness</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%22-25%20-14%20340%20340%22%3E%3Crect%20x=%22-25%22%20y=%22-14%22%20width=%22340%22%20height=%22340%22%20fill=%22%23121212%22/%3E%3Cpath%20fill=%22%23B4FF39%22%20fill-rule=%22evenodd%22%20d=%22M47.0%20212.0L38.2%20214.2L26.2%20220.2L21.5%20223.8L14.8%20231.5L9.2%20241.2L6.0%20252.0L6.0%20266.8L9.2%20277.5L13.2%20285.5L23.5%20297.0L30.2%20301.5L45.0%20306.8L61.8%20306.8L77.5%20300.5L85.2%20295.0L91.0%20288.2L97.5%20276.5L100.8%20261.8L99.8%20250.0L93.5%20234.2L83.2%20222.8L76.5%20218.2L63.8%20213.0ZM132.5%206.2L123.2%2022.2L91.2%2087.5L200.8%20306.2L202.2%20307.2L268.8%20306.8L271.0%20307.8L282.8%20307.8L283.5%20305.2L135.5%2010.2Z%22/%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css"></head>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arena | Moda fitness para musculação, corrida e treino funcional</title>
+  <meta name="description" content="Camisas, shorts, calças, tênis e acessórios fitness. Escolha tamanho e cor, aplique cupons no carrinho e finalize com sua conta.">
+  <meta name="theme-color" content="#0d0e0f">
+  <meta name="robots" content="index, follow">
+
+  <!-- Domínio próprio: troque o endereço abaixo pelo seu domínio (também em SITE.dominio no app.js). -->
+  <link rel="canonical" href="https://www.seudominio.com.br/" id="link-canonical">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Arena">
+  <meta property="og:title" content="Arena | Moda fitness">
+  <meta property="og:description" content="Camisas, shorts, calças, tênis e acessórios para treinar melhor.">
+  <meta property="og:url" content="https://www.seudominio.com.br/" id="meta-og-url">
+  <meta property="og:locale" content="pt_BR">
+
+  <!-- Favicon vetorial com a marca Arena (ponto e perna do A) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='135 435 340 360'%3E%3Crect x='135' y='435' width='340' height='360' rx='44' fill='%231f2022'/%3E%3Ccircle cx='210' cy='720' r='48' fill='%23b9f566'/%3E%3Cpolygon points='290,465 441,768 358,768 248,547' fill='%23b9f566'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Bodoni+Moda:opsz,wght@6..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><g id="arena-logo"><path fill="#B4FF39" fill-rule="evenodd" d="M47.0 212.0L38.2 214.2L26.2 220.2L21.5 223.8L14.8 231.5L9.2 241.2L6.0 252.0L6.0 266.8L9.2 277.5L13.2 285.5L23.5 297.0L30.2 301.5L45.0 306.8L61.8 306.8L77.5 300.5L85.2 295.0L91.0 288.2L97.5 276.5L100.8 261.8L99.8 250.0L93.5 234.2L83.2 222.8L76.5 218.2L63.8 213.0ZM132.5 6.2L123.2 22.2L91.2 87.5L200.8 306.2L202.2 307.2L268.8 306.8L271.0 307.8L282.8 307.8L283.5 305.2L135.5 10.2Z"/><path fill="#FFFFFF" fill-rule="evenodd" d="M789.2 227.2L780.5 233.8L775.8 239.5L771.2 247.2L768.0 258.0L769.0 272.8L772.2 281.5L776.8 288.2L784.5 296.0L791.2 300.5L808.0 306.8L830.8 307.8L844.8 303.5L834.5 296.2L823.0 283.5L817.8 270.8L817.2 262.0L820.0 248.2L824.5 240.5L832.5 231.5L845.0 223.5L830.8 219.0L812.0 219.0L797.2 223.2ZM651.0 151.2L607.5 184.8L604.0 189.0L604.0 305.5L605.2 306.8L650.5 306.8L651.8 305.5ZM492.0 151.0L478.2 155.2L462.5 163.8L446.8 178.5L441.2 186.2L435.2 198.2L430.0 216.0L429.0 230.8L431.0 244.8L435.2 258.5L444.8 275.2L457.5 289.0L468.2 296.5L480.2 302.5L501.0 307.8L515.8 307.8L527.8 305.8L544.5 299.5L557.2 291.0L565.0 283.5L548.0 284.0L536.0 282.0L523.2 277.8L513.2 272.8L500.5 263.2L493.5 256.2L484.0 242.5L480.0 234.5L475.8 220.8L474.8 193.0L481.0 172.2L494.0 151.8ZM792.5 155.8L788.2 160.2L784.0 170.0L784.0 179.8L789.8 191.2L793.2 194.5L803.0 198.8L809.5 199.5L821.5 195.5L826.2 192.0L829.5 187.5L832.8 178.8L832.8 170.0L829.8 161.8L830.8 159.8L846.0 154.8L853.8 155.5L854.0 274.8L858.2 288.5L866.5 299.0L871.2 302.5L882.0 306.8L887.0 307.8L898.8 306.8L905.5 304.5L914.2 299.0L932.2 284.0L933.2 282.2L927.8 281.0L907.0 282.0L903.0 280.2L902.8 181.0L897.5 167.2L889.2 157.8L879.5 152.2L869.8 150.0L806.0 150.0L798.2 152.2ZM699.0 151.0L686.5 156.8L662.8 176.0L693.5 176.8L695.0 178.2L695.0 305.5L696.2 306.8L742.5 306.8L743.8 305.5L743.8 183.0L742.8 177.0L736.0 163.5L725.5 154.2L712.8 150.0ZM511.0 150.2L521.8 165.2L526.8 176.2L530.0 192.0L529.0 202.8L493.8 231.2L565.2 231.5L569.8 217.8L570.8 199.0L566.5 184.2L560.0 173.5L550.2 163.8L537.5 156.2L521.8 151.0ZM406.8 151.0L401.8 150.0L309.2 150.5L309.5 306.5L355.5 306.8L356.8 305.5L357.0 155.5L360.8 154.8L366.8 155.8L377.2 160.5L378.0 162.8L375.0 171.0L375.0 177.8L379.2 188.5L385.5 195.0L394.0 198.8L404.8 198.8L416.2 193.0L421.5 186.5L423.8 180.8L423.8 169.0L420.5 161.2L414.2 154.8Z"/></g></defs></svg>
-<a class="skip" href="#app">Pular para o conteúdo</a>
-<div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="gate-box">
-<svg class="logo logo--gate" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg><h2 id="gt">Termos de Uso e Política de Privacidade</h2>
-<div class="gate-text" id="gateText" tabindex="0">
-<h3>Termos de Uso</h3><p>Ao usar a Arena você concorda em fornecer dados verdadeiros, usar o site apenas para compras pessoais e não tentar acessar áreas restritas. Preços e estoque podem mudar sem aviso. Pedidos ficam como "Aguardando Pagamento" até a confirmação.</p>
-<h3>Política de Privacidade</h3><p>Coletamos nome, e-mail e dados do pedido para processar compras e atendimento. Não vendemos seus dados. A autenticação é feita pelo Firebase (Google). Você pode pedir a exclusão da conta a qualquer momento.</p>
-<p>Guardamos no seu navegador apenas o registro deste aceite e o conteúdo do carrinho.</p>
-<p>Role até o final para liberar o aceite.</p></div>
-<label class="check"><input type="checkbox" id="gateCheck" disabled> Li e concordo com os Termos de Uso e a Política de Privacidade</label>
-<button class="btn" id="gateBtn" disabled>Concordar e acessar</button></div></div>
+  <a class="skip-link" href="#vitrine">Ir para os produtos</a>
 
-<header class="top"><a href="#" class="brand" aria-label="Arena, página inicial"><svg class="logo logo--header" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg></a>
-<input id="search" type="search" placeholder="Buscar produtos" aria-label="Buscar produtos">
-<nav><button class="ghost" id="accBtn">Entrar</button><a class="ghost" id="adminLink" href="#admin" hidden>Painel</a>
-<button class="ghost cartBtn" id="cartBtn" aria-label="Carrinho"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-2 9H8zM6 6 5 3H2M9 20h.01M18 20h.01"/></svg><span id="cartCount" class="badge">0</span></button></nav></header>
-<main id="app" tabindex="-1"></main>
-<footer class="foot"><svg class="logo logo--footer" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg><span>Arena Moda Fitness. Todos os direitos reservados.</span></footer>
+  <!-- Ícones SVG -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12Z"/><circle cx="7.5" cy="8.5" r="1.2"/></symbol>
+    <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 17 17 3l4 4L7 21l-4-4Z"/><path d="m8 12 2 2M11 9l2 2M14 6l2 2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8Z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  </svg>
 
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Carrinho"><div class="dh"><h3>Carrinho</h3><button class="ghost" data-close>Fechar</button></div><div id="cartBody" class="db"></div></aside>
-<div class="modal" id="auth" role="dialog" aria-modal="true"><div class="mbox"><button class="ghost x" data-close>Fechar</button>
-<h2 id="authTitle" class="mtitle">Entrar na conta</h2>
-<form id="authForm"><input id="aEmail" type="email" placeholder="E-mail" autocomplete="username" required><input id="aPass" type="password" placeholder="Senha" autocomplete="current-password" required>
-<p id="aErr" class="err"></p><button class="btn" id="aSubmit">Entrar</button></form>
-<button class="ghost" id="logoutBtn" hidden>Sair da conta</button></div></div>
-<div id="toast" class="toast"></div>
+  <!-- ================= CABEÇALHO ================= -->
+  <header class="site-header" id="top">
+    <div class="container header__inner">
+      <a class="logo" href="#/" data-home aria-label="Arena, página inicial">
+        <svg class="logo__mark" viewBox="150 455 305 320" aria-hidden="true"><circle cx="210" cy="720" r="48"/><polygon points="290,465 441,768 358,768 248,547"/></svg>
+        <span class="logo__word">rena</span>
+      </a>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="app.js"></script></body></html>
+      <form class="search" id="search-form" role="search" autocomplete="off">
+        <svg class="icon search__icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input type="search" id="search-input" placeholder="Buscar camisas, shorts, tênis..." aria-label="Buscar produtos" maxlength="80">
+        <button type="button" class="search__clear" id="search-clear" hidden aria-label="Limpar busca"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </form>
+
+      <div class="header__actions">
+        <button type="button" class="hbtn" id="btn-account">
+          <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+          <span id="account-label">Entrar</span>
+        </button>
+        <button type="button" class="hbtn hbtn--cart" data-open-cart aria-label="Abrir carrinho">
+          <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+          <span class="count" data-cart-count hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= LOJA ================= -->
+  <main id="store-view">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow">Moda fitness</p>
+          <h1 id="hero-title">Roupas e tênis de treino para musculação, corrida e funcional</h1>
+          <p class="hero__lead">Camisas, shorts, calças, tênis e acessórios com escolha de tamanho e cor. Aplique cupons no carrinho e finalize a compra com cadastro rápido.</p>
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#vitrine">Ver produtos <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <button type="button" class="btn btn--ghost btn--lg" data-promo-filter>Ver promoções</button>
+          </div>
+          <ul class="hero__features">
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-ruler"/></svg>
+              <div><strong>Tamanhos e cores</strong><span>Escolha a variação disponível em estoque.</span></div>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg>
+              <div><strong>Cupons por categoria</strong><span>Descontos no carrinho ou em categorias selecionadas.</span></div>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>
+              <div><strong>Conta só para comprar</strong><span>Navegue livremente e entre na hora de finalizar.</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__shape"></div>
+          <div class="hero__photo">
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80" alt="" fetchpriority="high" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Faixa de promoções (aparece somente se houver produtos com preço promocional ativo) -->
+    <section class="promo-banner" id="promo-banner" hidden aria-label="Promoções">
+      <div class="container promo-banner__inner">
+        <div>
+          <p class="promo-banner__title">Preços promocionais ativos</p>
+          <p class="promo-banner__text">Os produtos com desconto aparecem primeiro na vitrine.</p>
+        </div>
+        <button type="button" class="btn btn--dark" data-promo-filter>Ver somente promoções <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </section>
+
+    <!-- Categorias -->
+    <section class="section section--dark" id="categorias" aria-labelledby="cat-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">Categorias</p>
+          <h2 id="cat-title">Compre por categoria</h2>
+          <p class="section__sub">Selecione uma categoria para filtrar a vitrine.</p>
+        </div>
+        <div class="tiles" id="category-tiles"></div>
+      </div>
+    </section>
+
+    <!-- Vitrine -->
+    <section class="section section--light" id="vitrine" aria-labelledby="vit-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">Vitrine</p>
+          <h2 id="vit-title">Todos os produtos</h2>
+          <p class="section__sub">Produtos com preço promocional aparecem primeiro.</p>
+        </div>
+
+        <div class="toolbar">
+          <div class="tabs" id="category-tabs" role="tablist" aria-label="Categorias"></div>
+          <div class="toolbar__row">
+            <div class="segmented" id="gender-tabs" role="group" aria-label="Filtrar por gênero"></div>
+            <button type="button" class="toggle" id="btn-promo-toggle" aria-pressed="false">
+              <svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg> Somente promoções
+            </button>
+            <p class="toolbar__count" id="result-count" aria-live="polite"></p>
+            <button type="button" class="link-btn" id="btn-clear-filters" data-clear-filters hidden>Limpar filtros</button>
+          </div>
+        </div>
+
+        <div class="grid" id="product-grid"></div>
+
+        <div class="empty" id="empty-products" hidden>
+          <div class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <h3 id="empty-title">Nenhum produto encontrado</h3>
+          <p id="empty-text">Tente outro termo de busca ou remova os filtros.</p>
+          <button type="button" class="btn btn--dark" id="empty-action" data-clear-filters>Limpar busca e filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Como comprar -->
+    <section class="section section--dark" id="como-comprar" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">Passo a passo</p>
+          <h2 id="how-title">Como comprar na Arena</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal" style="--i:0">
+            <span class="step__num">01</span>
+            <h3>Escolha o produto</h3>
+            <p>Abra os detalhes, selecione tamanho e cor e adicione ao carrinho.</p>
+          </li>
+          <li class="step reveal" style="--i:1">
+            <span class="step__num">02</span>
+            <h3>Aplique seu cupom</h3>
+            <p>Digite o código no carrinho. Ele vale para o pedido todo ou apenas para categorias específicas.</p>
+          </li>
+          <li class="step reveal" style="--i:2">
+            <span class="step__num">03</span>
+            <h3>Finalize com sua conta</h3>
+            <p>Entre ou crie seu cadastro para concluir o pedido. Seu carrinho fica salvo.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= PAINEL DO LOJISTA ================= -->
+  <main id="admin-view" hidden>
+    <div class="container admin">
+
+      <!-- Acesso -->
+      <section id="admin-gate" class="gate">
+        <div class="gate__card">
+          <div class="gate__head">
+            <div class="gate__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></div>
+            <h1>Área do lojista</h1>
+            <p id="gate-text">Acesso restrito. Entre com o login e a senha do lojista.</p>
+          </div>
+
+          <form id="form-merchant-setup" novalidate hidden>
+            <p class="notice">Primeiro acesso: defina o login e a senha do lojista. Guarde esses dados, eles ficam salvos somente neste navegador.</p>
+            <label class="field"><span>Login</span><input id="ms-user" autocomplete="username" maxlength="40"></label>
+            <label class="field"><span>Senha (mínimo 8 caracteres)</span><input id="ms-pass" type="password" autocomplete="new-password"></label>
+            <label class="field"><span>Confirmar senha</span><input id="ms-pass2" type="password" autocomplete="new-password"></label>
+            <p class="form-error" id="ms-error" role="alert" hidden></p>
+            <button class="btn btn--primary btn--block" type="submit">Criar acesso do lojista</button>
+          </form>
+
+          <form id="form-merchant-login" novalidate hidden>
+            <label class="field"><span>Login</span><input id="ml-user" autocomplete="username" maxlength="40"></label>
+            <label class="field"><span>Senha</span><input id="ml-pass" type="password" autocomplete="current-password"></label>
+            <p class="form-error" id="ml-error" role="alert" hidden></p>
+            <button class="btn btn--primary btn--block" type="submit">Entrar no painel</button>
+          </form>
+
+          <a class="link-btn gate__back" href="#/"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg> Voltar para a loja</a>
+        </div>
+      </section>
+
+      <!-- Painel -->
+      <section id="admin-panel" hidden>
+        <div class="admin__top">
+          <div>
+            <p class="eyebrow">Painel</p>
+            <h1>Área do lojista</h1>
+          </div>
+          <div class="admin__top-actions">
+            <a class="btn btn--ghost btn--sm" href="#/"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg> Ver loja</a>
+            <button type="button" class="btn btn--ghost btn--sm" id="merchant-logout"><svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg> Sair</button>
+          </div>
+        </div>
+
+        <div class="tabs tabs--admin" id="admin-tabs" role="tablist" aria-label="Seções do painel">
+          <button type="button" class="tab is-active" role="tab" data-admin-tab="products" aria-selected="true">Produtos</button>
+          <button type="button" class="tab" role="tab" data-admin-tab="coupons" aria-selected="false">Cupons</button>
+          <button type="button" class="tab" role="tab" data-admin-tab="categories" aria-selected="false">Categorias</button>
+          <button type="button" class="tab" role="tab" data-admin-tab="orders" aria-selected="false">Pedidos</button>
+          <button type="button" class="tab" role="tab" data-admin-tab="account" aria-selected="false">Acesso</button>
+          <span class="tabs__ink" aria-hidden="true"></span>
+        </div>
+
+        <!-- Produtos -->
+        <div class="pane is-active" id="pane-products" role="tabpanel">
+          <div class="admin-grid">
+            <form id="product-form" class="panel" novalidate>
+              <div class="panel__head">
+                <h3 id="product-form-title">Novo produto</h3>
+                <button type="button" class="btn btn--ghost btn--sm" id="product-cancel" hidden>Cancelar edição</button>
+              </div>
+              <div class="field-grid">
+                <label class="field field--full"><span>Nome do produto</span><input id="pf-name" maxlength="80"></label>
+                <label class="field"><span>Categoria</span><select id="pf-category"></select></label>
+                <label class="field"><span>Gênero</span>
+                  <select id="pf-gender"><option>Unissex</option><option>Feminino</option><option>Masculino</option></select>
+                </label>
+                <label class="field"><span>Preço lançado (normal)</span><input id="pf-price" inputmode="decimal" placeholder="0,00"></label>
+                <label class="field"><span>Preço promocional (opcional)</span><input id="pf-promo" inputmode="decimal" placeholder="0,00"></label>
+                <p class="hint field--full">Com preço promocional preenchido, o produto sobe para o topo da vitrine com a etiqueta de desconto calculada automaticamente.</p>
+                <label class="field field--full"><span>Descrição</span><textarea id="pf-desc" rows="3" maxlength="800"></textarea></label>
+                <label class="field"><span>Material</span><input id="pf-material" maxlength="120" placeholder="Ex.: Poliéster e elastano"></label>
+                <label class="field"><span>Tipo de malha</span><input id="pf-malha" maxlength="120" placeholder="Ex.: Malha dry"></label>
+                <label class="field field--full"><span>URLs das fotos (uma por linha)</span><textarea id="pf-photos" rows="3" placeholder="https://images.unsplash.com/..."></textarea></label>
+              </div>
+
+              <fieldset class="variations">
+                <legend>Estoque por tamanho e cor</legend>
+                <div class="var-head" aria-hidden="true"><span>Tamanho</span><span>Cor</span><span>Amostra</span><span>Estoque</span><span></span></div>
+                <div id="var-rows"></div>
+                <button type="button" class="btn btn--ghost btn--sm" id="var-add"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> Adicionar variação</button>
+              </fieldset>
+
+              <p class="form-error" id="pf-error" role="alert" hidden></p>
+              <button class="btn btn--primary" type="submit" id="pf-submit">Salvar produto</button>
+            </form>
+
+            <div class="panel">
+              <div class="panel__head"><h3>Catálogo do lojista</h3></div>
+              <div id="catalog-list" class="list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cupons -->
+        <div class="pane" id="pane-coupons" role="tabpanel" hidden>
+          <div class="admin-grid">
+            <form id="coupon-form" class="panel" novalidate>
+              <div class="panel__head">
+                <h3 id="coupon-form-title">Novo cupom</h3>
+                <button type="button" class="btn btn--ghost btn--sm" id="coupon-cancel" hidden>Cancelar edição</button>
+              </div>
+              <div class="field-grid">
+                <label class="field"><span>Código</span><input id="cp-code" maxlength="20" placeholder="SITE10" autocomplete="off"></label>
+                <label class="field"><span>Desconto (1% a 100%)</span><input id="cp-percent" type="number" min="1" max="100" step="1" placeholder="10"></label>
+                <p class="hint field--full">Letras, números, hífen e sublinhado. O cliente pode digitar em maiúsculas ou minúsculas.</p>
+                <fieldset class="field field--full radio-group">
+                  <legend>Regra de aplicação</legend>
+                  <label class="radio"><input type="radio" name="cp-scope" value="cart" checked><span>Carrinho inteiro</span></label>
+                  <label class="radio"><input type="radio" name="cp-scope" value="categories"><span>Categorias específicas</span></label>
+                </fieldset>
+                <div class="field field--full" id="cp-cats-wrap" hidden>
+                  <span class="field__label">Categorias elegíveis</span>
+                  <div id="cp-cats" class="check-grid"></div>
+                </div>
+              </div>
+              <p class="form-error" id="cp-error" role="alert" hidden></p>
+              <button class="btn btn--primary" type="submit">Salvar cupom</button>
+            </form>
+            <div class="panel">
+              <div class="panel__head"><h3>Cupons cadastrados</h3></div>
+              <div id="coupon-list" class="list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categorias -->
+        <div class="pane" id="pane-categories" role="tabpanel" hidden>
+          <div class="admin-grid">
+            <form id="category-form" class="panel" novalidate>
+              <div class="panel__head">
+                <h3 id="category-form-title">Nova categoria</h3>
+                <button type="button" class="btn btn--ghost btn--sm" id="category-cancel" hidden>Cancelar edição</button>
+              </div>
+              <div class="field-grid">
+                <label class="field field--full"><span>Nome da categoria</span><input id="ct-name" maxlength="30" placeholder="Ex.: Meias"></label>
+                <label class="field field--full"><span>URL da imagem do banner (opcional)</span><input id="ct-image" placeholder="https://images.unsplash.com/..."></label>
+              </div>
+              <p class="form-error" id="ct-error" role="alert" hidden></p>
+              <button class="btn btn--primary" type="submit">Salvar categoria</button>
+            </form>
+            <div class="panel">
+              <div class="panel__head"><h3>Categorias</h3></div>
+              <div id="category-list" class="list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pedidos -->
+        <div class="pane" id="pane-orders" role="tabpanel" hidden>
+          <div class="panel">
+            <div class="panel__head"><h3>Pedidos recebidos</h3></div>
+            <div id="order-list" class="list"></div>
+          </div>
+        </div>
+
+        <!-- Acesso -->
+        <div class="pane" id="pane-account" role="tabpanel" hidden>
+          <form id="account-form" class="panel panel--narrow" novalidate>
+            <div class="panel__head"><h3>Alterar login e senha</h3></div>
+            <div class="field-grid">
+              <label class="field field--full"><span>Senha atual</span><input id="ac-current" type="password" autocomplete="current-password"></label>
+              <label class="field field--full"><span>Novo login</span><input id="ac-user" autocomplete="username" maxlength="40"></label>
+              <label class="field field--full"><span>Nova senha (mínimo 8 caracteres)</span><input id="ac-pass" type="password" autocomplete="new-password"></label>
+            </div>
+            <p class="form-error" id="ac-error" role="alert" hidden></p>
+            <button class="btn btn--primary" type="submit">Atualizar acesso</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ================= RODAPÉ ================= -->
+  <footer class="site-footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a class="logo logo--footer" href="#/" data-home aria-label="Arena, página inicial">
+          <svg class="logo__mark" viewBox="150 455 305 320" aria-hidden="true"><circle cx="210" cy="720" r="48"/><polygon points="290,465 441,768 358,768 248,547"/></svg>
+          <span class="logo__word">rena</span>
+        </a>
+        <p>Moda fitness para quem treina. Camisas, shorts, calças, tênis e acessórios.</p>
+      </div>
+      <nav class="footer__col" aria-label="Loja">
+        <h3>Loja</h3>
+        <a href="#vitrine">Produtos</a>
+        <a href="#categorias">Categorias</a>
+        <a href="#como-comprar">Como comprar</a>
+      </nav>
+      <nav class="footer__col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <button type="button" class="footer__link" data-open="modal-privacy">Política de Privacidade</button>
+        <button type="button" class="footer__link" data-open="modal-terms">Termos e Condições</button>
+        <a href="#/lojista">Área do lojista</a>
+      </nav>
+      <div class="footer__col">
+        <h3>Contato</h3>
+        <a href="#" data-email-link>contato</a>
+        <span data-domain>arena</span>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>&copy; <span id="year">2026</span> Arena. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Carrinho flutuante -->
+  <button type="button" class="fab" id="fab-cart" data-open-cart aria-label="Abrir carrinho">
+    <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+    <span class="count" data-cart-count hidden>0</span>
+  </button>
+
+  <!-- ================= MODAIS ================= -->
+
+  <!-- Produto -->
+  <div class="overlay" id="modal-product" hidden>
+    <div class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="product-title" tabindex="-1">
+      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <div id="product-body"></div>
+    </div>
+  </div>
+
+  <!-- Carrinho (gaveta) -->
+  <div class="overlay overlay--drawer" id="drawer-cart" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" tabindex="-1">
+      <div class="drawer__head">
+        <h2 id="cart-title">Carrinho</h2>
+        <button type="button" class="modal__close modal__close--static" data-close aria-label="Fechar carrinho"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="drawer__body" id="cart-body"></div>
+      <div class="drawer__foot" id="cart-foot"></div>
+    </aside>
+  </div>
+
+  <!-- Login e cadastro do cliente -->
+  <div class="overlay" id="modal-auth" hidden>
+    <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="auth-title" tabindex="-1">
+      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <div class="modal__pad">
+        <h2 id="auth-title">Sua conta</h2>
+        <p class="notice" id="auth-note" hidden></p>
+
+        <div class="tabs tabs--plain" id="auth-tabs" role="tablist">
+          <button type="button" class="tab is-active" role="tab" data-auth-tab="login">Entrar</button>
+          <button type="button" class="tab" role="tab" data-auth-tab="register">Criar conta</button>
+        </div>
+
+        <form id="form-login" novalidate>
+          <label class="field"><span>E-mail</span><input id="log-email" type="email" autocomplete="email"></label>
+          <label class="field"><span>Senha</span><input id="log-pass" type="password" autocomplete="current-password"></label>
+          <p class="form-error" id="log-error" role="alert" hidden></p>
+          <button class="btn btn--primary btn--block" type="submit">Entrar</button>
+        </form>
+
+        <form id="form-register" novalidate hidden>
+          <label class="field"><span>Nome</span><input id="reg-name" autocomplete="name" maxlength="60"></label>
+          <label class="field"><span>E-mail</span><input id="reg-email" type="email" autocomplete="email"></label>
+          <label class="field"><span>Senha (mínimo 6 caracteres)</span><input id="reg-pass" type="password" autocomplete="new-password"></label>
+          <p class="form-error" id="reg-error" role="alert" hidden></p>
+          <button class="btn btn--primary btn--block" type="submit">Criar conta</button>
+          <p class="fineprint">Ao criar a conta você concorda com os <button type="button" class="link-btn" data-open="modal-terms">Termos e Condições</button> e com a <button type="button" class="link-btn" data-open="modal-privacy">Política de Privacidade</button>.</p>
+        </form>
+
+        <div id="auth-account" hidden>
+          <div class="account-card">
+            <div class="account-card__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></div>
+            <div><strong id="acc-name"></strong><span id="acc-email"></span></div>
+          </div>
+          <button type="button" class="btn btn--ghost btn--block" id="btn-user-logout"><svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg> Sair da conta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Política de Privacidade -->
+  <div class="overlay" id="modal-privacy" hidden>
+    <div class="modal modal--md" role="dialog" aria-modal="true" aria-labelledby="privacy-title" tabindex="-1">
+      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <article class="modal__pad legal">
+        <h2 id="privacy-title">Política de Privacidade</h2>
+        <p class="legal__date">Última atualização: 16 de novembro de 2026</p>
+
+        <h3>1. Quem somos</h3>
+        <p>A Arena é uma loja virtual de moda fitness. Esta política explica como tratamos dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+
+        <h3>2. Dados que coletamos</h3>
+        <p>Coletamos apenas o necessário para a compra: nome e e-mail informados no cadastro, itens e valores dos pedidos, cupom aplicado e as preferências do carrinho.</p>
+
+        <h3>3. Como usamos os dados</h3>
+        <p>Usamos os dados para criar e autenticar sua conta, registrar pedidos, aplicar cupons, responder solicitações e cumprir obrigações legais. Não usamos seus dados para publicidade de terceiros.</p>
+
+        <h3>4. Onde os dados ficam armazenados</h3>
+        <p>Nesta versão da loja, os dados de conta, carrinho e pedidos ficam armazenados no próprio navegador por meio do LocalStorage. As senhas são guardadas apenas em formato de hash, nunca em texto aberto.</p>
+
+        <h3>5. Compartilhamento</h3>
+        <p>Não vendemos dados pessoais. Quando houver integração com meios de pagamento e transportadoras, compartilharemos somente as informações indispensáveis para concluir o pedido.</p>
+
+        <h3>6. Cookies e armazenamento local</h3>
+        <p>Usamos o armazenamento local do navegador apenas para o funcionamento da loja: manter o carrinho, a sessão e a sua conta. Não utilizamos rastreadores de publicidade.</p>
+
+        <h3>7. Seus direitos</h3>
+        <p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade, eliminação dos dados e revogação de consentimento. Para exercer seus direitos, fale conosco em <span data-email>o e-mail de contato</span>.</p>
+
+        <h3>8. Segurança</h3>
+        <p>Adotamos medidas técnicas razoáveis para proteger os dados contra acesso indevido. Você também deve manter sua senha em sigilo.</p>
+
+        <h3>9. Alterações</h3>
+        <p>Esta política pode ser atualizada. A data de atualização é sempre indicada no topo desta página.</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Termos e Condições -->
+  <div class="overlay" id="modal-terms" hidden>
+    <div class="modal modal--md" role="dialog" aria-modal="true" aria-labelledby="terms-title" tabindex="-1">
+      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <article class="modal__pad legal">
+        <h2 id="terms-title">Termos e Condições</h2>
+        <p class="legal__date">Última atualização: 16 de novembro de 2026</p>
+
+        <h3>1. Aceitação</h3>
+        <p>Ao navegar e comprar na Arena você concorda com estes termos. Se não concordar, não utilize a loja.</p>
+
+        <h3>2. Cadastro e conta</h3>
+        <p>Para concluir uma compra é necessário entrar ou criar uma conta. Você é responsável pela veracidade dos dados e pela guarda da sua senha. A navegação, os detalhes dos produtos e o carrinho não exigem cadastro.</p>
+
+        <h3>3. Produtos, preços e disponibilidade</h3>
+        <p>Os preços são exibidos em reais. Produtos com preço promocional mostram o preço lançado e o preço promocional vigente. A disponibilidade depende do estoque por tamanho e cor, que pode mudar a qualquer momento. As imagens são ilustrativas.</p>
+
+        <h3>4. Cupons de desconto</h3>
+        <p>Cupons podem valer para o carrinho inteiro ou apenas para categorias específicas. Quando um cupom de categoria é aplicado, o desconto incide somente sobre os produtos elegíveis. Se nenhum item do carrinho for elegível, o cupom não é aplicado. A Arena pode criar, alterar ou encerrar cupons a qualquer momento.</p>
+
+        <h3>5. Pedidos e pagamento</h3>
+        <p>O pedido é registrado após o login e a confirmação do carrinho. O pedido só é considerado concluído após a confirmação do pagamento, conforme os meios disponibilizados pela loja.</p>
+
+        <h3>6. Troca, devolução e arrependimento</h3>
+        <p>Nas compras feitas pela internet, o consumidor pode desistir da compra em até 7 dias corridos após o recebimento, conforme o artigo 49 do Código de Defesa do Consumidor. Produtos com defeito seguem os prazos e condições previstos em lei.</p>
+
+        <h3>7. Propriedade intelectual</h3>
+        <p>A marca Arena, o layout e os conteúdos da loja pertencem à Arena ou são usados com autorização. É proibida a reprodução sem permissão.</p>
+
+        <h3>8. Responsabilidades</h3>
+        <p>A Arena busca manter a loja disponível e as informações corretas, mas não garante funcionamento ininterrupto. Em caso de erro evidente de preço ou descrição, a Arena poderá corrigir a informação e cancelar o pedido afetado, com aviso ao cliente.</p>
+
+        <h3>9. Legislação e foro</h3>
+        <p>Estes termos são regidos pelas leis brasileiras. Fica eleito o foro do domicílio do consumidor para resolver eventuais disputas.</p>
+
+        <h3>10. Contato</h3>
+        <p>Dúvidas sobre estes termos podem ser enviadas para <span data-email>o e-mail de contato</span>.</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Confirmação -->
+  <div class="overlay" id="modal-confirm" hidden>
+    <div class="modal modal--xs" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" tabindex="-1">
+      <div class="modal__pad">
+        <h2 id="confirm-title">Confirmar</h2>
+        <p id="confirm-text"></p>
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+          <button type="button" class="btn btn--danger" id="confirm-ok">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pedido registrado -->
+  <div class="overlay" id="modal-order" hidden>
+    <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="order-title" tabindex="-1">
+      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <div class="modal__pad" id="order-body"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
