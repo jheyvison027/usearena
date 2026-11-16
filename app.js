@@ -30,22 +30,17 @@ db.collection('categories').onSnapshot(s=>{S.cats=s.docs.map(d=>({id:d.id,...d.d
 db.doc('settings/store').onSnapshot(d=>{if(d.exists)S.settings={...S.settings,...d.data()};renderCart()});
 
 /* Auth */
-auth.onAuthStateChanged(async u=>{S.user=u;S.isAdmin=false;
+auth.onAuthStateChanged(async u=>{S.user=u;S.isAdmin=false;S.authReady=false;
  if(u){try{S.isAdmin=(await db.doc('admins/'+u.uid).get()).exists}catch{}}
  $('#accBtn').textContent=u?(u.displayName||'Minha conta'):'Entrar';$('#adminLink').hidden=!S.isAdmin;
- if(u&&S.pending){const f=S.pending;S.pending=null;closeAll();f()}route()});
-let mode='login';
-const openAuth=()=>{$('#auth').classList.add('on');$('#logoutBtn').hidden=!S.user;$('#authForm').hidden=!!S.user;$('.tabs').hidden=!!S.user};
+ if(u&&S.pending){const f=S.pending;S.pending=null;closeAll();f()}S.authReady=true;route()});
+const openAuth=()=>{$('#aErr').textContent='';$('#auth').classList.add('on');$('#logoutBtn').hidden=!S.user;$('#authForm').hidden=!!S.user;$('#authTitle').hidden=!!S.user};
 $('#accBtn').onclick=openAuth;
-$$('.tab').forEach(t=>t.onclick=()=>{mode=t.dataset.tab;$$('.tab').forEach(x=>x.classList.toggle('on',x===t));
- $('#aName').hidden=$('#aPrivWrap').hidden=mode!=='signup';$('#aSubmit').textContent=mode==='signup'?'Criar conta':'Entrar'});
-$('#authForm').onsubmit=async e=>{e.preventDefault();$('#aErr').textContent='';
- try{if(mode==='signup'){if(!$('#aPriv').checked)throw{message:'Aceite a Política de Privacidade para criar a conta.'};
-  const c=await auth.createUserWithEmailAndPassword($('#aEmail').value,$('#aPass').value);
-  await c.user.updateProfile({displayName:$('#aName').value.trim()});
-  await db.doc('users/'+c.user.uid).set({name:$('#aName').value.trim(),email:c.user.email,createdAt:FV.serverTimestamp()});}
-  else await auth.signInWithEmailAndPassword($('#aEmail').value,$('#aPass').value);
-  $('#auth').classList.remove('on')}catch(x){$('#aErr').textContent=({'auth/invalid-credential':'E-mail ou senha incorretos.','auth/email-already-in-use':'Este e-mail já tem conta. Use Entrar.','auth/weak-password':'A senha precisa ter ao menos 6 caracteres.'})[x.code]||x.message}};
+/* Somente login: contas sao criadas previamente no Firebase Authentication (console) */
+$('#authForm').onsubmit=async e=>{e.preventDefault();$('#aErr').textContent='';const btn=$('#aSubmit');btn.disabled=true;
+ try{await auth.signInWithEmailAndPassword($('#aEmail').value.trim(),$('#aPass').value);$('#aPass').value='';$('#auth').classList.remove('on')}
+ catch(x){$('#aErr').textContent=({'auth/network-request-failed':'Sem conexão. Tente novamente.','auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.'})[x.code]||'E-mail ou senha incorretos.'}
+ finally{btn.disabled=false}};
 $('#logoutBtn').onclick=()=>{auth.signOut();$('#auth').classList.remove('on')};
 
 /* Overlay / drawer */
@@ -58,8 +53,10 @@ $('#cartBtn').onclick=openCart;
 /* Router */
 $('#search').oninput=e=>{S.q=e.target.value.toLowerCase();if(location.hash)location.hash='';else route()};
 window.onhashchange=route;
+/* Saida silenciosa: limpa o hash sem abrir modal e sem criar entrada no historico */
+function leaveAdmin(){history.replaceState(null,'',location.pathname+location.search);renderHome($('#app'))}
 function route(){const h=location.hash;const app=$('#app');
- if(h==='#admin')return renderAdmin(app);
+ if(h==='#admin'){if(!S.authReady){app.innerHTML='';return}return renderAdmin(app)}
  if(h.startsWith('#produto/'))return renderPDP(app,h.split('/')[1]);
  renderHome(app)}
 
@@ -150,8 +147,9 @@ async function checkout(){
 
 /* Admin */
 async function renderAdmin(app){
- if(!S.isAdmin){app.innerHTML=`<section class="hero"><h1>Área do lojista</h1><p>Entre com a conta de administrador para continuar.</p></section><button class="btn" id="al">Entrar</button>`;$('#al').onclick=openAuth;return}
- const [co,or]=await Promise.all([db.collection('coupons').get(),db.collection('orders').orderBy('createdAt','desc').limit(30).get()]);
+ if(!S.isAdmin)return leaveAdmin();
+ let co,or;try{[co,or]=await Promise.all([db.collection('coupons').get(),db.collection('orders').orderBy('createdAt','desc').limit(30).get()])}catch(e){return leaveAdmin()}
+ if(!S.isAdmin||location.hash!=='#admin')return;
  app.innerHTML=`<h1>Painel</h1>
  <div class="panel"><h3>Novo produto</h3><form id="pf"><input id="pn" placeholder="Nome" required><textarea id="pd" placeholder="Descrição"></textarea><input id="pm" placeholder="Malha e materiais">
  <div class="two"><input id="pp" type="number" step="0.01" placeholder="Preço" required><input id="ppr" type="number" step="0.01" placeholder="Preço promocional (opcional)"></div>

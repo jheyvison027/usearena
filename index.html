@@ -28,9 +28,9 @@
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Carrinho"><div class="dh"><h3>Carrinho</h3><button class="ghost" data-close>Fechar</button></div><div id="cartBody" class="db"></div></aside>
 <div class="modal" id="auth" role="dialog" aria-modal="true"><div class="mbox"><button class="ghost x" data-close>Fechar</button>
-<div class="tabs"><button class="tab on" data-tab="login">Entrar</button><button class="tab" data-tab="signup">Criar conta</button></div>
-<form id="authForm"><input id="aName" placeholder="Nome" hidden><input id="aEmail" type="email" placeholder="E-mail" required><input id="aPass" type="password" placeholder="Senha (mín. 6)" minlength="6" required>
-<label class="check" id="aPrivWrap" hidden><input type="checkbox" id="aPriv"> Aceito a Política de Privacidade</label><p id="aErr" class="err"></p><button class="btn" id="aSubmit">Entrar</button></form>
+<h2 id="authTitle" class="mtitle">Entrar na conta</h2>
+<form id="authForm"><input id="aEmail" type="email" placeholder="E-mail" autocomplete="username" required><input id="aPass" type="password" placeholder="Senha" autocomplete="current-password" required>
+<p id="aErr" class="err"></p><button class="btn" id="aSubmit">Entrar</button></form>
 <button class="ghost" id="logoutBtn" hidden>Sair da conta</button></div></div>
 <div id="toast" class="toast"></div>
 

@@ -133,3 +133,5 @@ h2.sec{margin:72px 0 8px;font-size:1.6rem}.mut{color:var(--mut)}
 .logo--footer{--logo-h:30px}
 @media(max-width:820px){.logo--header{--logo-h:34px}.logo--gate{--logo-h:52px}.logo--footer{--logo-h:26px}}
 @media(max-width:360px){.logo--header{--logo-h:30px}}
+
+.mtitle{margin:4px 0 22px;font-size:1.3rem}
