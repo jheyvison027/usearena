@@ -150,7 +150,7 @@ p { margin: 0 0 1em; }
 .check input:disabled + span { color: var(--muted); }
 
 /* Gate */
-.gate { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.94); display: flex; align-items: center; justify-content: center; padding: 12px; }
+.gate { position: fixed; inset: 0; z-index: 100; background: #0a0a0a; display: flex; align-items: center; justify-content: center; padding: 12px; }
 .gate-panel { width: 100%; max-width: 720px; max-height: 100%; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
 .gate-head h1 { font-size: 1.7rem; }
 .legal-box { flex: 1 1 auto; min-height: 140px; overflow-y: auto; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: .92rem; color: #d8d8d8; }
@@ -253,3 +253,43 @@ p { margin: 0 0 1em; }
   .pdp { grid-template-columns: 1.1fr 1fr; gap: 40px; }
   .gate-panel { padding: 28px; }
 }
+
+/* Animações sutis */
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.tile { transition: border-color .2s, background-color .2s, color .2s; }
+.card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 0 1px rgba(180,255,57,.35), 0 14px 32px rgba(180,255,57,.08); }
+.card-media img { transition: transform .4s ease; }
+.card:hover .card-media img { transform: scale(1.03); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+.grid.animate .card { animation: fadeUp .4s ease both; }
+.grid.animate .card:nth-child(2) { animation-delay: .04s; }
+.grid.animate .card:nth-child(3) { animation-delay: .08s; }
+.grid.animate .card:nth-child(4) { animation-delay: .12s; }
+.grid.animate .card:nth-child(n+5) { animation-delay: .16s; }
+.hero-inner > * { animation: fadeUp .5s ease both; }
+.hero-inner > *:nth-child(2) { animation-delay: .06s; }
+.hero-inner > *:nth-child(3) { animation-delay: .12s; }
+.hero-inner > *:nth-child(n+4) { animation-delay: .18s; }
+#view > .container, #view > .pdp { animation: fadeIn .3s ease both; }
+
+#modal-root .backdrop { animation: fadeIn .2s ease both; }
+.modal { animation: fadeUp .25s ease both; }
+.gate-panel { animation: fadeUp .35s ease both; }
+.header-btn.bump { animation: bump .35s ease; }
+.cart-badge { transition: transform .2s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .card:hover, .card:hover .card-media img { transform: none; }
+}
+
+/* Logotipo da marca */
+.logo-link { display: inline-flex; align-items: center; }
+.logo-link img { height: 46px; width: auto; margin-left: -4px; }
+.gate-logo { height: 56px; width: auto; margin: 0 0 14px -4px; }
+.footer-logo { height: 48px; width: auto; margin-left: -4px; }

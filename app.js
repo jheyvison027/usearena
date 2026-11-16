@@ -16,7 +16,7 @@
 
   const HERO_IMAGE = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1800&q=80';
   const GENDERS = ['MASCULINO', 'FEMININO', 'UNISSEX'];
-  const STATUSES = ['Aguardando Pagamento / Confirmação', 'Pago / Em Separação', 'Enviado', 'Concluído'];
+  const STATUSES = ['Aguardando Pagamento', 'Pago / Em Separação', 'Enviado', 'Concluído'];
   const TERMS_VERSION = '2026-11';
   const LS_TERMS = 'arena_terms';
   const LS_CART = 'arena_cart';
@@ -547,16 +547,16 @@
       <div class="result-bar"><h2 style="margin:0">Produtos</h2><span id="result-count" class="muted small"></span></div>
       <div class="grid" id="grid"></div>
     </section>`;
-    renderCatalog();
+    renderCatalog(true);
   }
 
   actions['scroll-shop'] = () => { const s = $('#shop'); if (s) s.scrollIntoView(); };
-  inputs.search = (el) => { state.filters.q = el.value; renderGrid(); };
-  actions.cat = (el) => { state.filters.cat = el.dataset.id; renderCatalog(); };
-  actions.gender = (el) => { state.filters.gender = el.dataset.id; renderCatalog(); };
-  actions['clear-filters'] = () => { state.filters = { q: '', cat: 'TODOS', gender: 'TODOS' }; const s = $('#search'); if (s) s.value = ''; renderCatalog(); };
+  inputs.search = (el) => { state.filters.q = el.value; renderGrid(false); };
+  actions.cat = (el) => { state.filters.cat = el.dataset.id; renderCatalog(true); };
+  actions.gender = (el) => { state.filters.gender = el.dataset.id; renderCatalog(true); };
+  actions['clear-filters'] = () => { state.filters = { q: '', cat: 'TODOS', gender: 'TODOS' }; const s = $('#search'); if (s) s.value = ''; renderCatalog(true); };
 
-  function renderCatalog() {
+  function renderCatalog(animate) {
     if (!$('#grid')) return;
     const th = state.settings.freeShippingThreshold;
     const hs = $('#hero-ship');
@@ -565,12 +565,13 @@
     $('#cat-tiles').innerHTML = tile('TODOS', 'TODOS', state.filters.cat === 'TODOS', 'cat') +
       state.categories.map((c) => tile(c.id, c.name, state.filters.cat === c.id, 'cat')).join('');
     $('#gender-tiles').innerHTML = ['TODOS'].concat(GENDERS).map((g) => tile(g, g, state.filters.gender === g, 'gender')).join('');
-    renderGrid();
+    renderGrid(animate);
   }
 
-  function renderGrid() {
+  function renderGrid(animate) {
     const grid = $('#grid');
     if (!grid) return;
+    grid.classList.toggle('animate', !!animate);
     if (!state.productsLoaded) { grid.innerHTML = '<div class="state-box" style="grid-column:1/-1">Carregando produtos...</div>'; return; }
     const q = norm(state.filters.q);
     const list = sortedProducts(state.products.filter((p) => {
@@ -660,6 +661,14 @@
     return { p, color: pdp.color, size: pdp.size };
   }
 
+  function bumpCart() {
+    const b = $('.header-btn[data-act="open-cart"]');
+    if (!b) return;
+    b.classList.remove('bump');
+    void b.offsetWidth;
+    b.classList.add('bump');
+  }
+
   function addToCart(pid, color, size, qty) {
     const p = state.products.find((x) => x.id === pid);
     if (!p) return false;
@@ -670,6 +679,7 @@
     if (ex) ex.qty = next; else state.cart.items.push({ pid, color, size, qty: qty || 1 });
     saveCart();
     updateHeader();
+    bumpCart();
     return true;
   }
 
@@ -886,7 +896,7 @@
       openModal(`
         <h2 class="modal-title">Pedido registrado</h2>
         <p>Número do pedido: <strong>${esc(orderId.slice(0, 8).toUpperCase())}</strong></p>
-        <p>Status: Aguardando Pagamento / Confirmação. A loja entrará em contato pelo telefone informado para combinar o pagamento e o envio.</p>
+        <p>Status: Aguardando Pagamento. A loja entrará em contato pelo telefone informado para combinar o pagamento e o envio.</p>
         <button type="button" class="btn btn-block" data-act="close-modal">Voltar à loja</button>`, { label: 'Pedido registrado' });
     } catch (e) {
       console.error(e);
