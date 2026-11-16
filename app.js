@@ -11,8 +11,8 @@
      ---------------------------------------------------------- */
   const SITE = {
     nome: 'Arena',
-    dominio: 'www.seudominio.com.br',
-    email: 'contato@seudominio.com.br'
+    dominio: 'www.usearenapdf.com.br',
+    email: 'contato@usearenapdf.com.br'
   };
 
   const KEYS = {
