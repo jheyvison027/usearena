@@ -1,157 +1,40 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arena | Moda Fitness</title>
-  <meta name="description" content="Arena: camisas, shorts, calças, tênis e acessórios de treino com envio para a sua região.">
-  <meta name="theme-color" content="#121212">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23121212'/%3E%3Cpath d='M32 10 12 54h9l4-10h14l4 10h9L32 10Zm0 18 5 12H27l5-12Z' fill='%23B4FF39'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="theme-color" content="#121212"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arena | Moda Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%22-25%20-14%20340%20340%22%3E%3Crect%20x=%22-25%22%20y=%22-14%22%20width=%22340%22%20height=%22340%22%20fill=%22%23121212%22/%3E%3Cpath%20fill=%22%23B4FF39%22%20fill-rule=%22evenodd%22%20d=%22M47.0%20212.0L38.2%20214.2L26.2%20220.2L21.5%20223.8L14.8%20231.5L9.2%20241.2L6.0%20252.0L6.0%20266.8L9.2%20277.5L13.2%20285.5L23.5%20297.0L30.2%20301.5L45.0%20306.8L61.8%20306.8L77.5%20300.5L85.2%20295.0L91.0%20288.2L97.5%20276.5L100.8%20261.8L99.8%20250.0L93.5%20234.2L83.2%20222.8L76.5%20218.2L63.8%20213.0ZM132.5%206.2L123.2%2022.2L91.2%2087.5L200.8%20306.2L202.2%20307.2L268.8%20306.8L271.0%20307.8L282.8%20307.8L283.5%20305.2L135.5%2010.2Z%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css"></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><g id="arena-logo"><path fill="#B4FF39" fill-rule="evenodd" d="M47.0 212.0L38.2 214.2L26.2 220.2L21.5 223.8L14.8 231.5L9.2 241.2L6.0 252.0L6.0 266.8L9.2 277.5L13.2 285.5L23.5 297.0L30.2 301.5L45.0 306.8L61.8 306.8L77.5 300.5L85.2 295.0L91.0 288.2L97.5 276.5L100.8 261.8L99.8 250.0L93.5 234.2L83.2 222.8L76.5 218.2L63.8 213.0ZM132.5 6.2L123.2 22.2L91.2 87.5L200.8 306.2L202.2 307.2L268.8 306.8L271.0 307.8L282.8 307.8L283.5 305.2L135.5 10.2Z"/><path fill="#FFFFFF" fill-rule="evenodd" d="M789.2 227.2L780.5 233.8L775.8 239.5L771.2 247.2L768.0 258.0L769.0 272.8L772.2 281.5L776.8 288.2L784.5 296.0L791.2 300.5L808.0 306.8L830.8 307.8L844.8 303.5L834.5 296.2L823.0 283.5L817.8 270.8L817.2 262.0L820.0 248.2L824.5 240.5L832.5 231.5L845.0 223.5L830.8 219.0L812.0 219.0L797.2 223.2ZM651.0 151.2L607.5 184.8L604.0 189.0L604.0 305.5L605.2 306.8L650.5 306.8L651.8 305.5ZM492.0 151.0L478.2 155.2L462.5 163.8L446.8 178.5L441.2 186.2L435.2 198.2L430.0 216.0L429.0 230.8L431.0 244.8L435.2 258.5L444.8 275.2L457.5 289.0L468.2 296.5L480.2 302.5L501.0 307.8L515.8 307.8L527.8 305.8L544.5 299.5L557.2 291.0L565.0 283.5L548.0 284.0L536.0 282.0L523.2 277.8L513.2 272.8L500.5 263.2L493.5 256.2L484.0 242.5L480.0 234.5L475.8 220.8L474.8 193.0L481.0 172.2L494.0 151.8ZM792.5 155.8L788.2 160.2L784.0 170.0L784.0 179.8L789.8 191.2L793.2 194.5L803.0 198.8L809.5 199.5L821.5 195.5L826.2 192.0L829.5 187.5L832.8 178.8L832.8 170.0L829.8 161.8L830.8 159.8L846.0 154.8L853.8 155.5L854.0 274.8L858.2 288.5L866.5 299.0L871.2 302.5L882.0 306.8L887.0 307.8L898.8 306.8L905.5 304.5L914.2 299.0L932.2 284.0L933.2 282.2L927.8 281.0L907.0 282.0L903.0 280.2L902.8 181.0L897.5 167.2L889.2 157.8L879.5 152.2L869.8 150.0L806.0 150.0L798.2 152.2ZM699.0 151.0L686.5 156.8L662.8 176.0L693.5 176.8L695.0 178.2L695.0 305.5L696.2 306.8L742.5 306.8L743.8 305.5L743.8 183.0L742.8 177.0L736.0 163.5L725.5 154.2L712.8 150.0ZM511.0 150.2L521.8 165.2L526.8 176.2L530.0 192.0L529.0 202.8L493.8 231.2L565.2 231.5L569.8 217.8L570.8 199.0L566.5 184.2L560.0 173.5L550.2 163.8L537.5 156.2L521.8 151.0ZM406.8 151.0L401.8 150.0L309.2 150.5L309.5 306.5L355.5 306.8L356.8 305.5L357.0 155.5L360.8 154.8L366.8 155.8L377.2 160.5L378.0 162.8L375.0 171.0L375.0 177.8L379.2 188.5L385.5 195.0L394.0 198.8L404.8 198.8L416.2 193.0L421.5 186.5L423.8 180.8L423.8 169.0L420.5 161.2L414.2 154.8Z"/></g></defs></svg>
+<a class="skip" href="#app">Pular para o conteúdo</a>
+<div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="gate-box">
+<svg class="logo logo--gate" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg><h2 id="gt">Termos de Uso e Política de Privacidade</h2>
+<div class="gate-text" id="gateText" tabindex="0">
+<h3>Termos de Uso</h3><p>Ao usar a Arena você concorda em fornecer dados verdadeiros, usar o site apenas para compras pessoais e não tentar acessar áreas restritas. Preços e estoque podem mudar sem aviso. Pedidos ficam como "Aguardando Pagamento" até a confirmação.</p>
+<h3>Política de Privacidade</h3><p>Coletamos nome, e-mail e dados do pedido para processar compras e atendimento. Não vendemos seus dados. A autenticação é feita pelo Firebase (Google). Você pode pedir a exclusão da conta a qualquer momento.</p>
+<p>Guardamos no seu navegador apenas o registro deste aceite e o conteúdo do carrinho.</p>
+<p>Role até o final para liberar o aceite.</p></div>
+<label class="check"><input type="checkbox" id="gateCheck" disabled> Li e concordo com os Termos de Uso e a Política de Privacidade</label>
+<button class="btn" id="gateBtn" disabled>Concordar e acessar</button></div></div>
 
-  <!-- CSS crítico embutido: garante o tema escuro e o aviso de Termos mesmo se styles.css não carregar -->
-  <style>
-    :root{--bg:#121212;--surface:#1E1E1E;--border:#2C2C2C;--text:#FFFFFF;--muted:#A9A9A9;--accent:#B4FF39;--accent-ink:#121212;--radius:4px;--font-body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-head:'Barlow Condensed','Arial Narrow',Impact,sans-serif}
-    *,*::before,*::after{box-sizing:border-box}
-    [hidden]{display:none!important}
-    html{background:#121212;color-scheme:dark}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.5}
-    body.gated{overflow:hidden}
-    img{max-width:100%;display:block}
-    a{color:inherit;text-decoration:none}
-    button,input{font:inherit;color:inherit}
-    h1,h2,h3{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.02em;line-height:1.1;margin:0 0 .5em}
-    p{margin:0 0 1em}
-    .muted{color:var(--muted)}.small{font-size:.85rem}
-    .gate{position:fixed;inset:0;z-index:100;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:12px}
-    .gate-panel{width:100%;max-width:720px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
-    .gate-logo{height:56px;width:auto;margin:0 0 14px -4px}
-    .gate-head h1{font-size:1.7rem}
-    .legal-box{flex:1 1 auto;min-height:140px;overflow-y:auto;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:.92rem;color:#d8d8d8;scrollbar-width:thin;scrollbar-color:var(--accent) #1a1a1a}
-    .legal-box h2{font-size:1.4rem;color:var(--accent);margin-top:8px}
-    .legal-box h3{font-size:1.05rem;margin-top:14px}
-    .check{display:flex;gap:10px;align-items:flex-start;margin:12px 0;cursor:pointer;font-size:.92rem}
-    .check input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
-    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 20px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:var(--radius);font-family:var(--font-head);font-weight:700;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
-    .btn:disabled{opacity:.4;cursor:not-allowed}.btn-block{width:100%}
-    #app{min-height:100vh}
-    @keyframes gateIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-    .gate-panel{animation:gateIn .35s ease both}
-    @media (prefers-reduced-motion:reduce){*{animation:none!important}}
-  </style>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body class="gated">
+<header class="top"><a href="#" class="brand" aria-label="Arena, página inicial"><svg class="logo logo--header" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg></a>
+<input id="search" type="search" placeholder="Buscar produtos" aria-label="Buscar produtos">
+<nav><button class="ghost" id="accBtn">Entrar</button><a class="ghost" id="adminLink" href="#admin" hidden>Painel</a>
+<button class="ghost cartBtn" id="cartBtn" aria-label="Carrinho"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-2 9H8zM6 6 5 3H2M9 20h.01M18 20h.01"/></svg><span id="cartCount" class="badge">0</span></button></nav></header>
+<main id="app" tabindex="-1"></main>
+<footer class="foot"><svg class="logo logo--footer" viewBox="0 0 940 313" role="img" aria-label="Arena"><use href="#arena-logo"/></svg><span>Arena Moda Fitness. Todos os direitos reservados.</span></footer>
 
-  <!-- Bloqueio obrigatório: Termos de Uso e Política de Privacidade -->
-  <div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" hidden>
-    <div class="gate-panel">
-      <div class="gate-head">
-        <img class="gate-logo" src="logo-arena.png" alt="Arena" width="640" height="243">
-        <h1 id="gate-title">Termos de Uso e Política de Privacidade</h1>
-        <p class="muted">Para acessar a loja, leia os dois documentos abaixo até o final e confirme o aceite.</p>
-      </div>
-      <div id="gate-legal" class="legal-box" tabindex="0" aria-label="Termos de Uso e Política de Privacidade"></div>
-      <p id="gate-hint" class="muted small">Role o texto até o fim para liberar a caixa de aceite.</p>
-      <label class="check">
-        <input type="checkbox" id="gate-check" disabled>
-        <span>Li e aceito os Termos de Uso e a Política de Privacidade da Arena.</span>
-      </label>
-      <button type="button" id="gate-enter" class="btn btn-block" disabled>Concordar e Acessar</button>
-    </div>
-  </div>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Carrinho"><div class="dh"><h3>Carrinho</h3><button class="ghost" data-close>Fechar</button></div><div id="cartBody" class="db"></div></aside>
+<div class="modal" id="auth" role="dialog" aria-modal="true"><div class="mbox"><button class="ghost x" data-close>Fechar</button>
+<div class="tabs"><button class="tab on" data-tab="login">Entrar</button><button class="tab" data-tab="signup">Criar conta</button></div>
+<form id="authForm"><input id="aName" placeholder="Nome" hidden><input id="aEmail" type="email" placeholder="E-mail" required><input id="aPass" type="password" placeholder="Senha (mín. 6)" minlength="6" required>
+<label class="check" id="aPrivWrap" hidden><input type="checkbox" id="aPriv"> Aceito a Política de Privacidade</label><p id="aErr" class="err"></p><button class="btn" id="aSubmit">Entrar</button></form>
+<button class="ghost" id="logoutBtn" hidden>Sair da conta</button></div></div>
+<div id="toast" class="toast"></div>
 
-  <div id="app" inert>
-    <header class="site-header">
-      <div class="container header-row">
-        <a href="#" class="logo-link" aria-label="Arena, página inicial"><img src="logo-arena.png" alt="Arena" width="640" height="243"></a>
-        <div class="header-actions">
-          <a id="admin-link" href="#admin" class="header-link" hidden>Painel</a>
-          <button type="button" class="header-btn" data-act="account" aria-label="Minha conta">
-            <span data-bind="icon-user"></span>
-            <span id="account-label" class="header-label">Entrar</span>
-          </button>
-          <button type="button" class="header-btn" data-act="open-cart" aria-label="Abrir carrinho">
-            <span data-bind="icon-cart"></span>
-            <span id="cart-badge" class="cart-badge" hidden>0</span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <main id="view"></main>
-
-    <footer class="site-footer">
-      <div class="container footer-row">
-        <img class="footer-logo" src="logo-arena.png" alt="Arena" width="640" height="243">
-        <p class="muted small">Moda fitness para treino e competição.</p>
-        <div class="footer-links">
-          <button type="button" class="link" data-act="legal">Termos de Uso</button>
-          <button type="button" class="link" data-act="legal">Política de Privacidade</button>
-        </div>
-      </div>
-    </footer>
-  </div>
-
-  <div id="cart-backdrop" class="backdrop" data-act="close-cart" hidden></div>
-  <aside id="cart" class="drawer" aria-label="Carrinho de compras" inert>
-    <div class="drawer-head">
-      <h2>Carrinho</h2>
-      <button type="button" class="icon-btn" data-act="close-cart" aria-label="Fechar carrinho"><span data-bind="icon-close"></span></button>
-    </div>
-    <div id="cart-body" class="drawer-body"></div>
-    <div id="cart-foot" class="drawer-foot"></div>
-  </aside>
-
-  <div id="modal-root" hidden></div>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <template id="tpl-legal">
-    <section>
-      <h2>Termos de Uso</h2>
-      <h3>1. Aceitação</h3>
-      <p>Ao acessar e utilizar a loja virtual Arena, você declara ter lido e concordado com estes Termos de Uso. Caso não concorde, não utilize o site.</p>
-      <h3>2. Cadastro</h3>
-      <p>A navegação e a montagem do carrinho não exigem cadastro. Para finalizar um pedido é necessário criar uma conta com informações verdadeiras e atualizadas. Você é responsável por manter a confidencialidade da sua senha e por toda atividade realizada na sua conta.</p>
-      <h3>3. Produtos e preços</h3>
-      <p>As imagens e descrições dos produtos buscam representar o item com fidelidade, mas pequenas variações de cor podem ocorrer conforme a tela do dispositivo. Os preços e as promoções podem ser alterados a qualquer momento, sendo válido o preço exibido no momento do registro do pedido. A disponibilidade depende do estoque de cada tamanho e cor.</p>
-      <h3>4. Pedidos e pagamento</h3>
-      <p>Ao concluir a compra, o pedido é registrado com o status "Aguardando Pagamento". O pagamento e a confirmação são combinados diretamente com a loja pelos canais de atendimento informados. O pedido só segue para separação e envio após essa confirmação.</p>
-      <h3>5. Cupons</h3>
-      <p>Cupons de desconto possuem percentual, escopo (carrinho inteiro ou categoria específica) e limite de usos por conta definidos pela Arena. Cupons de categoria incidem apenas sobre os produtos elegíveis. É vedada a tentativa de burlar as regras de uso dos cupons.</p>
-      <h3>6. Entrega</h3>
-      <p>O valor do frete é calculado conforme a região ou faixa de distância selecionada. Compras que atingirem a meta de frete grátis vigente na loja ficam isentas da taxa de envio. Os prazos informados são estimativas e podem variar.</p>
-      <h3>7. Trocas, devoluções e arrependimento</h3>
-      <p>Nas compras realizadas à distância, você pode desistir da compra em até 7 dias corridos após o recebimento, nos termos do Código de Defesa do Consumidor. Trocas por tamanho ou defeito seguem a mesma legislação e devem ser solicitadas pelos canais de atendimento da loja.</p>
-      <h3>8. Propriedade intelectual</h3>
-      <p>A marca Arena, o layout, os textos e as imagens do site são protegidos por direitos autorais e não podem ser copiados ou reutilizados sem autorização.</p>
-      <h3>9. Alterações</h3>
-      <p>Estes Termos podem ser atualizados. A versão vigente é sempre a publicada no site, e o uso continuado após a atualização indica concordância com o novo texto.</p>
-    </section>
-    <section>
-      <h2>Política de Privacidade</h2>
-      <h3>1. Dados que coletamos</h3>
-      <p>Coletamos os dados que você informa ao criar conta e ao finalizar um pedido: nome completo, e-mail, telefone e endereço de entrega. Também registramos o histórico dos seus pedidos, o uso de cupons e a data e hora do aceite destes documentos. Guardamos no seu navegador (localStorage) o aceite dos termos e o conteúdo do carrinho.</p>
-      <h3>2. Finalidade</h3>
-      <p>Usamos os dados para criar e manter sua conta, processar e entregar pedidos, aplicar cupons, prestar atendimento e cumprir obrigações legais. Não vendemos seus dados.</p>
-      <h3>3. Base legal</h3>
-      <p>O tratamento ocorre com base na execução de contrato, no cumprimento de obrigação legal e no seu consentimento, conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
-      <h3>4. Armazenamento e compartilhamento</h3>
-      <p>Os dados são armazenados em serviços de nuvem do Google Firebase (autenticação e banco de dados). Compartilhamos informações apenas com quem for necessário para concluir a entrega do pedido ou quando houver exigência legal.</p>
-      <h3>5. Seus direitos</h3>
-      <p>Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, portabilidade, eliminação dos dados e revogação do consentimento, nos termos do artigo 18 da LGPD, pelos canais de atendimento da loja.</p>
-      <h3>6. Segurança</h3>
-      <p>Adotamos medidas técnicas para proteger seus dados, incluindo autenticação, regras de acesso ao banco de dados e conexão criptografada. Nenhum sistema é totalmente imune a incidentes, e em caso de ocorrência relevante você será informado conforme a lei.</p>
-      <h3>7. Retenção</h3>
-      <p>Mantemos os dados pelo tempo necessário para cumprir as finalidades acima e as obrigações legais e fiscais aplicáveis.</p>
-    </section>
-  </template>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="app.js"></script></body></html>
