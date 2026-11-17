@@ -1,7 +1,7 @@
 /* ==========================================================
    Arena | Lógica da loja (etapa 1)
    Vitrine, filtros, detalhes, carrinho, cupons, login do cliente,
-   checkout e área do lojista. Persistência em LocalStorage.
+   checkout e área do lojista (rota oculta #/adminarena). Persistência em LocalStorage.
    ========================================================== */
 (() => {
   'use strict';
@@ -15,6 +15,18 @@
     email: 'contato@usearenapdf.com.br'
   };
 
+  /* Acesso do lojista: definido aqui, nunca pela interface.
+     Para trocar a senha, gere um novo hash e aumente "v":
+     node -e "const c=require('crypto');console.log(c.pbkdf2Sync('NOVA_SENHA','SALT',120000,32,'sha256').toString('hex'))"
+     (use o mesmo SALT do objeto abaixo ou troque os dois). */
+  const MERCHANT_SEED = {
+    v: 1,
+    user: 'admin.arena',
+    salt: 'arena-2026-s1',
+    iterations: 120000,
+    hash: 'cd522ad162a06aaf909c50ce9b4d2e611f4ed1bd785d59759e1ced9e8d18d08f'
+  };
+
   const KEYS = {
     products: 'arena:produtos',
     categories: 'arena:categorias',
@@ -22,7 +34,8 @@
     cart: 'arena:carrinho',
     users: 'arena:clientes',
     session: 'arena:sessao',
-    merchant: 'arena:lojista',
+    merchantAuth: 'arena:acesso-lojista',
+    merchantLock: 'arena:lojista-bloqueio',
     orders: 'arena:pedidos',
     seeded: 'arena:catalogo-inicial'
   };
@@ -150,6 +163,7 @@
      Carregamento
      ---------------------------------------------------------- */
   function loadState() {
+    ensureMerchantAccess();
     if (!store.get(KEYS.seeded, false)) {
       const d = seedData();
       store.set(KEYS.categories, d.cats);
@@ -401,20 +415,10 @@
   function clearFilters() { state.filters = { query: '', category: 'all', gender: 'all', onlyPromo: false }; applyFilters(); }
 
   /* ----------------------------------------------------------
-     Detalhes do produto
+     Página de detalhes do produto (rota #/produto/ID)
+     Tela cheia, tema claro, com galeria, seletores e relacionados.
      ---------------------------------------------------------- */
-  function openProduct(id) {
-    const p = findProduct(id);
-    if (!p) return;
-    const colors = colorsOf(p);
-    const first = colors.find((c) => p.variations.some((v) => v.color === c.name && v.stock > 0)) || colors[0];
-    state.sel = { id, color: first ? first.name : '', size: null, photo: 0, tab: 'desc' };
-    renderProductShell(p);
-    updateSelectors();
-    openModal('modal-product');
-    const dlg = $('#modal-product .modal');
-    dlg.scrollTop = 0;
-  }
+  const hiRes = (src) => (/images\.unsplash\.com/.test(src) ? src.replace(/([?&])w=\d+/, '$1w=1400') : src);
 
   function relatedOf(p) {
     const same = state.products.filter((x) => x.id !== p.id && x.categoryId === p.categoryId);
@@ -422,89 +426,118 @@
     return [...same, ...others].slice(0, 4);
   }
 
-  function renderProductShell(p) {
-    const promo = isPromo(p);
-    const rel = relatedOf(p);
-    const photos = p.photos.length ? p.photos : [PLACEHOLDER];
-    $('#product-body').innerHTML = `
-    <div class="pd">
-      <div class="pd__gallery">
-        <div class="pd__main">
-          <img id="pd-main" src="${esc(photos[0])}" alt="${esc(p.name)}" decoding="async">
-          <div class="card__badges">
-            ${promo ? `<span class="badge badge--discount">-${discountPct(p)}%</span>` : ''}
-            ${totalStock(p) === 0 ? '<span class="badge badge--out">Esgotado</span>' : ''}
-          </div>
-        </div>
-        ${photos.length > 1 ? `<div class="pd__thumbs">${photos.map((src, i) => `
-          <button type="button" class="pd__thumb ${i === 0 ? 'is-active' : ''}" data-photo="${i}" aria-label="Foto ${i + 1}">${img(src, '', '', false)}</button>`).join('')}</div>` : ''}
-      </div>
-
-      <div class="pd__info">
-        <p class="eyebrow">${esc(catName(p.categoryId))} / ${esc(p.gender)}</p>
-        <h2 id="product-title">${esc(p.name)}</h2>
-        <div class="pd__price">
-          ${promo ? `
-            <div><small>Preço promocional</small><span class="price-now is-promo">${brl(unitCents(p))}</span></div>
-            <div><small>Preço lançado</small><s class="price-old">${brl(toCents(p.price))}</s></div>`
-          : `<div><small>Preço lançado</small><span class="price-now">${brl(unitCents(p))}</span></div>`}
-        </div>
-
-        <div class="pd__block">
-          <p class="pd__label">Cor <strong id="pd-color-name"></strong></p>
-          <div class="swatches" id="pd-colors"></div>
-        </div>
-        <div class="pd__block">
-          <p class="pd__label">Tamanho <strong id="pd-size-name"></strong></p>
-          <div class="sizes" id="pd-sizes"></div>
-        </div>
-
-        <p class="form-error" id="pd-error" role="alert" hidden></p>
-        <div class="pd__buy">
-          <button type="button" class="btn btn--primary" id="pd-add">${icon('bag')} Adicionar ao carrinho</button>
-        </div>
-
-        <div class="pd__tabs">
-          <div class="tabs tabs--plain" role="tablist" style="margin:0">
-            <button type="button" class="tab is-active" role="tab" data-pd-tab="desc">Descrição</button>
-            <button type="button" class="tab" role="tab" data-pd-tab="material">Material e malha</button>
-          </div>
-          <div class="pd__panel" id="pd-panel"></div>
-        </div>
-      </div>
-
-      ${rel.length ? `
-      <section class="pd__related" aria-labelledby="rel-title">
-        <h3 id="rel-title">Produtos relacionados</h3>
-        <div class="related">
-          ${rel.map((r) => `
-            <button type="button" class="rel" data-related="${esc(r.id)}">
-              <div class="rel__img">${img(r.photos[0] || PLACEHOLDER, r.name)}</div>
-              <div class="rel__body">
-                <p class="rel__name">${esc(r.name)}</p>
-                <p class="rel__price">${brl(unitCents(r))}${isPromo(r) ? `<s>${brl(toCents(r.price))}</s>` : ''}</p>
-              </div>
-            </button>`).join('')}
-        </div>
-      </section>` : ''}
-    </div>`;
-    renderProductPanel();
+  function prepareProduct(id) {
+    const p = findProduct(id);
+    if (!p) return null;
+    const colors = colorsOf(p);
+    const first = colors.find((c) => p.variations.some((v) => v.color === c.name && v.stock > 0)) || colors[0];
+    state.sel = { id, color: first ? first.name : '', size: null };
+    renderProductPage(p);
+    return p;
   }
 
-  function renderProductPanel() {
-    const p = findProduct(state.sel.id);
-    const panel = $('#pd-panel');
-    if (!panel) return;
-    panel.innerHTML = state.sel.tab === 'desc'
-      ? `<p>${esc(p.description || 'Sem descrição cadastrada.').replace(/\n/g, '<br>')}</p>`
-      : `<dl><div><dt>Material</dt><dd>${esc(p.material || 'Não informado')}</dd></div><div><dt>Tipo de malha</dt><dd>${esc(p.malha || 'Não informado')}</dd></div></dl>`;
-    panel.style.animation = 'none'; void panel.offsetWidth; panel.style.animation = '';
+  function renderProductPage(p) {
+    const promo = isPromo(p);
+    const sold = totalStock(p) === 0;
+    const rel = relatedOf(p);
+    const photos = p.photos.length ? p.photos : [PLACEHOLDER];
+    const colorNames = colorsOf(p).map((c) => c.name).join(', ');
+    const sizeList = [...new Set(p.variations.map((v) => v.size))].join(', ');
+
+    $('#product-page').innerHTML = `
+      <div class="pv__bar">
+        <a class="pv__back" href="#vitrine">${icon('back')} Voltar à vitrine</a>
+        <nav class="pv__crumbs" aria-label="Você está em">
+          <a href="#vitrine">Loja</a><span aria-hidden="true">/</span>
+          <button type="button" class="link-btn" data-crumb-cat="${esc(p.categoryId)}">${esc(catName(p.categoryId))}</button><span aria-hidden="true">/</span>
+          <span aria-current="page">${esc(p.name)}</span>
+        </nav>
+      </div>
+
+      <section class="pv__main" aria-labelledby="pv-title">
+        <div class="pv__gallery ${photos.length > 1 ? '' : 'no-thumbs'}">
+          ${photos.length > 1 ? `
+          <div class="pv__thumbs" role="group" aria-label="Fotos do produto">
+            ${photos.map((src, i) => `
+            <button type="button" class="pv__thumb ${i === 0 ? 'is-active' : ''}" data-photo="${i}" aria-label="Ver foto ${i + 1}">${img(src, '', '', false)}</button>`).join('')}
+          </div>` : ''}
+          <div class="pv__stage">
+            <img id="pd-main" src="${esc(hiRes(photos[0]))}" alt="${esc(p.name)}" decoding="async" fetchpriority="high">
+            <div class="card__badges">
+              ${promo ? `<span class="badge badge--discount">-${discountPct(p)}%</span>` : ''}
+              ${sold ? '<span class="badge badge--out">Esgotado</span>' : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="pv__info">
+          <p class="eyebrow">${esc(catName(p.categoryId))} / ${esc(p.gender)}</p>
+          <h1 id="pv-title" class="pv__title">${esc(p.name)}</h1>
+
+          <div class="pv__price">
+            ${promo ? `
+              <div><small>Preço promocional</small><span class="price-now is-promo">${brl(unitCents(p))}</span></div>
+              <div><small>Preço lançado</small><s class="price-old">${brl(toCents(p.price))}</s></div>`
+            : `<div><small>Preço lançado</small><span class="price-now">${brl(unitCents(p))}</span></div>`}
+          </div>
+
+          <div class="pv__block">
+            <p class="pv__label">Cor <strong id="pd-color-name"></strong></p>
+            <div class="swatches" id="pd-colors"></div>
+          </div>
+          <div class="pv__block">
+            <p class="pv__label">Tamanho <strong id="pd-size-name"></strong></p>
+            <div class="sizes" id="pd-sizes"></div>
+          </div>
+
+          <p class="form-error" id="pd-error" role="alert" hidden></p>
+          <div class="pv__buy">
+            <button type="button" class="btn btn--primary btn--lg" id="pd-add" ${sold ? 'disabled' : ''}>${icon('bag')} ${sold ? 'Produto esgotado' : 'Adicionar ao carrinho'}</button>
+            <button type="button" class="btn btn--ghost btn--lg" data-open-cart>Ver carrinho</button>
+          </div>
+
+          <ul class="pv__notes">
+            <li>${icon('tag')}<span>Cupons de desconto são aplicados no carrinho.</span></li>
+            <li>${icon('lock')}<span>Para finalizar a compra, entre ou crie sua conta.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="pv__details" aria-label="Detalhes técnicos">
+        <div class="tabs" id="pv-tabs" role="tablist">
+          <button type="button" class="tab is-active" role="tab" aria-selected="true" data-pd-tab="desc">Descrição</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-pd-tab="spec">Material e malha</button>
+          <span class="tabs__ink" aria-hidden="true"></span>
+        </div>
+        <div class="pv__panel" id="pv-panel-desc" role="tabpanel">
+          <p>${esc(p.description || 'Sem descrição cadastrada.').replace(/\n/g, '<br>')}</p>
+        </div>
+        <div class="pv__panel" id="pv-panel-spec" role="tabpanel" hidden>
+          <dl class="specs">
+            <div><dt>Material</dt><dd>${esc(p.material || 'Não informado')}</dd></div>
+            <div><dt>Tipo de malha</dt><dd>${esc(p.malha || 'Não informado')}</dd></div>
+            <div><dt>Cores</dt><dd>${esc(colorNames)}</dd></div>
+            <div><dt>Tamanhos</dt><dd>${esc(sizeList)}</dd></div>
+            <div><dt>Categoria</dt><dd>${esc(catName(p.categoryId))}</dd></div>
+            <div><dt>Gênero</dt><dd>${esc(p.gender)}</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      ${rel.length ? `
+      <section class="pv__related" aria-labelledby="rel-title">
+        <h2 id="rel-title">Produtos relacionados</h2>
+        <div class="grid">${rel.map(cardHTML).join('')}</div>
+      </section>` : ''}`;
+
+    updateSelectors();
+    moveInk($('#pv-tabs'));
   }
 
   function updateSelectors() {
-    const p = findProduct(state.sel.id);
     const s = state.sel;
-    if (!p) return;
+    const p = s && findProduct(s.id);
+    if (!p || !$('#pd-colors')) return;
     const vs = p.variations.filter((v) => v.color === s.color);
     if (s.size && !vs.some((v) => v.size === s.size && v.stock > 0)) s.size = null;
 
@@ -520,9 +553,9 @@
     setError($('#pd-error'), '');
   }
 
-  function addFromModal() {
+  function addFromPage() {
     const s = state.sel;
-    const p = findProduct(s.id);
+    const p = s && findProduct(s.id);
     const err = $('#pd-error');
     if (!p) return;
     if (!s.size) { setError(err, 'Selecione um tamanho para continuar.'); return; }
@@ -808,21 +841,14 @@
   /* ==========================================================
      ÁREA DO LOJISTA
      ========================================================== */
-  const merchantData = () => store.get(KEYS.merchant, null);
   const merchantAuthed = () => { try { return sessionStorage.getItem(MERCHANT_SESSION) === '1'; } catch { return false; } };
   const setMerchantAuthed = (on) => { try { on ? sessionStorage.setItem(MERCHANT_SESSION, '1') : sessionStorage.removeItem(MERCHANT_SESSION); } catch { /* ignora */ } };
 
   function renderAdmin() {
-    const m = merchantData();
-    const authed = merchantAuthed() && m;
-    $('#admin-gate').hidden = Boolean(authed);
+    const authed = merchantAuthed() && Boolean(store.get(KEYS.merchantAuth, null));
+    $('#admin-gate').hidden = authed;
     $('#admin-panel').hidden = !authed;
-    if (!authed) {
-      $('#form-merchant-setup').hidden = Boolean(m);
-      $('#form-merchant-login').hidden = !m;
-      $('#gate-text').textContent = m ? 'Acesso restrito. Entre com o login e a senha do lojista.' : 'Antes de usar o painel, crie o acesso do lojista.';
-      return;
-    }
+    if (!authed) return;
     renderProductFormOptions();
     renderCatalog();
     renderCouponList();
@@ -1103,72 +1129,100 @@
     refreshInks();
   }
 
-  /* ---------- Acesso do lojista ---------- */
-  async function setupMerchant(e) {
-    e.preventDefault();
-    const err = $('#ms-error');
-    const user = $('#ms-user').value.trim();
-    const pass = $('#ms-pass').value;
-    if (user.length < 3) return setError(err, 'O login precisa ter pelo menos 3 caracteres.');
-    if (pass.length < 8) return setError(err, 'A senha precisa ter pelo menos 8 caracteres.');
-    if (pass !== $('#ms-pass2').value) return setError(err, 'As senhas não conferem.');
-    const salt = uid('s');
-    store.set(KEYS.merchant, { user, salt, hash: await sha(salt + pass) });
-    setMerchantAuthed(true);
-    $('#form-merchant-setup').reset();
-    toast('Acesso do lojista criado.');
-    renderAdmin();
+  /* ---------- Acesso do lojista (somente login) ----------
+     As credenciais não são criadas na interface. Elas vêm de MERCHANT_SEED
+     e são gravadas em LocalStorage (KEYS.merchantAuth) a cada carregamento. */
+  function ensureMerchantAccess() {
+    try { localStorage.removeItem('arena:lojista'); } catch { /* ignora */ }
+    const cur = store.get(KEYS.merchantAuth, null);
+    if (JSON.stringify(cur) !== JSON.stringify(MERCHANT_SEED)) store.set(KEYS.merchantAuth, MERCHANT_SEED);
+  }
+
+  async function pbkdf2Hex(pass, salt, iterations) {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: enc.encode(salt), iterations }, key, 256);
+    return Array.from(new Uint8Array(bits)).map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   async function loginMerchant(e) {
     e.preventDefault();
     const err = $('#ml-error');
-    const m = merchantData();
+    const lock = store.get(KEYS.merchantLock, { count: 0, until: 0 });
+    if (lock.until > Date.now()) {
+      const min = Math.max(1, Math.ceil((lock.until - Date.now()) / 60000));
+      return setError(err, `Muitas tentativas incorretas. Tente novamente em ${min} min.`);
+    }
+    if (!(window.crypto && crypto.subtle)) {
+      return setError(err, 'Este navegador não permite validar o acesso neste endereço. Abra o site por HTTPS.');
+    }
+    const m = store.get(KEYS.merchantAuth, null);
     const user = $('#ml-user').value.trim();
     const pass = $('#ml-pass').value;
-    if (!m || norm(user) !== norm(m.user) || (await sha(m.salt + pass)) !== m.hash) return setError(err, 'Login ou senha incorretos.');
+    let ok = false;
+    if (m) {
+      const h = await pbkdf2Hex(pass, m.salt, m.iterations);
+      ok = norm(user) === norm(m.user) && h === m.hash;
+    }
+    if (!ok) {
+      const count = (lock.count || 0) + 1;
+      store.set(KEYS.merchantLock, count >= 5 ? { count: 0, until: Date.now() + 5 * 60000 } : { count, until: 0 });
+      return setError(err, 'Login ou senha incorretos.');
+    }
+    store.set(KEYS.merchantLock, { count: 0, until: 0 });
     setMerchantAuthed(true);
     $('#form-merchant-login').reset();
     setError(err, '');
     renderAdmin();
   }
 
-  async function updateMerchant(e) {
-    e.preventDefault();
-    const err = $('#ac-error');
-    const m = merchantData();
-    const user = $('#ac-user').value.trim();
-    const pass = $('#ac-pass').value;
-    if (!m || (await sha(m.salt + $('#ac-current').value)) !== m.hash) return setError(err, 'A senha atual está incorreta.');
-    if (user.length < 3) return setError(err, 'O novo login precisa ter pelo menos 3 caracteres.');
-    if (pass.length < 8) return setError(err, 'A nova senha precisa ter pelo menos 8 caracteres.');
-    const salt = uid('s');
-    store.set(KEYS.merchant, { user, salt, hash: await sha(salt + pass) });
-    $('#account-form').reset();
-    setError(err, '');
-    toast('Acesso atualizado.');
-  }
-
   /* ==========================================================
-     Rotas (loja e painel)
+     Rotas: loja (#/), produto (#/produto/ID) e painel (#/adminarena)
      ========================================================== */
   const DEFAULT_TITLE = document.title;
+  let currentView = null;
+
+  function parseRoute() {
+    const h = location.hash;
+    if (h === '#/adminarena') return { name: 'admin' };
+    const m = h.match(/^#\/produto\/([\w-]+)$/);
+    if (m) return { name: 'product', id: m[1] };
+    return { name: 'store' };
+  }
+  const onStore = () => parseRoute().name === 'store';
+  const jump = (y) => window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+  function goShowcase() { if (onStore()) scrollToShowcase(); else location.hash = '#vitrine'; }
+
   function route() {
-    const admin = location.hash === '#/lojista';
-    $('#store-view').hidden = admin;
-    $('#admin-view').hidden = !admin;
-    document.body.classList.toggle('is-admin', admin);
-    if (admin) {
-      document.title = 'Painel do lojista | Arena';
+    const r = parseRoute();
+    const prev = currentView;
+    if (r.name === 'product' && !findProduct(r.id)) {
+      toast('Produto não encontrado.', true);
+      location.hash = '#/';
+      return;
+    }
+    currentView = r.name;
+    $('#store-view').hidden = r.name !== 'store';
+    $('#admin-view').hidden = r.name !== 'admin';
+    $('#product-view').hidden = r.name !== 'product';
+    document.body.classList.toggle('is-admin', r.name === 'admin');
+
+    if (r.name === 'admin') {
+      document.title = 'Acesso restrito | Arena';
       renderAdmin();
-      window.scrollTo(0, 0);
+      jump(0);
+    } else if (r.name === 'product') {
+      const p = prepareProduct(r.id);
+      document.title = `${p.name} | Arena`;
+      jump(0);
     } else {
       document.title = DEFAULT_TITLE;
       const id = location.hash.slice(1);
       if (id && !id.startsWith('/')) {
         const target = document.getElementById(id);
         if (target) requestAnimationFrame(() => target.scrollIntoView());
-      }
+      } else if (prev === 'product') jump(state.scrollY || 0);
+      else if (prev === 'admin') jump(0);
       observeReveal();
     }
     requestAnimationFrame(refreshInks);
@@ -1189,12 +1243,22 @@
       const d = t.dataset;
 
       if (d.home !== undefined) {
-        // No painel, o link muda o hash e a rota volta para a loja. Na loja, apenas rola ao topo.
-        if (location.hash !== '#/lojista') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        // Na loja o logo apenas rola ao topo. Em outras telas, volta para a loja no topo.
+        if (onStore()) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        else state.scrollY = 0;
         return;
       }
-      if (d.details) return openProduct(d.details);
-      if (d.related) { openProduct(d.related); return; }
+      if (d.details) {
+        if (onStore()) state.scrollY = window.scrollY;
+        location.hash = '#/produto/' + d.details;
+        return;
+      }
+      if (d.crumbCat) {
+        state.filters = { query: '', category: d.crumbCat, gender: 'all', onlyPromo: false };
+        applyFilters();
+        location.hash = '#vitrine';
+        return;
+      }
       if (d.cat !== undefined && t.closest('#category-tabs')) { state.filters.category = d.cat; applyFilters(); return; }
       if (d.gender !== undefined) { state.filters.gender = d.gender; applyFilters(); return; }
       if (d.catTile) { state.filters.category = d.catTile; applyFilters(); scrollToShowcase(); return; }
@@ -1202,28 +1266,28 @@
       if (t.id === 'btn-promo-toggle') { state.filters.onlyPromo = !state.filters.onlyPromo; applyFilters(); return; }
       if (d.clearFilters !== undefined) { clearFilters(); return; }
       if (d.openCart !== undefined) { renderCart(); openModal('drawer-cart'); return; }
-      if (d.explore !== undefined) { closeModal('drawer-cart'); setTimeout(scrollToShowcase, 250); return; }
+      if (d.explore !== undefined) { closeModal('drawer-cart'); setTimeout(goShowcase, 250); return; }
       if (d.open) { openModal(d.open); return; }
       if (d.close !== undefined) { const ov = t.closest('.overlay'); if (ov) closeModal(ov.id); return; }
 
-      // Produto (modal)
+      // Página do produto
       if (d.photo !== undefined) {
         const p = findProduct(state.sel.id);
         const main = $('#pd-main');
         main.classList.add('is-fading');
-        setTimeout(() => { main.src = p.photos[Number(d.photo)]; main.dataset.failed = ''; main.classList.remove('is-fading'); }, 180);
-        $$('.pd__thumb').forEach((b) => b.classList.toggle('is-active', b === t));
+        setTimeout(() => { main.dataset.failed = ''; main.src = hiRes(p.photos[Number(d.photo)]); main.classList.remove('is-fading'); }, 180);
+        $$('.pv__thumb').forEach((b) => b.classList.toggle('is-active', b === t));
         return;
       }
       if (d.color !== undefined) { state.sel.color = d.color; updateSelectors(); return; }
       if (d.size !== undefined) { state.sel.size = state.sel.size === d.size ? null : d.size; updateSelectors(); return; }
       if (d.pdTab) {
-        state.sel.tab = d.pdTab;
-        $$('[data-pd-tab]').forEach((b) => b.classList.toggle('is-active', b === t));
-        renderProductPanel();
+        $$('[data-pd-tab]').forEach((b) => { b.classList.toggle('is-active', b === t); b.setAttribute('aria-selected', b === t); });
+        $$('.pv__panel').forEach((pn) => { pn.hidden = pn.id !== `pv-panel-${d.pdTab}`; });
+        moveInk($('#pv-tabs'));
         return;
       }
-      if (t.id === 'pd-add') { addFromModal(); return; }
+      if (t.id === 'pd-add') { addFromPage(); return; }
 
       // Carrinho
       if (d.qty) { changeQty(d.key, Number(d.qty)); return; }
@@ -1326,11 +1390,11 @@
     document.addEventListener('submit', (e) => {
       if (e.target.id === 'cart-coupon-form') { e.preventDefault(); applyCoupon($('#cart-coupon-input').value); }
     });
-    $('#search-form').addEventListener('submit', (e) => { e.preventDefault(); if (location.hash === '#/lojista') location.hash = '#/'; scrollToShowcase(); });
+    $('#search-form').addEventListener('submit', (e) => { e.preventDefault(); goShowcase(); });
     $('#search-input').addEventListener('input', debounce((e) => {
       state.filters.query = e.target.value;
-      if (location.hash === '#/lojista') location.hash = '#/';
       applyFilters();
+      if (!onStore() && e.target.value.trim()) location.hash = '#vitrine';
     }, 120));
     $('#search-input').addEventListener('input', (e) => { $('#search-clear').hidden = !e.target.value; });
     $('#search-clear').addEventListener('click', () => { state.filters.query = ''; $('#search-input').value = ''; applyFilters(); $('#search-input').focus(); });
@@ -1364,9 +1428,7 @@
       loginUser(user);
     });
 
-    $('#form-merchant-setup').addEventListener('submit', setupMerchant);
     $('#form-merchant-login').addEventListener('submit', loginMerchant);
-    $('#account-form').addEventListener('submit', updateMerchant);
     $('#product-form').addEventListener('submit', submitProduct);
     $('#coupon-form').addEventListener('submit', submitCoupon);
     $('#category-form').addEventListener('submit', submitCategory);
@@ -1404,6 +1466,7 @@
      Início
      ---------------------------------------------------------- */
   function init() {
+    try { history.scrollRestoration = 'manual'; } catch { /* ignora */ }
     loadState();
     applySiteConfig();
     renderCategoryTiles();

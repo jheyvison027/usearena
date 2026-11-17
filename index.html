@@ -199,7 +199,12 @@
     </section>
   </main>
 
-  <!-- ================= PAINEL DO LOJISTA ================= -->
+  <!-- ================= PÁGINA DO PRODUTO (rota #/produto/ID) ================= -->
+  <main id="product-view" class="pv theme-light" hidden>
+    <div class="container" id="product-page"></div>
+  </main>
+
+  <!-- ================= ÁREA RESTRITA (rota oculta #/adminarena) ================= -->
   <main id="admin-view" hidden>
     <div class="container admin">
 
@@ -212,17 +217,8 @@
             <p id="gate-text">Acesso restrito. Entre com o login e a senha do lojista.</p>
           </div>
 
-          <form id="form-merchant-setup" novalidate hidden>
-            <p class="notice">Primeiro acesso: defina o login e a senha do lojista. Guarde esses dados, eles ficam salvos somente neste navegador.</p>
-            <label class="field"><span>Login</span><input id="ms-user" autocomplete="username" maxlength="40"></label>
-            <label class="field"><span>Senha (mínimo 8 caracteres)</span><input id="ms-pass" type="password" autocomplete="new-password"></label>
-            <label class="field"><span>Confirmar senha</span><input id="ms-pass2" type="password" autocomplete="new-password"></label>
-            <p class="form-error" id="ms-error" role="alert" hidden></p>
-            <button class="btn btn--primary btn--block" type="submit">Criar acesso do lojista</button>
-          </form>
-
-          <form id="form-merchant-login" novalidate hidden>
-            <label class="field"><span>Login</span><input id="ml-user" autocomplete="username" maxlength="40"></label>
+          <form id="form-merchant-login" novalidate>
+            <label class="field"><span>Login</span><input id="ml-user" autocomplete="username" maxlength="40" autocapitalize="none" spellcheck="false"></label>
             <label class="field"><span>Senha</span><input id="ml-pass" type="password" autocomplete="current-password"></label>
             <p class="form-error" id="ml-error" role="alert" hidden></p>
             <button class="btn btn--primary btn--block" type="submit">Entrar no painel</button>
@@ -250,7 +246,6 @@
           <button type="button" class="tab" role="tab" data-admin-tab="coupons" aria-selected="false">Cupons</button>
           <button type="button" class="tab" role="tab" data-admin-tab="categories" aria-selected="false">Categorias</button>
           <button type="button" class="tab" role="tab" data-admin-tab="orders" aria-selected="false">Pedidos</button>
-          <button type="button" class="tab" role="tab" data-admin-tab="account" aria-selected="false">Acesso</button>
           <span class="tabs__ink" aria-hidden="true"></span>
         </div>
 
@@ -356,20 +351,6 @@
             <div id="order-list" class="list"></div>
           </div>
         </div>
-
-        <!-- Acesso -->
-        <div class="pane" id="pane-account" role="tabpanel" hidden>
-          <form id="account-form" class="panel panel--narrow" novalidate>
-            <div class="panel__head"><h3>Alterar login e senha</h3></div>
-            <div class="field-grid">
-              <label class="field field--full"><span>Senha atual</span><input id="ac-current" type="password" autocomplete="current-password"></label>
-              <label class="field field--full"><span>Novo login</span><input id="ac-user" autocomplete="username" maxlength="40"></label>
-              <label class="field field--full"><span>Nova senha (mínimo 8 caracteres)</span><input id="ac-pass" type="password" autocomplete="new-password"></label>
-            </div>
-            <p class="form-error" id="ac-error" role="alert" hidden></p>
-            <button class="btn btn--primary" type="submit">Atualizar acesso</button>
-          </form>
-        </div>
       </section>
     </div>
   </main>
@@ -394,7 +375,6 @@
         <h3>Institucional</h3>
         <button type="button" class="footer__link" data-open="modal-privacy">Política de Privacidade</button>
         <button type="button" class="footer__link" data-open="modal-terms">Termos e Condições</button>
-        <a href="#/lojista">Área do lojista</a>
       </nav>
       <div class="footer__col">
         <h3>Contato</h3>
@@ -414,14 +394,6 @@
   </button>
 
   <!-- ================= MODAIS ================= -->
-
-  <!-- Produto -->
-  <div class="overlay" id="modal-product" hidden>
-    <div class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="product-title" tabindex="-1">
-      <button type="button" class="modal__close" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-      <div id="product-body"></div>
-    </div>
-  </div>
 
   <!-- Carrinho (gaveta) -->
   <div class="overlay overlay--drawer" id="drawer-cart" hidden>
