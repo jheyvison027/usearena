@@ -47,6 +47,7 @@
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
     <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8Z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
     <symbol id="i-logout" viewBox="0 0 24 24"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/></symbol>
     <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
   </svg>
 
@@ -263,13 +264,23 @@
                 <label class="field"><span>Gênero</span>
                   <select id="pf-gender"><option>Unissex</option><option>Feminino</option><option>Masculino</option></select>
                 </label>
-                <label class="field"><span>Preço lançado (normal)</span><input id="pf-price" inputmode="decimal" placeholder="0,00"></label>
-                <label class="field"><span>Preço promocional (opcional)</span><input id="pf-promo" inputmode="decimal" placeholder="0,00"></label>
-                <p class="hint field--full">Com preço promocional preenchido, o produto sobe para o topo da vitrine com a etiqueta de desconto calculada automaticamente.</p>
+                <label class="field"><span>Preço lançado (normal)</span><input id="pf-price" inputmode="numeric" autocomplete="off" placeholder="R$ 0,00"></label>
+                <label class="field"><span>Preço promocional (opcional)</span><input id="pf-promo" inputmode="numeric" autocomplete="off" placeholder="R$ 0,00"></label>
+                <p class="hint field--full">Digite só os números: 1700 vira R$ 17,00. Com preço promocional preenchido, o produto sobe para o topo da vitrine com a etiqueta de desconto calculada automaticamente.</p>
                 <label class="field field--full"><span>Descrição</span><textarea id="pf-desc" rows="3" maxlength="800"></textarea></label>
                 <label class="field"><span>Material</span><input id="pf-material" maxlength="120" placeholder="Ex.: Poliéster e elastano"></label>
                 <label class="field"><span>Tipo de malha</span><input id="pf-malha" maxlength="120" placeholder="Ex.: Malha dry"></label>
-                <label class="field field--full"><span>URLs das fotos (uma por linha)</span><textarea id="pf-photos" rows="3" placeholder="https://images.unsplash.com/..."></textarea></label>
+                <div class="field field--full">
+                  <p class="field__label">Fotos do produto</p>
+                  <input class="sr-file" type="file" id="pf-files" accept="image/*" multiple>
+                  <label class="dropzone" for="pf-files" id="pf-drop">
+                    <svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>
+                    <strong>Selecionar fotos</strong>
+                    <span>Escolha no computador ou celular, ou arraste até aqui. A primeira foto é a capa.</span>
+                  </label>
+                  <div class="photo-grid" id="pf-photo-list" aria-live="polite"></div>
+                  <p class="hint" id="pf-photo-hint"></p>
+                </div>
               </div>
 
               <fieldset class="variations">

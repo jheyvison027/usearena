@@ -11,8 +11,8 @@
      ---------------------------------------------------------- */
   const SITE = {
     nome: 'Arena',
-    dominio: 'www.usearenapdf.com.br',
-    email: 'contato@usearenapdf.com.br'
+    dominio: 'www.seudominio.com.br',
+    email: 'contato@seudominio.com.br'
   };
 
   /* Acesso do lojista: definido aqui, nunca pela interface.
@@ -58,11 +58,14 @@
   const isHex = (v) => /^#[0-9a-f]{6}$/i.test(v);
   const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
-  function parsePrice(v) {
-    const s = String(v).trim().replace(/\s|R\$/g, '');
-    if (!s) return NaN;
-    return Number(s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : s);
+  // Campo monetário estilo caixa de banco: os dígitos entram da direita para a esquerda (centavos)
+  function maskMoney(el) {
+    const digits = el.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 9);
+    el.value = digits ? fmt.format(Number(digits) / 100) : '';
+    try { el.setSelectionRange(el.value.length, el.value.length); } catch { /* ignora */ }
   }
+  const moneyCents = (el) => Number(el.value.replace(/\D/g, '') || 0);
+  const setMoney = (el, reais) => { el.value = reais > 0 ? fmt.format(reais) : ''; };
 
   const store = {
     get(key, fallback) {
@@ -105,6 +108,8 @@
     sel: null,
     couponError: '',
     pendingCheckout: false,
+    formPhotos: [],
+    busyPhotos: false,
     editing: { product: null, coupon: null, category: null }
   };
 
@@ -896,6 +901,8 @@
   function resetProductForm() {
     state.editing.product = null;
     $('#product-form').reset();
+    state.formPhotos = [];
+    renderPhotoList();
     $('#var-rows').innerHTML = varRowHTML();
     $('#product-form-title').textContent = 'Novo produto';
     $('#pf-submit').textContent = 'Salvar produto';
@@ -912,12 +919,13 @@
     $('#pf-name').value = p.name;
     $('#pf-category').value = p.categoryId;
     $('#pf-gender').value = p.gender;
-    $('#pf-price').value = String(p.price).replace('.', ',');
-    $('#pf-promo').value = p.promo ? String(p.promo).replace('.', ',') : '';
+    setMoney($('#pf-price'), p.price);
+    setMoney($('#pf-promo'), p.promo);
     $('#pf-desc').value = p.description || '';
     $('#pf-material').value = p.material || '';
     $('#pf-malha').value = p.malha || '';
-    $('#pf-photos').value = p.photos.join('\n');
+    state.formPhotos = [...p.photos];
+    renderPhotoList();
     $('#var-rows').innerHTML = p.variations.map(varRowHTML).join('');
     $('#product-form-title').textContent = 'Editando produto';
     $('#pf-submit').textContent = 'Salvar alterações';
@@ -932,17 +940,16 @@
     const name = $('#pf-name').value.trim();
     const categoryId = $('#pf-category').value;
     const gender = $('#pf-gender').value;
-    const price = parsePrice($('#pf-price').value);
-    const promoRaw = $('#pf-promo').value.trim();
-    const promo = promoRaw ? parsePrice(promoRaw) : 0;
-    const photos = $('#pf-photos').value.split(/\n+/).map((s) => s.trim()).filter(Boolean);
+    const priceC = moneyCents($('#pf-price'));
+    const promoC = moneyCents($('#pf-promo'));
+    const photos = [...state.formPhotos];
 
     if (name.length < 2) return setError(err, 'Informe o nome do produto.');
     if (!categoryId) return setError(err, 'Selecione uma categoria. Se não houver, crie na aba Categorias.');
-    if (!(price > 0)) return setError(err, 'Informe o preço lançado (normal) maior que zero.');
-    if (promoRaw && !(promo > 0 && promo < price)) return setError(err, 'O preço promocional precisa ser maior que zero e menor que o preço lançado.');
-    if (!photos.length) return setError(err, 'Informe pelo menos uma URL de foto.');
-    if (photos.some((u) => !isUrl(u))) return setError(err, 'Todas as URLs de foto precisam começar com http:// ou https://.');
+    if (state.busyPhotos) return setError(err, 'Aguarde o processamento das fotos terminar.');
+    if (!(priceC > 0)) return setError(err, 'Informe o preço lançado (normal) maior que zero.');
+    if (promoC && !(promoC < priceC)) return setError(err, 'O preço promocional precisa ser maior que zero e menor que o preço lançado.');
+    if (!photos.length) return setError(err, 'Selecione pelo menos uma foto do produto.');
 
     const variations = [];
     const seen = new Set();
@@ -962,21 +969,90 @@
     if (!variations.length) return setError(err, 'Adicione pelo menos uma variação de tamanho e cor com estoque.');
 
     const data = {
-      name, categoryId, gender, price: Math.round(price * 100) / 100, promo: promo ? Math.round(promo * 100) / 100 : 0,
+      name, categoryId, gender, price: priceC / 100, promo: promoC / 100,
       description: $('#pf-desc').value.trim(), material: $('#pf-material').value.trim(), malha: $('#pf-malha').value.trim(),
       photos, variations
     };
-    if (state.editing.product) {
-      const p = findProduct(state.editing.product);
-      Object.assign(p, data);
-      toast('Produto atualizado.');
-    } else {
-      state.products.push({ id: uid('prd'), createdAt: Date.now(), ...data });
-      toast('Produto cadastrado.');
+    const editing = state.editing.product;
+    if (editing) Object.assign(findProduct(editing), data);
+    else state.products.push({ id: uid('prd'), createdAt: Date.now(), ...data });
+    if (!store.set(KEYS.products, state.products)) {
+      // Não coube no LocalStorage: desfaz a alteração em memória e mantém o formulário preenchido
+      state.products = store.get(KEYS.products, []).filter((x) => x && Array.isArray(x.variations) && Array.isArray(x.photos));
+      return setError(err, 'Não coube no armazenamento do navegador. Remova algumas fotos ou use menos imagens neste produto.');
     }
-    store.set(KEYS.products, state.products);
+    toast(editing ? 'Produto atualizado.' : 'Produto cadastrado.');
     resetProductForm();
     refreshStoreAndAdmin();
+  }
+
+  /* ---------- Upload de fotos (FileReader, convertido para base64) ---------- */
+  const MAX_PHOTOS = 6;
+  const MAX_FILE_BYTES = 15 * 1024 * 1024;
+  const readFileAsDataURL = (file) => new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onload = () => resolve(fr.result);
+    fr.onerror = () => reject(fr.error);
+    fr.readAsDataURL(file);
+  });
+  const loadImage = (src) => new Promise((resolve, reject) => {
+    const im = new Image();
+    im.onload = () => resolve(im);
+    im.onerror = () => reject(new Error('imagem inválida'));
+    im.src = src;
+  });
+
+  // Lê o arquivo com FileReader e reduz para no máximo 1200 px (JPEG), para caber no LocalStorage
+  async function fileToStoredImage(file) {
+    const im = await loadImage(await readFileAsDataURL(file));
+    const scale = Math.min(1, 1200 / Math.max(im.naturalWidth, im.naturalHeight));
+    const w = Math.max(1, Math.round(im.naturalWidth * scale));
+    const h = Math.max(1, Math.round(im.naturalHeight * scale));
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(im, 0, 0, w, h);
+    return cv.toDataURL('image/jpeg', 0.8);
+  }
+
+  async function addPhotoFiles(fileList) {
+    const files = Array.from(fileList || []);
+    if (!files.length || state.busyPhotos) return;
+    const room = MAX_PHOTOS - state.formPhotos.length;
+    if (room <= 0) { toast(`Limite de ${MAX_PHOTOS} fotos por produto.`, true); return; }
+    state.busyPhotos = true;
+    $('#pf-drop').classList.add('is-busy');
+    let skipped = files.length > room ? files.length - room : 0;
+    for (const f of files.slice(0, room)) {
+      if (!f.type.startsWith('image/') || f.size > MAX_FILE_BYTES) { skipped++; continue; }
+      try { state.formPhotos.push(await fileToStoredImage(f)); } catch { skipped++; }
+    }
+    state.busyPhotos = false;
+    $('#pf-drop').classList.remove('is-busy');
+    if (skipped) toast(`${skipped} ${skipped === 1 ? 'arquivo não foi adicionado' : 'arquivos não foram adicionados'} (formato inválido, maior que 15 MB ou acima do limite de ${MAX_PHOTOS} fotos).`, true);
+    setError($('#pf-error'), '');
+    renderPhotoList();
+  }
+
+  function storageUsedMB() {
+    let n = 0;
+    try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); n += k.length + (localStorage.getItem(k) || '').length; } } catch { /* ignora */ }
+    return n / 1e6;
+  }
+
+  function renderPhotoList() {
+    const list = $('#pf-photo-list');
+    if (!list) return;
+    list.innerHTML = state.formPhotos.map((src, i) => `
+      <figure class="photo-item ${i === 0 ? 'is-cover' : ''}">
+        ${img(src, `Foto ${i + 1}`, '', false)}
+        ${i === 0 ? '<span class="photo-item__tag">Capa</span>' : `<button type="button" class="photo-item__cover" data-photo-cover="${i}">Tornar capa</button>`}
+        <button type="button" class="photo-item__remove" data-photo-remove="${i}" aria-label="Remover foto ${i + 1}">${icon('close')}</button>
+      </figure>`).join('');
+    const left = MAX_PHOTOS - state.formPhotos.length;
+    $('#pf-photo-hint').textContent = `${state.formPhotos.length} de ${MAX_PHOTOS} fotos${left ? '' : ' (limite atingido)'}. As imagens são reduzidas automaticamente. Espaço do navegador em uso: ${storageUsedMB().toFixed(1).replace('.', ',')} MB de cerca de 5 MB.`;
   }
 
   function renderCatalog() {
@@ -1315,6 +1391,8 @@
         if (rows.children.length > 1) t.closest('.var-row').remove(); else rows.innerHTML = varRowHTML();
         return;
       }
+      if (d.photoRemove !== undefined) { state.formPhotos.splice(Number(d.photoRemove), 1); renderPhotoList(); return; }
+      if (d.photoCover !== undefined) { const [ph] = state.formPhotos.splice(Number(d.photoCover), 1); state.formPhotos.unshift(ph); renderPhotoList(); return; }
       if (t.id === 'product-cancel') { resetProductForm(); return; }
       if (t.id === 'coupon-cancel') { resetCouponForm(); return; }
       if (t.id === 'category-cancel') { resetCategoryForm(); return; }
@@ -1430,6 +1508,18 @@
 
     $('#form-merchant-login').addEventListener('submit', loginMerchant);
     $('#product-form').addEventListener('submit', submitProduct);
+    $('#pf-files').addEventListener('change', (e) => { addPhotoFiles(e.target.files); e.target.value = ''; });
+    const drop = $('#pf-drop');
+    ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('is-over'); }));
+    ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('is-over'); }));
+    drop.addEventListener('drop', (e) => addPhotoFiles(e.dataTransfer && e.dataTransfer.files));
+    ['#pf-price', '#pf-promo'].forEach((sel) => {
+      const el = $(sel);
+      const toEnd = () => { try { el.setSelectionRange(el.value.length, el.value.length); } catch { /* ignora */ } };
+      el.addEventListener('input', () => maskMoney(el));
+      el.addEventListener('focus', () => setTimeout(toEnd, 0));
+      el.addEventListener('click', toEnd);
+    });
     $('#coupon-form').addEventListener('submit', submitCoupon);
     $('#category-form').addEventListener('submit', submitCategory);
 
